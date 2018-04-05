@@ -55,7 +55,7 @@ Push to Gitlab Registry (Windows):
   - docker-builder
   script:
     # Build Images
-  - docker build -t build-core:win-msvc2017-%CI_COMMIT_SHA% -f windows/msvc2017.dockerfile windows
+  - docker build -t build-core:win-msvc2017-%CI_COMMIT_SHA% -m 2GB -f windows/msvc2017.dockerfile windows
     # Tag Images
   - docker tag build-core:win-msvc2017-%CI_COMMIT_SHA% registry.stabletec.com/docker/build-core/windows:msvc2017
     # Push Images
