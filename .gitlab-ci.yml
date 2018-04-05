@@ -8,18 +8,20 @@ Build Images (Linux):
   - docker-builder
   script:
   - cd fedora
-  - docker build -t build-core:unix-gcc-$CI_COMMIT_SHA   -f gcc.dockerfile   .
-  - docker build -t build-core:unix-clang-$CI_COMMIT_SHA -f clang.dockerfile .
+  - docker build -t build-core/fedora:gcc-$CI_COMMIT_SHA -f fedora/gcc.dockerfile fedora
+  - docker build -t build-core/fedora:clang-$CI_COMMIT_SHA -f fedora/clang.dockerfile fedora
+  - docker build -t build-core/centos:gcc-$CI_COMMIT_SHA -f centos/gcc.dockerfile centos
+  - docker build -t build-core/centos:clang-$CI_COMMIT_SHA -f centos/clang.dockerfile centos
 
-Build Images (Windows):
-  except:
-  - master
-  tags:
-  - windows
-  - docker-builder
-  script:
-  - cd windows
-  - docker build -t build-core:win-msvc2017-%CI_COMMIT_SHA% -f msvc2017.dockerfile .
+#Build Images (Windows):
+#  except:
+#  - master
+#  tags:
+#  - windows
+#  - docker-builder
+#  script:
+#  - cd windows
+#  - docker build -t build-core:win-msvc2017-%CI_COMMIT_SHA% -f msvc2017.dockerfile .
 
 Push to Gitlab Registry (Linux):
   only:
@@ -28,24 +30,31 @@ Push to Gitlab Registry (Linux):
   - linux
   - docker-builder
   script:
-  - cd fedora
-  - docker build -t build-core:unix-gcc-$CI_COMMIT_SHA -f gcc.dockerfile .
-  - docker tag build-core:unix-gcc-$CI_COMMIT_SHA registry.stabletec.com/docker/build-core:unix-gcc
-  - docker build -t build-core:unix-clang-$CI_COMMIT_SHA -f clang.dockerfile .
-  - docker tag build-core:unix-clang-$CI_COMMIT_SHA registry.stabletec.com/docker/build-core:unix-clang
-  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.stabletec.com
-  - docker push registry.stabletec.com/docker/build-core:unix-gcc
-  - docker push registry.stabletec.com/docker/build-core:unix-clang
+  - docker build -t build-core/fedora:gcc-$CI_COMMIT_SHA -f fedora/gcc.dockerfile fedora
+  - docker build -t build-core/fedora:clang-$CI_COMMIT_SHA -f fedora/clang.dockerfile fedora
+  - docker build -t build-core/centos:gcc-$CI_COMMIT_SHA -f centos/gcc.dockerfile centos
+  - docker build -t build-core/centos:clang-$CI_COMMIT_SHA -f centos/clang.dockerfile centos
 
-Push to Gitlab Registry (Windows):
-  only:
-  - master
-  tags:
-  - windows
-  - docker-builder
-  script:
-  - cd windows
-  - docker build -t build-core:win-msvc2017-%CI_COMMIT_SHA% -f msvc2017.dockerfile .
-  - docker tag build-core:win-msvc2017-%CI_COMMIT_SHA% registry.stabletec.com/docker/build-core:win-msvc2017
-  - docker login -u gitlab-ci-token -p %CI_BUILD_TOKEN% registry.stabletec.com
-  - docker push registry.stabletec.com/docker/build-core:win-msvc2017
+  - docker tag build-core/fedora:gcc-$CI_COMMIT_SHA registry.stabletec.com/docker/build-core/fedora:gcc
+  - docker tag build-core/fedora:clang-$CI_COMMIT_SHA registry.stabletec.com/docker/build-core/fedora:clang
+  - docker tag build-core/centos:gcc-$CI_COMMIT_SHA registry.stabletec.com/docker/build-core/centos:gcc
+  - docker tag build-core/centos:clang-$CI_COMMIT_SHA registry.stabletec.com/docker/build-core/centos:clang
+
+  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.stabletec.com
+  - docker push registry.stabletec.com/docker/build-core/fedora:gcc
+  - docker push registry.stabletec.com/docker/build-core/fedora:clang
+    - docker push registry.stabletec.com/docker/build-core/centos:gcc
+  - docker push registry.stabletec.com/docker/build-core/centos:clang
+
+#Push to Gitlab Registry (Windows):
+#  only:
+#  - master
+#  tags:
+#  - windows
+#  - docker-builder
+#  script:
+#  - cd windows
+#  - docker build -t build-core:win-msvc2017-%CI_COMMIT_SHA% -f msvc2017.dockerfile .
+#  - docker tag build-core:win-msvc2017-%CI_COMMIT_SHA% registry.stabletec.com/docker/build-core/windows:msvc2017
+#  - docker login -u gitlab-ci-token -p %CI_BUILD_TOKEN% registry.stabletec.com
+#  - docker push registry.stabletec.com/docker/build-core/windows:msvc2017
