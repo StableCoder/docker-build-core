@@ -6,8 +6,7 @@ RUN @"%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -NoProfil
 RUN choco install -y 7zip cmake python git
 
 # Conan
-RUN pip install conan && \
-    conan remote add stabletec https://conan.stabletec.com/artifactory/api/conan/stabletec
+RUN pip install conan
 
 # MSVC Build Tools 2017
 ADD https://aka.ms/vs/15/release/vs_buildtools.exe C:\\TEMP\\vs_buildtools.exe
