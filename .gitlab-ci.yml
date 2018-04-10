@@ -7,7 +7,7 @@ Build Images (Linux):
   - linux-docker
   - docker-builder
   script:
-  - cd fedora
+  # Build Images
   - docker build -t build-core/fedora:gcc-$CI_COMMIT_SHA -f fedora/gcc.dockerfile fedora
   - docker build -t build-core/fedora:clang-$CI_COMMIT_SHA -f fedora/clang.dockerfile fedora
   - docker build -t build-core/centos:gcc-$CI_COMMIT_SHA -f centos/gcc.dockerfile centos
@@ -20,8 +20,8 @@ Build Images (Linux):
   - windows-docker
   - docker-builder
   script:
-  - cd windows
-  - docker build -t build-core:win-msvc2017-%CI_COMMIT_SHA% -f msvc2017.dockerfile .
+  # Build Images
+  - docker build -t build-core:win-msvc2017-%CI_COMMIT_SHA% -m 2GB -f windows/msvc2017.dockerfile windows
 
 Push to Gitlab Registry (Linux):
   only:
