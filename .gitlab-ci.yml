@@ -1,6 +1,5 @@
-image: docker:latest
-
 Build Images (Linux):
+  image: docker:dind
   except:
   - master
   tags:
@@ -24,6 +23,7 @@ Build Images (Linux):
   - docker build -t build-core:win-msvc2017-%CI_COMMIT_SHA% -m 2GB -f windows/msvc2017.dockerfile windows
 
 Push to Gitlab Registry (Linux):
+  image: docker:dind
   only:
   - master
   tags:
