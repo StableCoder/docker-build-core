@@ -20,7 +20,7 @@ RUN powershell -command "& { iwr https://aka.ms/vs/15/release/vs_buildtools.exe 
 RUN del vs_buildtools.exe
 
 # Start developer command prompt with any other commands specified.
-ENTRYPOINT C:\BuildTools\Common7\Tools\VsDevCmd.bat && 
+ENTRYPOINT C:\BuildTools\VC\Auxiliary\Build\vcvars64.bat && 
 
 # Default to PowerShell if no other command specified.
 CMD ["powershell.exe", "-NoLogo", "-ExecutionPolicy", "Bypass"]
