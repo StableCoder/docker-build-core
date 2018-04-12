@@ -7,10 +7,10 @@ Build Images (Linux):
   - docker-builder
   script:
   # Build Images
-  - docker build -t build-core/fedora:gcc-$CI_COMMIT_SHA -f fedora/gcc.dockerfile fedora
-  - docker build -t build-core/fedora:clang-$CI_COMMIT_SHA -f fedora/clang.dockerfile fedora
-  - docker build -t build-core/centos:gcc-$CI_COMMIT_SHA -f centos/gcc.dockerfile centos
-  - docker build -t build-core/centos:clang-$CI_COMMIT_SHA -f centos/clang.dockerfile centos
+  - docker build -t build-core/fedora:gcc-$CI_COMMIT_REF_NAME -f fedora/gcc.dockerfile fedora
+  - docker build -t build-core/fedora:clang-$CI_COMMIT_REF_NAME -f fedora/clang.dockerfile fedora
+  - docker build -t build-core/centos:gcc-$CI_COMMIT_REF_NAME -f centos/gcc.dockerfile centos
+  - docker build -t build-core/centos:clang-$CI_COMMIT_REF_NAME -f centos/clang.dockerfile centos
 
 Build Images (Windows):
   except:
@@ -20,7 +20,7 @@ Build Images (Windows):
   - docker-builder
   script:
   # Build Images
-  - docker build -t build-core/windows:msvc2017-%CI_COMMIT_SHA% -m 2GB -f windows/msvc2017.dockerfile windows
+  - docker build -t build-core/windows:msvc2017-%CI_COMMIT_REF_NAME% -m 2GB -f windows/msvc2017.dockerfile windows
 
 Build and Push Images (Linux):
   image: docker:dind
@@ -31,15 +31,15 @@ Build and Push Images (Linux):
   - docker-builder
   script:
     # Build Images
-  - docker build -t build-core/fedora:gcc-$CI_COMMIT_SHA -f fedora/gcc.dockerfile fedora
-  - docker build -t build-core/fedora:clang-$CI_COMMIT_SHA -f fedora/clang.dockerfile fedora
-  - docker build -t build-core/centos:gcc-$CI_COMMIT_SHA -f centos/gcc.dockerfile centos
-  - docker build -t build-core/centos:clang-$CI_COMMIT_SHA -f centos/clang.dockerfile centos
+  - docker build -t build-core/fedora:gcc-$CI_COMMIT_REF_NAME -f fedora/gcc.dockerfile fedora
+  - docker build -t build-core/fedora:clang-$CI_COMMIT_REF_NAME -f fedora/clang.dockerfile fedora
+  - docker build -t build-core/centos:gcc-$CI_COMMIT_REF_NAME -f centos/gcc.dockerfile centos
+  - docker build -t build-core/centos:clang-$CI_COMMIT_REF_NAME -f centos/clang.dockerfile centos
     # Tag images
-  - docker tag build-core/fedora:gcc-$CI_COMMIT_SHA registry.stabletec.com/docker/build-core/fedora:gcc
-  - docker tag build-core/fedora:clang-$CI_COMMIT_SHA registry.stabletec.com/docker/build-core/fedora:clang
-  - docker tag build-core/centos:gcc-$CI_COMMIT_SHA registry.stabletec.com/docker/build-core/centos:gcc
-  - docker tag build-core/centos:clang-$CI_COMMIT_SHA registry.stabletec.com/docker/build-core/centos:clang
+  - docker tag build-core/fedora:gcc-$CI_COMMIT_REF_NAME registry.stabletec.com/docker/build-core/fedora:gcc
+  - docker tag build-core/fedora:clang-$CI_COMMIT_REF_NAME registry.stabletec.com/docker/build-core/fedora:clang
+  - docker tag build-core/centos:gcc-$CI_COMMIT_REF_NAME registry.stabletec.com/docker/build-core/centos:gcc
+  - docker tag build-core/centos:clang-$CI_COMMIT_REF_NAME registry.stabletec.com/docker/build-core/centos:clang
     # Push Images
   - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.stabletec.com
   - docker push registry.stabletec.com/docker/build-core/fedora:gcc
@@ -55,9 +55,9 @@ Build and Push Images (Windows):
   - docker-builder
   script:
     # Build Images
-  - docker build -t build-core/windows:msvc2017-%CI_COMMIT_SHA% -m 2GB -f windows/msvc2017.dockerfile windows
+  - docker build -t build-core/windows:msvc2017-%CI_COMMIT_REF_NAME% -m 2GB -f windows/msvc2017.dockerfile windows
     # Tag Images
-  - docker tag build-core/windows:msvc2017-%CI_COMMIT_SHA% registry.stabletec.com/docker/build-core/windows:msvc2017
+  - docker tag build-core/windows:msvc2017-%CI_COMMIT_REF_NAME% registry.stabletec.com/docker/build-core/windows:msvc2017
     # Push Images
   - docker login -u gitlab-ci-token -p %CI_BUILD_TOKEN% registry.stabletec.com
   - docker push registry.stabletec.com/docker/build-core/windows:msvc2017
