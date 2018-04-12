@@ -1,13 +1,9 @@
 FROM centos:latest
 
-# Change Workdir
-RUN mkdir -p /root/workdir
-WORKDIR /root/workdir
-
 # Enable the EPEL repository, pip, Conan
 RUN yum update -y \
     && yum install -y epel-release \
-    && yum install -y python-pip \
+    && yum install -y python-pip ninja-build make \
     && yum clean all
 
 # Conan
