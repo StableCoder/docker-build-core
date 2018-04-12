@@ -11,10 +11,9 @@ RUN setx /m PATH "%PATH%;C:\Program Files\7-Zip;C:\Program Files\CMake\bin;C:\Pr
 RUN pip install conan
 
 # MSVC Build Tools 2017
-ADD https://aka.ms/vs/15/release/vs_buildtools.exe C:\\TEMP\\vs_buildtools.exe
-
-RUN setx /m PATH "%PATH%;C:\Bin" \
-    && C:\TEMP\vs_buildtools.exe --quiet --wait --norestart --nocache --installPath C:\BuildTools \
+RUN powershell -command "& { iwr https://aka.ms/vs/15/release/vs_buildtools.exe -OutFile vs_buildtools.exe }" \
+    && setx /m PATH "%PATH%;C:\Bin" \
+    && vs_buildtools.exe --quiet --wait --norestart --nocache --installPath C:\BuildTools \
     --add Microsoft.VisualStudio.Workload.VCTools \
     --add Microsoft.VisualStudio.Component.Windows10SDK.16299.Desktop \
     || IF "%ERRORLEVEL%"=="3010" EXIT 0
