@@ -4,7 +4,7 @@ Build Images (Linux):
   except:
   - master
   tags:
-  - linux
+  - linux-docker
   - docker-builder
   script:
   - docker build -t build-core/fedora:gcc-$CI_COMMIT_SHA -f fedora/gcc.dockerfile fedora
@@ -16,7 +16,7 @@ Build Images (Windows):
   except:
   - master
   tags:
-  - windows
+  - windows-docker
   - docker-builder
   script:
   - docker build -t build-core/windows:msvc2017-%CI_COMMIT_SHA% -m 2GB -f windows/msvc2017.dockerfile windows
@@ -25,7 +25,7 @@ Build and Push Images (Linux):
   only:
   - master
   tags:
-  - linux
+  - linux-docker
   - docker-builder
   script:
     # Build Images
@@ -49,7 +49,7 @@ Build and Push Images (Windows):
   only:
   - master
   tags:
-  - windows
+  - windows-docker
   - docker-builder
   script:
     # Build Images
