@@ -1,13 +1,10 @@
 FROM fedora:latest
 
-# Change Workdir
-RUN mkdir -p /root/workdir
-WORKDIR /root/workdir
-
 # OS Updates / Common Packages
 RUN yum update -y \
     && yum install -y \
     git \
+    make \
     ninja-build \
     cmake \
     libasan \

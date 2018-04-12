@@ -1,4 +1,4 @@
-image: docker:latest
+image: docker:dind
 
 Build Images (Linux):
   except:
@@ -7,23 +7,21 @@ Build Images (Linux):
   - linux
   - docker-builder
   script:
-  - cd fedora
   - docker build -t build-core/fedora:gcc-$CI_COMMIT_SHA -f fedora/gcc.dockerfile fedora
   - docker build -t build-core/fedora:clang-$CI_COMMIT_SHA -f fedora/clang.dockerfile fedora
   - docker build -t build-core/centos:gcc-$CI_COMMIT_SHA -f centos/gcc.dockerfile centos
   - docker build -t build-core/centos:clang-$CI_COMMIT_SHA -f centos/clang.dockerfile centos
 
-#Build Images (Windows):
-#  except:
-#  - master
-#  tags:
-#  - windows
-#  - docker-builder
-#  script:
-#  - cd windows
-#  - docker build -t build-core:win-msvc2017-%CI_COMMIT_SHA% -f msvc2017.dockerfile .
+Build Images (Windows):
+  except:
+  - master
+  tags:
+  - windows
+  - docker-builder
+  script:
+  - docker build -t build-core/windows:msvc2017-%CI_COMMIT_SHA% -m 2GB -f windows/msvc2017.dockerfile windows
 
-Push to Gitlab Registry (Linux):
+Build and Push Images (Linux):
   only:
   - master
   tags:
@@ -47,17 +45,17 @@ Push to Gitlab Registry (Linux):
   - docker push registry.stabletec.com/docker/build-core/centos:gcc
   - docker push registry.stabletec.com/docker/build-core/centos:clang
 
-#Push to Gitlab Registry (Windows):
-#  only:
-#  - master
-#  tags:
-#  - windows
-#  - docker-builder
-#  script:
-#    # Build Images
-#  - docker build -t build-core:win-msvc2017-%CI_COMMIT_SHA% -m 2GB -f windows/msvc2017.dockerfile windows
-#    # Tag Images
-#  - docker tag build-core:win-msvc2017-%CI_COMMIT_SHA% registry.stabletec.com/docker/build-core/windows:msvc2017
-#    # Push Images
-#  - docker login -u gitlab-ci-token -p %CI_BUILD_TOKEN% registry.stabletec.com
-#  - docker push registry.stabletec.com/docker/build-core/windows:msvc2017
+Build and Push Images (Windows):
+  only:
+  - master
+  tags:
+  - windows
+  - docker-builder
+  script:
+    # Build Images
+  - docker build -t build-core/windows:msvc2017-%CI_COMMIT_SHA% -m 2GB -f windows/msvc2017.dockerfile windows
+    # Tag Images
+  - docker tag build-core/windows:msvc2017-%CI_COMMIT_SHA% registry.stabletec.com/docker/build-core/windows:msvc2017
+    # Push Images
+  - docker login -u gitlab-ci-token -p %CI_BUILD_TOKEN% registry.stabletec.com
+  - docker push registry.stabletec.com/docker/build-core/windows:msvc2017
