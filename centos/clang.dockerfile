@@ -3,7 +3,7 @@ FROM centos:latest
 # Enable the EPEL repository / Common Packages
 RUN yum update -y \
     && yum install -y epel-release \
-    && yum install -y python-pip ninja-build make \
+    && yum install -y python-pip ninja-build make cmake \
     && yum clean all
 
 # Conan
