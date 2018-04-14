@@ -36,16 +36,16 @@ Build and Push Images (Linux):
   - docker build -t build-core/centos:gcc-$CI_COMMIT_REF_NAME -f centos/gcc.dockerfile centos
   - docker build -t build-core/centos:clang-$CI_COMMIT_REF_NAME -f centos/clang.dockerfile centos
     # Tag images
-  - docker tag build-core/fedora:gcc-$CI_COMMIT_REF_NAME registry.stabletec.com/docker/build-core/fedora:gcc
-  - docker tag build-core/fedora:clang-$CI_COMMIT_REF_NAME registry.stabletec.com/docker/build-core/fedora:clang
-  - docker tag build-core/centos:gcc-$CI_COMMIT_REF_NAME registry.stabletec.com/docker/build-core/centos:gcc
-  - docker tag build-core/centos:clang-$CI_COMMIT_REF_NAME registry.stabletec.com/docker/build-core/centos:clang
+  - docker tag build-core/fedora:gcc-$CI_COMMIT_REF_NAME stabletec/build-core:fedora-gcc
+  - docker tag build-core/fedora:clang-$CI_COMMIT_REF_NAME stabletec/build-core:fedora-clang
+  - docker tag build-core/centos:gcc-$CI_COMMIT_REF_NAME stabletec/build-core:centos-gcc
+  - docker tag build-core/centos:clang-$CI_COMMIT_REF_NAME stabletec/build-core:centos-clang
     # Push Images
-  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.stabletec.com
-  - docker push registry.stabletec.com/docker/build-core/fedora:gcc
-  - docker push registry.stabletec.com/docker/build-core/fedora:clang
-  - docker push registry.stabletec.com/docker/build-core/centos:gcc
-  - docker push registry.stabletec.com/docker/build-core/centos:clang
+  - docker login -u DOCKER_USER -p $DOCKER_PASSWORD
+  - docker push stabletec/build-core:fedora-gcc
+  - docker push stabletec/build-core:fedora-clang
+  - docker push stabletec/build-core:centos-gcc
+  - docker push stabletec/build-core:centos-clang
 
 Build and Push Images (Windows):
   only:
@@ -57,7 +57,7 @@ Build and Push Images (Windows):
     # Build Images
   - docker build -t build-core/windows:msvc2017-%CI_COMMIT_REF_NAME% -m 2GB -f windows/msvc2017.dockerfile windows
     # Tag Images
-  - docker tag build-core/windows:msvc2017-%CI_COMMIT_REF_NAME% registry.stabletec.com/docker/build-core/windows:msvc2017
+  - docker tag build-core/windows:msvc2017-%CI_COMMIT_REF_NAME% stabletec/build-core:windows-msvc2017
     # Push Images
-  - docker login -u gitlab-ci-token -p %CI_BUILD_TOKEN% registry.stabletec.com
-  - docker push registry.stabletec.com/docker/build-core/windows:msvc2017
+  - docker login -u DOCKER_USER -p %DOCKER_PASSWORD%
+  - docker push stabletec/build-core:windows-msvc2017
