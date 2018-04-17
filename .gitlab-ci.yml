@@ -3,7 +3,7 @@ Build Images (Linux):
   except:
   - master
   tags:
-  - linux-docker
+  - linux
   - docker-builder
   script:
   # Build Images
@@ -12,11 +12,11 @@ Build Images (Linux):
   - docker build -t build-core/centos:gcc-$CI_COMMIT_REF_NAME -f centos/gcc.dockerfile centos
   - docker build -t build-core/centos:clang-$CI_COMMIT_REF_NAME -f centos/clang.dockerfile centos
 
-Build Images (Windows):
+.Build Images (Windows):
   except:
   - master
   tags:
-  - windows-docker
+  - windows
   - docker-builder
   script:
   # Build Images
@@ -27,7 +27,7 @@ Build and Push Images (Linux):
   only:
   - master
   tags:
-  - linux-docker
+  - linux
   - docker-builder
   script:
     # Build Images
@@ -47,11 +47,11 @@ Build and Push Images (Linux):
   - docker push stabletec/build-core:centos-gcc
   - docker push stabletec/build-core:centos-clang
 
-Build and Push Images (Windows):
+.Build and Push Images (Windows):
   only:
   - master
   tags:
-  - windows-docker
+  - windows
   - docker-builder
   script:
     # Build Images
