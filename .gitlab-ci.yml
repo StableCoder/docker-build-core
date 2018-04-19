@@ -1,63 +1,111 @@
+# Image Builds
+
 Build Images (Linux):
   image: docker:dind
   except:
-  - master
+    - master
+    - schedules
   tags:
-  - linux
-  - docker-builder
+    - linux
+    - docker-builder
   script:
-  # Build Images
-  - docker build -t build-core/fedora:gcc-$CI_COMMIT_REF_NAME -f fedora/gcc.dockerfile fedora
-  - docker build -t build-core/fedora:clang-$CI_COMMIT_REF_NAME -f fedora/clang.dockerfile fedora
-  - docker build -t build-core/centos:gcc-$CI_COMMIT_REF_NAME -f centos/gcc.dockerfile centos
-  - docker build -t build-core/centos:clang-$CI_COMMIT_REF_NAME -f centos/clang.dockerfile centos
+    # Build Images
+    - docker build -t build-core/fedora:gcc-$CI_COMMIT_REF_NAME -f fedora/gcc.dockerfile fedora
+    - docker build -t build-core/fedora:clang-$CI_COMMIT_REF_NAME -f fedora/clang.dockerfile fedora
+    - docker build -t build-core/centos:gcc-$CI_COMMIT_REF_NAME -f centos/gcc.dockerfile centos
+    - docker build -t build-core/centos:clang-$CI_COMMIT_REF_NAME -f centos/clang.dockerfile centos
 
-.Build Images (Windows):
+Build Images (Windows):
   except:
-  - master
+    - master
+    - schedules
   tags:
-  - windows
-  - docker-builder
+    - windows
+    - docker-builder
   script:
-  # Build Images
-  - docker build -t build-core/windows:msvc2017-%CI_COMMIT_REF_NAME% -m 2GB -f windows/msvc2017.dockerfile windows
+    # Build Images
+    - docker build -t build-core/windows:msvc2017-%CI_COMMIT_REF_NAME% -m 2GB -f windows/msvc2017.dockerfile windows
+
+# Master Pushes
 
 Build and Push Images (Linux):
   image: docker:dind
   only:
-  - master
+    - master
   tags:
-  - linux
-  - docker-builder
+    - linux
+    - docker-builder
   script:
     # Build Images
-  - docker build -t build-core/fedora:gcc-$CI_COMMIT_REF_NAME -f fedora/gcc.dockerfile fedora
-  - docker build -t build-core/fedora:clang-$CI_COMMIT_REF_NAME -f fedora/clang.dockerfile fedora
-  - docker build -t build-core/centos:gcc-$CI_COMMIT_REF_NAME -f centos/gcc.dockerfile centos
-  - docker build -t build-core/centos:clang-$CI_COMMIT_REF_NAME -f centos/clang.dockerfile centos
+    - docker build -t build-core/fedora:gcc-$CI_COMMIT_REF_NAME -f fedora/gcc.dockerfile fedora
+    - docker build -t build-core/fedora:clang-$CI_COMMIT_REF_NAME -f fedora/clang.dockerfile fedora
+    - docker build -t build-core/centos:gcc-$CI_COMMIT_REF_NAME -f centos/gcc.dockerfile centos
+    - docker build -t build-core/centos:clang-$CI_COMMIT_REF_NAME -f centos/clang.dockerfile centos
     # Tag images
-  - docker tag build-core/fedora:gcc-$CI_COMMIT_REF_NAME stabletec/build-core:fedora-gcc
-  - docker tag build-core/fedora:clang-$CI_COMMIT_REF_NAME stabletec/build-core:fedora-clang
-  - docker tag build-core/centos:gcc-$CI_COMMIT_REF_NAME stabletec/build-core:centos-gcc
-  - docker tag build-core/centos:clang-$CI_COMMIT_REF_NAME stabletec/build-core:centos-clang
+    - docker tag build-core/fedora:gcc-$CI_COMMIT_REF_NAME stabletec/build-core:fedora-gcc
+    - docker tag build-core/fedora:clang-$CI_COMMIT_REF_NAME stabletec/build-core:fedora-clang
+    - docker tag build-core/centos:gcc-$CI_COMMIT_REF_NAME stabletec/build-core:centos-gcc
+    - docker tag build-core/centos:clang-$CI_COMMIT_REF_NAME stabletec/build-core:centos-clang
     # Push Images
-  - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-  - docker push stabletec/build-core:fedora-gcc
-  - docker push stabletec/build-core:fedora-clang
-  - docker push stabletec/build-core:centos-gcc
-  - docker push stabletec/build-core:centos-clang
+    - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+    - docker push stabletec/build-core:fedora-gcc
+    - docker push stabletec/build-core:fedora-clang
+    - docker push stabletec/build-core:centos-gcc
+    - docker push stabletec/build-core:centos-clang
 
-.Build and Push Images (Windows):
+Build and Push Images (Windows):
   only:
-  - master
+    - master
   tags:
-  - windows
-  - docker-builder
+    - windows
+    - docker-builder
   script:
     # Build Images
-  - docker build -t build-core/windows:msvc2017-%CI_COMMIT_REF_NAME% -m 2GB -f windows/msvc2017.dockerfile windows
+    - docker build -t build-core/windows:msvc2017-%CI_COMMIT_REF_NAME% -m 2GB -f windows/msvc2017.dockerfile windows
     # Tag Images
-  - docker tag build-core/windows:msvc2017-%CI_COMMIT_REF_NAME% stabletec/build-core:windows-msvc2017
+    - docker tag build-core/windows:msvc2017-%CI_COMMIT_REF_NAME% stabletec/build-core:windows-msvc2017
     # Push Images
-  - docker login -u %DOCKER_USER% -p %DOCKER_PASSWORD%
-  - docker push stabletec/build-core:windows-msvc2017
+    - docker login -u %DOCKER_USER% -p %DOCKER_PASSWORD%
+    - docker push stabletec/build-core:windows-msvc2017
+
+# Non-cached Scheduled Pushes
+
+Non-Cached Build and Push Images (Linux):
+  image: docker:dind
+  only:
+    - schedules
+  tags:
+    - linux
+    - docker-builder
+  script:
+    # Build Images
+    - docker build --no-cache -t build-core/fedora:gcc-$CI_COMMIT_REF_NAME -f fedora/gcc.dockerfile fedora
+    - docker build -t build-core/fedora:clang-$CI_COMMIT_REF_NAME -f fedora/clang.dockerfile fedora
+    - docker build --no-cache -t build-core/centos:gcc-$CI_COMMIT_REF_NAME -f centos/gcc.dockerfile centos
+    - docker build -t build-core/centos:clang-$CI_COMMIT_REF_NAME -f centos/clang.dockerfile centos
+    # Tag images
+    - docker tag build-core/fedora:gcc-$CI_COMMIT_REF_NAME stabletec/build-core:fedora-gcc
+    - docker tag build-core/fedora:clang-$CI_COMMIT_REF_NAME stabletec/build-core:fedora-clang
+    - docker tag build-core/centos:gcc-$CI_COMMIT_REF_NAME stabletec/build-core:centos-gcc
+    - docker tag build-core/centos:clang-$CI_COMMIT_REF_NAME stabletec/build-core:centos-clang
+    # Push Images
+    - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+    - docker push stabletec/build-core:fedora-gcc
+    - docker push stabletec/build-core:fedora-clang
+    - docker push stabletec/build-core:centos-gcc
+    - docker push stabletec/build-core:centos-clang
+
+Non-Cached Build and Push Images (Windows):
+  only:
+    - schedules
+  tags:
+    - windows
+    - docker-builder
+  script:
+    # Build Images
+    - docker build --no-cache -t build-core/windows:msvc2017-%CI_COMMIT_REF_NAME% -m 2GB -f windows/msvc2017.dockerfile windows
+    # Tag Images
+    - docker tag build-core/windows:msvc2017-%CI_COMMIT_REF_NAME% stabletec/build-core:windows-msvc2017
+    # Push Images
+    - docker login -u %DOCKER_USER% -p %DOCKER_PASSWORD%
+    - docker push stabletec/build-core:windows-msvc2017
