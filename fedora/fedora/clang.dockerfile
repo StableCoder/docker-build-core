@@ -14,7 +14,8 @@ RUN yum update -y \
     && yum clean all
 
 # Conan
-RUN pip3 install conan
+RUN pip3 install --upgrade pip \
+    && pip3 install conan
 
 # Tag Specific
 RUN yum install -y \
@@ -24,5 +25,5 @@ RUN yum install -y \
     llvm-libs \
     && yum clean all
 
-ENV CC clang
-ENV CXX clang++
+ENV CC=clang \
+    CXX=clang++

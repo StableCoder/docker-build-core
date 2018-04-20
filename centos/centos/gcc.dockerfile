@@ -7,7 +7,8 @@ RUN yum update -y \
     && yum clean all
 
 # Conan
-RUN pip install conan
+RUN pip install --upgrade pip \
+    && pip install conan
 
 # Tag Specific
 RUN yum install -y gcc gcc-c++ \

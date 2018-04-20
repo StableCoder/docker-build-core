@@ -1,111 +1,160 @@
+stages:
+  - Basic Images
+  - Latest Images
+
+variables:
+  PREFIX: stabletec
+  CORE_NAME: build-core
+  FIRST_SEPARATOR: ':'
+  SECOND_SEPARATOR: '-'
+  LOCAL_IMAGE_NAME: ${CORE_NAME}${FIRST_SEPARATOR}${OS}${RELEASE}${SECOND_SEPARATOR}
+  EXPORT_IMAGE_NAME: ${PREFIX}/${CORE_NAME}${FIRST_SEPARATOR}${OS}${RELEASE}${SECOND_SEPARATOR}
+  REGISTRY_ADDRESS: ''
+  DOCKER_BUILD_EXTRA: ''
+
+.build_image: &build_template
+  image: docker:dind
+  except:
+    - master
+    - schedules
+  tags:
+    - linux
+    - docker-builder
+  script:
+    - docker build ${DOCKER_BUILD_EXTRA} -t ${LOCAL_IMAGE_NAME}gcc-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
+    - docker build ${DOCKER_BUILD_EXTRA} -t ${LOCAL_IMAGE_NAME}clang-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
+
+.upload_image: &upload_template
+  image: docker:dind
+  only:
+    - master
+    - schedules
+  tags:
+    - linux
+    - docker-builder
+  before_script: 
+    - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${REGISTRY_ADDRESS}
+  script:
+    - docker build ${DOCKER_BUILD_EXTRA} -t ${LOCAL_IMAGE_NAME}gcc-${CI_COMMIT_REF_NAME} -t ${EXPORT_IMAGE_NAME}gcc -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
+    - docker build ${DOCKER_BUILD_EXTRA} -t ${LOCAL_IMAGE_NAME}clang-${CI_COMMIT_REF_NAME} -t ${EXPORT_IMAGE_NAME}clang -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
+    - docker push ${EXPORT_IMAGE_NAME}gcc
+    - docker push ${EXPORT_IMAGE_NAME}clang
+
 # Image Builds
 
-Build Images (Linux):
-  image: docker:dind
+Build Fedora26:
+  stage: Basic Images
+  variables:
+    OS: fedora
+    RELEASE: 26
+  <<: *build_template
+
+Build Fedora27:
+  stage: Basic Images
+  variables:
+    OS: fedora
+    RELEASE: 27
+  <<: *build_template
+
+Build Fedora28:
+  stage: Basic Images
+  variables:
+    OS: fedora
+    RELEASE: 28
+  <<: *build_template
+
+Build Fedora (Latest):
+  stage: Latest Images
+  variables:
+    OS: fedora
+    RELEASE: ''
+  <<: *build_template
+
+Build CentOS7:
+  stage: Basic Images
+  variables:
+    OS: centos
+    RELEASE: 7
+  <<: *build_template
+
+Build CentOS (Latest):
+  stage: Latest Images
+  variables:
+    OS: centos
+    RELEASE: ''
+  <<: *build_template
+
+Build Windows:
+  stage: Basic Images
+  variables:
+    OS: windows
+    RELEASE: ''
   except:
     - master
     - schedules
   tags:
-    - linux
+    - windows
     - docker-builder
   script:
-    # Build Images
-    - docker build -t build-core/fedora:gcc-$CI_COMMIT_REF_NAME -f fedora/gcc.dockerfile fedora
-    - docker build -t build-core/fedora:clang-$CI_COMMIT_REF_NAME -f fedora/clang.dockerfile fedora
-    - docker build -t build-core/centos:gcc-$CI_COMMIT_REF_NAME -f centos/gcc.dockerfile centos
-    - docker build -t build-core/centos:clang-$CI_COMMIT_REF_NAME -f centos/clang.dockerfile centos
+    - docker build %DOCKER_BUILD_EXTRA% -t %LOCAL_IMAGE_NAME%msvc2017-%CI_COMMIT_REF_NAME% -m 2GB -f windows/msvc2017.dockerfile windows
 
-Build Images (Windows):
-  except:
+# Push Images
+
+Push Fedora26:
+  stage: Basic Images
+  variables:
+    OS: fedora
+    RELEASE: 26
+  <<: *upload_template
+
+Push Fedora27:
+  stage: Basic Images
+  variables:
+    OS: fedora
+    RELEASE: 27
+  <<: *upload_template
+
+Push Fedora28:
+  stage: Basic Images
+  variables:
+    OS: fedora
+    RELEASE: 28
+  <<: *upload_template
+
+Push Fedora (Latest):
+  stage: Latest Images
+  variables:
+    OS: fedora
+    RELEASE: ''
+  <<: *upload_template
+
+Push CentOS7:
+  stage: Basic Images
+  variables:
+    OS: centos
+    RELEASE: 7
+  <<: *upload_template
+
+Push CentOS (Latest):
+  stage: Latest Images
+  variables:
+    OS: centos
+    RELEASE: ''
+  <<: *upload_template
+
+Push Windows:
+  stage: Basic Images
+  variables:
+    OS: windows
+    RELEASE: ''
+  only:
     - master
     - schedules
   tags:
     - windows
     - docker-builder
+  before_script:
+    - docker login -u %DOCKER_USER% -p %DOCKER_PASSWORD% %REGISTRY_ADDRESS%
   script:
-    # Build Images
-    - docker build -t build-core/windows:msvc2017-%CI_COMMIT_REF_NAME% -m 2GB -f windows/msvc2017.dockerfile windows
-
-# Master Pushes
-
-Build and Push Images (Linux):
-  image: docker:dind
-  only:
-    - master
-  tags:
-    - linux
-    - docker-builder
-  script:
-    # Build Images
-    - docker build -t build-core/fedora:gcc-$CI_COMMIT_REF_NAME -f fedora/gcc.dockerfile fedora
-    - docker build -t build-core/fedora:clang-$CI_COMMIT_REF_NAME -f fedora/clang.dockerfile fedora
-    - docker build -t build-core/centos:gcc-$CI_COMMIT_REF_NAME -f centos/gcc.dockerfile centos
-    - docker build -t build-core/centos:clang-$CI_COMMIT_REF_NAME -f centos/clang.dockerfile centos
-    # Tag images
-    - docker tag build-core/fedora:gcc-$CI_COMMIT_REF_NAME stabletec/build-core:fedora-gcc
-    - docker tag build-core/fedora:clang-$CI_COMMIT_REF_NAME stabletec/build-core:fedora-clang
-    - docker tag build-core/centos:gcc-$CI_COMMIT_REF_NAME stabletec/build-core:centos-gcc
-    - docker tag build-core/centos:clang-$CI_COMMIT_REF_NAME stabletec/build-core:centos-clang
-    # Push Images
-    - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-    - docker push stabletec/build-core:fedora-gcc
-    - docker push stabletec/build-core:fedora-clang
-    - docker push stabletec/build-core:centos-gcc
-    - docker push stabletec/build-core:centos-clang
-
-Build and Push Images (Windows):
-  only:
-    - master
-  tags:
-    - windows
-    - docker-builder
-  script:
-    # Build Images
-    - docker build -t build-core/windows:msvc2017-%CI_COMMIT_REF_NAME% -m 2GB -f windows/msvc2017.dockerfile windows
-    # Tag Images
-    - docker tag build-core/windows:msvc2017-%CI_COMMIT_REF_NAME% stabletec/build-core:windows-msvc2017
-    # Push Images
-    - docker login -u %DOCKER_USER% -p %DOCKER_PASSWORD%
-    - docker push stabletec/build-core:windows-msvc2017
-
-# Non-cached Scheduled Pushes
-
-Non-Cached Build and Push Images (Linux):
-  image: docker:dind
-  only:
-    - schedules
-  tags:
-    - linux
-    - docker-builder
-  script:
-    # Build Images
-    - docker build --no-cache -t build-core/fedora:gcc-$CI_COMMIT_REF_NAME -f fedora/gcc.dockerfile fedora
-    - docker build -t build-core/fedora:clang-$CI_COMMIT_REF_NAME -f fedora/clang.dockerfile fedora
-    - docker build --no-cache -t build-core/centos:gcc-$CI_COMMIT_REF_NAME -f centos/gcc.dockerfile centos
-    - docker build -t build-core/centos:clang-$CI_COMMIT_REF_NAME -f centos/clang.dockerfile centos
-    # Tag images
-    - docker tag build-core/fedora:gcc-$CI_COMMIT_REF_NAME stabletec/build-core:fedora-gcc
-    - docker tag build-core/fedora:clang-$CI_COMMIT_REF_NAME stabletec/build-core:fedora-clang
-    - docker tag build-core/centos:gcc-$CI_COMMIT_REF_NAME stabletec/build-core:centos-gcc
-    - docker tag build-core/centos:clang-$CI_COMMIT_REF_NAME stabletec/build-core:centos-clang
-    # Push Images
-    - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-    - docker push stabletec/build-core:fedora-gcc
-    - docker push stabletec/build-core:fedora-clang
-    - docker push stabletec/build-core:centos-gcc
-    - docker push stabletec/build-core:centos-clang
-
-Non-Cached Build and Push Images (Windows):
-  only:
-    - schedules
-  tags:
-    - windows
-    - docker-builder
-  script:
-    # Build Images
-    - docker build --no-cache -t build-core/windows:msvc2017-%CI_COMMIT_REF_NAME% -m 2GB -f windows/msvc2017.dockerfile windows
-    # Tag Images
-    - docker tag build-core/windows:msvc2017-%CI_COMMIT_REF_NAME% stabletec/build-core:windows-msvc2017
-    # Push Images
-    - docker login -u %DOCKER_USER% -p %DOCKER_PASSWORD%
-    - docker push stabletec/build-core:windows-msvc2017
+    - docker build %DOCKER_BUILD_EXTRA% -t %LOCAL_IMAGE_NAME%msvc2017-%CI_COMMIT_REF_NAME% -t %EXPORT_IMAGE_NAME%msvc2017 -m 2GB -f windows/msvc2017.dockerfile windows
+    - docker push %EXPORT_IMAGE_NAME%msvc2017
