@@ -1,4 +1,4 @@
-FROM fedora:latest
+FROM fedora:28
 
 # OS Updates / Common Packages
 RUN yum update -y \
@@ -14,7 +14,8 @@ RUN yum update -y \
     && yum clean all
 
 # Conan
-RUN pip3 install conan
+RUN pip3 install --upgrade pip \
+    && pip3 install conan
 
 # Tag Specific
 RUN yum install -y \
