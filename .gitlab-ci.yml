@@ -1,12 +1,16 @@
 stages:
   - Basic Images
   - Latest Images
+  - Post-pipeline
+
+#############
+# Templates #
+#############
 
 .build_image: &build_template
   image: docker:dind
   except:
     - master
-    - schedules
   tags:
     - linux
     - docker-builder
@@ -18,39 +22,39 @@ stages:
   image: docker:dind
   only:
     - master
-  except:
-    - schedules
   tags:
     - linux
     - docker-builder
   before_script: 
     - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD}
   script:
-    - docker build -t stabletec/build-core:${OS}${RELEASE}-gcc-${CI_COMMIT_REF_NAME} -t stabletec/build-core:${OS}${RELEASE}-gcc -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
-    - docker build -t stabletec/build-core:${OS}${RELEASE}-clang-${CI_COMMIT_REF_NAME} -t stabletec/build-core:${OS}${RELEASE}-clang -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
+    - docker build ${DOCKER_NO_CACHE} -t stabletec/build-core:${OS}${RELEASE}-gcc -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
+    - docker build -t stabletec/build-core:${OS}${RELEASE}-clang -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
     - docker push stabletec/build-core:${OS}${RELEASE}-gcc
     - docker push stabletec/build-core:${OS}${RELEASE}-clang
   after_script:
     - docker logout
 
-.re_image: &reimaging_template
+.latest_upload_image: &latest_upload_template
   image: docker:dind
   only:
-    - schedules
+    - master
   tags:
     - linux
     - docker-builder
   before_script: 
     - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD}
   script:
-    - docker build --no-cache -t stabletec/build-core:${OS}${RELEASE}-gcc-${CI_COMMIT_REF_NAME} -t stabletec/build-core:${OS}${RELEASE}-gcc -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
-    - docker build -t stabletec/build-core:${OS}${RELEASE}-clang-${CI_COMMIT_REF_NAME} -t stabletec/build-core:${OS}${RELEASE}-clang -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
+    - docker build -t stabletec/build-core:${OS}${RELEASE}-gcc -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
+    - docker build -t stabletec/build-core:${OS}${RELEASE}-clang -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
     - docker push stabletec/build-core:${OS}${RELEASE}-gcc
     - docker push stabletec/build-core:${OS}${RELEASE}-clang
   after_script:
     - docker logout
 
-# Image Builds
+################
+# Image Builds #
+################
 
 Build Fedora26:
   stage: Basic Images
@@ -101,14 +105,15 @@ Build CentOS (Latest):
     RELEASE: ''
   except:
     - master
-    - schedules
   tags:
     - windows
     - docker-builder
   script:
     - docker build -t stabletec/build-core:%OS%%RELEASE%-msvc2017-%CI_COMMIT_REF_NAME% -m 2GB -f windows/msvc2017.dockerfile windows
 
-# Push Images
+###############
+# Push Images #
+###############
 
 Push Fedora26:
   stage: Basic Images
@@ -136,7 +141,7 @@ Push Fedora (Latest):
   variables:
     OS: fedora
     RELEASE: ''
-  <<: *upload_template
+  <<: *latest_upload_template
 
 Push CentOS7:
   stage: Basic Images
@@ -150,7 +155,7 @@ Push CentOS (Latest):
   variables:
     OS: centos
     RELEASE: ''
-  <<: *upload_template
+  <<: *latest_upload_template
 
 .Push Windows:
   stage: Basic Images
@@ -159,77 +164,29 @@ Push CentOS (Latest):
     RELEASE: ''
   only:
     - master
-  except:
-    - schedules
   tags:
     - windows
     - docker-builder
   before_script:
     - docker login -u %DOCKER_USER% -p %DOCKER_PASSWORD%
   script:
-    - docker build -t stabletec/build-core:%OS%%RELEASE%-msvc2017-%CI_COMMIT_REF_NAME% -t stabletec/build-core:%OS%%RELEASE%-msvc2017 -m 2GB -f windows/msvc2017.dockerfile windows
+    - docker build %DOCKER_NO_CACHE% -t stabletec/build-core:%OS%%RELEASE%-msvc2017 -m 2GB -f windows/msvc2017.dockerfile windows
     - docker push stabletec/build-core:%OS%%RELEASE%-msvc2017
   after_script:
     - docker logout
 
-# ReImaging
+#################
+# Post-pipeline #
+#################
 
-ReImage Fedora26:
-  stage: Basic Images
-  variables:
-    OS: fedora
-    RELEASE: 26
-  <<: *upload_template
-
-ReImage Fedora27:
-  stage: Basic Images
-  variables:
-    OS: fedora
-    RELEASE: 27
-  <<: *upload_template
-
-ReImage Fedora28:
-  stage: Basic Images
-  variables:
-    OS: fedora
-    RELEASE: 28
-  <<: *upload_template
-
-ReImage Fedora (Latest):
-  stage: Latest Images
-  variables:
-    OS: fedora
-    RELEASE: ''
-  <<: *upload_template
-
-ReImage CentOS7:
-  stage: Basic Images
-  variables:
-    OS: centos
-    RELEASE: 7
-  <<: *upload_template
-
-ReImage CentOS (Latest):
-  stage: Latest Images
-  variables:
-    OS: centos
-    RELEASE: ''
-  <<: *upload_template
-
-.ReImage Windows:
-  stage: Basic Images
-  variables:
-    OS: windows
-    RELEASE: ''
+Pipeline Triggers:
+  stage: Post-pipeline
+  image: stabletec/alpine:curl
   only:
-    - schedules
+    - master
   tags:
-    - windows
-    - docker-builder
-  before_script:
-    - docker login -u %DOCKER_USER% -p %DOCKER_PASSWORD%
+    - linux
+    - docker
   script:
-    - docker build --no-cache -t stabletec/build-core:%OS%%RELEASE%-msvc2017-%CI_COMMIT_REF_NAME% -t stabletec/build-core:%OS%%RELEASE%-msvc2017 -m 2GB -f windows/msvc2017.dockerfile windows
-    - docker push stabletec/build-core:%OS%%RELEASE%-msvc2017
-  after_script:
-    - docker logout
+    - echo "Triggering build-stec (13)"
+    - curl --request POST --form "token=$CI_JOB_TOKEN" --form ref=master http://git.stabletec.com/api/v4/projects/13/trigger/pipeline
