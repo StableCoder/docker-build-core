@@ -26,3 +26,5 @@ RUN yum install -y \
 
 ENV CC=clang \
     CXX=clang++
+
+CMD ["bash"]

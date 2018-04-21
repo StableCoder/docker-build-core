@@ -14,3 +14,5 @@ RUN yum install -y clang llvm-libs \
 
 ENV CC=clang \
     CXX=clang++
+
+CMD ["bash"]

@@ -7,3 +7,5 @@ RUN apt update \
 
 # Tag Specific
 RUN apt install -y gcc g++
+
+CMD ["bash"]

@@ -21,3 +21,5 @@ RUN yum install -y \
     gcc \
     gcc-c++ \
     && yum clean all
+
+CMD ["bash"]
