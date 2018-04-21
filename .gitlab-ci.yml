@@ -2,16 +2,6 @@ stages:
   - Basic Images
   - Latest Images
 
-variables:
-  PREFIX: stabletec
-  CORE_NAME: build-core
-  FIRST_SEPARATOR: ':'
-  SECOND_SEPARATOR: '-'
-  LOCAL_IMAGE_NAME: ${CORE_NAME}${FIRST_SEPARATOR}${OS}${RELEASE}${SECOND_SEPARATOR}
-  EXPORT_IMAGE_NAME: ${PREFIX}/${CORE_NAME}${FIRST_SEPARATOR}${OS}${RELEASE}${SECOND_SEPARATOR}
-  REGISTRY_ADDRESS: ''
-  DOCKER_BUILD_EXTRA: ''
-
 .build_image: &build_template
   image: docker:dind
   except:
@@ -21,24 +11,44 @@ variables:
     - linux
     - docker-builder
   script:
-    - docker build ${DOCKER_BUILD_EXTRA} -t ${LOCAL_IMAGE_NAME}gcc-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
-    - docker build ${DOCKER_BUILD_EXTRA} -t ${LOCAL_IMAGE_NAME}clang-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
+    - docker build -t stabletec/build-core:${OS}${RELEASE}-gcc-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
+    - docker build -t stabletec/build-core:${OS}${RELEASE}-clang-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
 
 .upload_image: &upload_template
   image: docker:dind
   only:
     - master
+  except:
     - schedules
   tags:
     - linux
     - docker-builder
   before_script: 
-    - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${REGISTRY_ADDRESS}
+    - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD}
   script:
-    - docker build ${DOCKER_BUILD_EXTRA} -t ${LOCAL_IMAGE_NAME}gcc-${CI_COMMIT_REF_NAME} -t ${EXPORT_IMAGE_NAME}gcc -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
-    - docker build ${DOCKER_BUILD_EXTRA} -t ${LOCAL_IMAGE_NAME}clang-${CI_COMMIT_REF_NAME} -t ${EXPORT_IMAGE_NAME}clang -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
-    - docker push ${EXPORT_IMAGE_NAME}gcc
-    - docker push ${EXPORT_IMAGE_NAME}clang
+    - docker build -t stabletec/build-core:${OS}${RELEASE}-gcc-${CI_COMMIT_REF_NAME} -t stabletec/build-core:${OS}${RELEASE}-gcc -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
+    - docker build -t stabletec/build-core:${OS}${RELEASE}-clang-${CI_COMMIT_REF_NAME} -t stabletec/build-core:${OS}${RELEASE}-clang -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
+    - docker push stabletec/build-core:${OS}${RELEASE}-gcc
+    - docker push stabletec/build-core:${OS}${RELEASE}-clang
+  after_script:
+    - docker logout
+
+.re_image: &reimaging_template
+  image: docker:dind
+  only:
+    - schedules
+  tags:
+    - linux
+    - docker-builder
+  before_script: 
+    - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD}
+  script:
+    - docker build --no-cache -t stabletec/build-core:${OS}${RELEASE}-gcc-${CI_COMMIT_REF_NAME} -t stabletec/build-core:${OS}${RELEASE}-gcc -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
+    - docker build -t stabletec/build-core:${OS}${RELEASE}-clang-${CI_COMMIT_REF_NAME} -t stabletec/build-core:${OS}${RELEASE}-clang -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
+    - docker push stabletec/build-core:${OS}${RELEASE}-gcc
+    - docker push stabletec/build-core:${OS}${RELEASE}-clang
+  after_script:
+    - docker logout
 
 # Image Builds
 
@@ -84,7 +94,7 @@ Build CentOS (Latest):
     RELEASE: ''
   <<: *build_template
 
-Build Windows:
+.Build Windows:
   stage: Basic Images
   variables:
     OS: windows
@@ -96,7 +106,7 @@ Build Windows:
     - windows
     - docker-builder
   script:
-    - docker build %DOCKER_BUILD_EXTRA% -t %LOCAL_IMAGE_NAME%msvc2017-%CI_COMMIT_REF_NAME% -m 2GB -f windows/msvc2017.dockerfile windows
+    - docker build -t stabletec/build-core:%OS%%RELEASE%-msvc2017-%CI_COMMIT_REF_NAME% -m 2GB -f windows/msvc2017.dockerfile windows
 
 # Push Images
 
@@ -142,19 +152,84 @@ Push CentOS (Latest):
     RELEASE: ''
   <<: *upload_template
 
-Push Windows:
+.Push Windows:
   stage: Basic Images
   variables:
     OS: windows
     RELEASE: ''
   only:
     - master
+  except:
     - schedules
   tags:
     - windows
     - docker-builder
   before_script:
-    - docker login -u %DOCKER_USER% -p %DOCKER_PASSWORD% %REGISTRY_ADDRESS%
+    - docker login -u %DOCKER_USER% -p %DOCKER_PASSWORD%
   script:
-    - docker build %DOCKER_BUILD_EXTRA% -t %LOCAL_IMAGE_NAME%msvc2017-%CI_COMMIT_REF_NAME% -t %EXPORT_IMAGE_NAME%msvc2017 -m 2GB -f windows/msvc2017.dockerfile windows
-    - docker push %EXPORT_IMAGE_NAME%msvc2017
+    - docker build -t stabletec/build-core:%OS%%RELEASE%-msvc2017-%CI_COMMIT_REF_NAME% -t stabletec/build-core:%OS%%RELEASE%-msvc2017 -m 2GB -f windows/msvc2017.dockerfile windows
+    - docker push stabletec/build-core:%OS%%RELEASE%-msvc2017
+  after_script:
+    - docker logout
+
+# ReImaging
+
+ReImage Fedora26:
+  stage: Basic Images
+  variables:
+    OS: fedora
+    RELEASE: 26
+  <<: *upload_template
+
+ReImage Fedora27:
+  stage: Basic Images
+  variables:
+    OS: fedora
+    RELEASE: 27
+  <<: *upload_template
+
+ReImage Fedora28:
+  stage: Basic Images
+  variables:
+    OS: fedora
+    RELEASE: 28
+  <<: *upload_template
+
+ReImage Fedora (Latest):
+  stage: Latest Images
+  variables:
+    OS: fedora
+    RELEASE: ''
+  <<: *upload_template
+
+ReImage CentOS7:
+  stage: Basic Images
+  variables:
+    OS: centos
+    RELEASE: 7
+  <<: *upload_template
+
+ReImage CentOS (Latest):
+  stage: Latest Images
+  variables:
+    OS: centos
+    RELEASE: ''
+  <<: *upload_template
+
+.ReImage Windows:
+  stage: Basic Images
+  variables:
+    OS: windows
+    RELEASE: ''
+  only:
+    - schedules
+  tags:
+    - windows
+    - docker-builder
+  before_script:
+    - docker login -u %DOCKER_USER% -p %DOCKER_PASSWORD%
+  script:
+    - docker build --no-cache -t stabletec/build-core:%OS%%RELEASE%-msvc2017-%CI_COMMIT_REF_NAME% -t stabletec/build-core:%OS%%RELEASE%-msvc2017 -m 2GB -f windows/msvc2017.dockerfile windows
+    - docker push stabletec/build-core:%OS%%RELEASE%-msvc2017
+  after_script:
+    - docker logout
