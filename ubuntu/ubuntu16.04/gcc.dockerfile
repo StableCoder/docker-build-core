@@ -6,4 +6,4 @@ RUN apt-get update \
     && pip install conan
 
 # Tag Specific
-RUN apt install gcc g++
+RUN apt install -y gcc g++

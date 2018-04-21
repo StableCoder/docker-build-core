@@ -6,7 +6,7 @@ RUN apt-get update \
     && pip install conan
 
 # Tag Specific
-RUN apt install clang
+RUN apt install -y clang
 
 ENV CC=clang \
     CXX=clang++
