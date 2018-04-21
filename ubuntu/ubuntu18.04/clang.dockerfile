@@ -10,3 +10,5 @@ RUN apt install -y clang
 
 ENV CC=clang \
     CXX=clang++
+
+CMD ["bash"]
