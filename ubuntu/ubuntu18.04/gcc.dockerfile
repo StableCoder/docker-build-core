@@ -1,5 +1,6 @@
 FROM ubuntu:18.04
 
+# Core Packages
 RUN apt update \
     && apt upgrade -y \
     && apt install -y python3-pip ninja-build make git cmake subversion \
