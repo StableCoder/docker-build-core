@@ -4,6 +4,7 @@ FROM fedora:27
 RUN yum update -y \
     && yum install -y \
     git \
+    subversion \
     make \
     ninja-build \
     cmake \
@@ -11,10 +12,8 @@ RUN yum update -y \
     liblsan \
     libtsan \
     libubsan \
-    && yum clean all
-
-# Conan
-RUN pip3 install --upgrade pip \
+    && yum clean all \
+    && pip3 install --upgrade pip \
     && pip3 install conan
 
 # Tag Specific
