@@ -1,11 +1,15 @@
+##########
+# Global #
+##########
+
 stages:
   - Basic Images
   - Latest Images
-  - Post-pipeline
+  - Post-Pipeline
 
-#############
-# Templates #
-#############
+######################
+# Image Builds Stage #
+######################
 
 .build_image: &build_template
   image: docker:dind
@@ -17,44 +21,6 @@ stages:
   script:
     - docker build -t stabletec/build-core:${OS}${RELEASE}-gcc-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
     - docker build -t stabletec/build-core:${OS}${RELEASE}-clang-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
-
-.upload_image: &upload_template
-  image: docker:dind
-  only:
-    - master
-  tags:
-    - linux
-    - docker-builder
-  before_script: 
-    - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD}
-  script:
-    - docker build ${DOCKER_NO_CACHE} -t stabletec/build-core:${OS}${RELEASE}-gcc -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
-    - docker build -t stabletec/build-core:${OS}${RELEASE}-clang -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
-    - docker push stabletec/build-core:${OS}${RELEASE}-gcc
-    - docker push stabletec/build-core:${OS}${RELEASE}-clang
-  after_script:
-    - docker logout
-
-.latest_upload_image: &latest_upload_template
-  image: docker:dind
-  only:
-    - master
-  tags:
-    - linux
-    - docker-builder
-  before_script: 
-    - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD}
-  script:
-    - docker build -t stabletec/build-core:${OS}${RELEASE}-gcc -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
-    - docker build -t stabletec/build-core:${OS}${RELEASE}-clang -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
-    - docker push stabletec/build-core:${OS}${RELEASE}-gcc
-    - docker push stabletec/build-core:${OS}${RELEASE}-clang
-  after_script:
-    - docker logout
-
-################
-# Image Builds #
-################
 
 Build Fedora26:
   stage: Basic Images
@@ -132,9 +98,43 @@ Build Ubuntu (Latest):
   script:
     - docker build -t stabletec/build-core:%OS%%RELEASE%-msvc2017-%CI_COMMIT_REF_NAME% -m 2GB -f windows/msvc2017.dockerfile windows
 
-###############
-# Push Images #
-###############
+#####################
+# Push Images Stage #
+#####################
+
+.upload_image: &upload_template
+  image: docker:dind
+  only:
+    - master
+  tags:
+    - linux
+    - docker-builder
+  before_script: 
+    - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD}
+  script:
+    - docker build ${DOCKER_NO_CACHE} -t stabletec/build-core:${OS}${RELEASE}-gcc -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
+    - docker build -t stabletec/build-core:${OS}${RELEASE}-clang -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
+    - docker push stabletec/build-core:${OS}${RELEASE}-gcc
+    - docker push stabletec/build-core:${OS}${RELEASE}-clang
+  after_script:
+    - docker logout
+
+.latest_upload_image: &latest_upload_template
+  image: docker:dind
+  only:
+    - master
+  tags:
+    - linux
+    - docker-builder
+  before_script: 
+    - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD}
+  script:
+    - docker build -t stabletec/build-core:${OS}${RELEASE}-gcc -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
+    - docker build -t stabletec/build-core:${OS}${RELEASE}-clang -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
+    - docker push stabletec/build-core:${OS}${RELEASE}-gcc
+    - docker push stabletec/build-core:${OS}${RELEASE}-clang
+  after_script:
+    - docker logout
 
 Push Fedora26:
   stage: Basic Images
@@ -217,12 +217,12 @@ Push Ubuntu (Latest):
   after_script:
     - docker logout
 
-#################
-# Post-pipeline #
-#################
+#######################
+# Post-Pipeline Stage #
+#######################
 
 Pipeline Triggers:
-  stage: Post-pipeline
+  stage: Post-Pipeline
   image: stabletec/alpine:curl
   only:
     - master
