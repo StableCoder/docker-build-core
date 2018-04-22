@@ -19,6 +19,17 @@ stages:
     - linux
     - docker-builder
   script:
+    - docker build -t stabletec/build-core:${OS}${RELEASE}-gcc-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
+    - docker build -t stabletec/build-core:${OS}${RELEASE}-clang-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
+
+.tagged_build_image: &tagged_build_template
+  image: docker:dind
+  except:
+    - master
+  tags:
+    - linux
+    - docker-builder
+  script:
     - ./tag_helper.sh
     - docker build -t stabletec/build-core:${OS}${RELEASE}-gcc-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
     - docker build -t stabletec/build-core:${OS}${RELEASE}-clang-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
@@ -49,7 +60,7 @@ Fedora Latest Build:
   variables:
     OS: fedora
     RELEASE: ''
-  <<: *build_template
+  <<: *tagged_build_template
 
 CentOS 7 Build:
   stage: Release Images
@@ -63,7 +74,7 @@ CentOS Latest Build:
   variables:
     OS: centos
     RELEASE: ''
-  <<: *build_template
+  <<: *tagged_build_template
 
 Debian 9 Build:
   stage: Release Images
@@ -76,7 +87,7 @@ Debian 10 Build:
   stage: Release Images
   variables:
     OS: debian
-    RELEASE: sid
+    RELEASE: 10
   <<: *build_template
 
 Debian Latest Build:
@@ -84,14 +95,14 @@ Debian Latest Build:
   variables:
     OS: debian
     RELEASE: ''
-  <<: *build_template
+  <<: *tagged_build_template
 
 Debian Testing Build:
   stage: Tagged Images
   variables:
     OS: debian
     RELEASE: testing
-  <<: *build_template
+  <<: *tagged_build_template
 
 Ubuntu 16.04 Build:
   stage: Release Images
@@ -112,7 +123,14 @@ Ubuntu Latest Build:
   variables:
     OS: ubuntu
     RELEASE: ''
-  <<: *build_template
+  <<: *tagged_build_template
+
+Ubuntu Devel Build:
+  stage: Tagged Images
+  variables:
+    OS: ubuntu
+    RELEASE: devel
+  <<: *tagged_build_template
 
 .Windows Build:
   stage: Release Images
@@ -127,9 +145,9 @@ Ubuntu Latest Build:
   script:
     - docker build -t stabletec/build-core:%OS%%RELEASE%-msvc2017-%CI_COMMIT_REF_NAME% -m 2GB -f windows/msvc2017.dockerfile windows
 
-#####################
-# Push Images Stage #
-#####################
+#######################
+# Image Uploads Stage #
+#######################
 
 .upload_image: &upload_template
   image: docker:dind
@@ -166,98 +184,105 @@ Ubuntu Latest Build:
   after_script:
     - docker logout
 
-Fedora 26 Push:
+Fedora 26 Upload:
   stage: Release Images
   variables:
     OS: fedora
     RELEASE: 26
   <<: *upload_template
 
-Fedora 27 Push:
+Fedora 27 Upload:
   stage: Release Images
   variables:
     OS: fedora
     RELEASE: 27
   <<: *upload_template
 
-Fedora 28 Push:
+Fedora 28 Upload:
   stage: Release Images
   variables:
     OS: fedora
     RELEASE: 28
   <<: *upload_template
 
-Fedora Latest Push:
+Fedora Latest Upload:
   stage: Tagged Images
   variables:
     OS: fedora
     RELEASE: ''
   <<: *tagged_upload_template
 
-CentOS 7 Push:
+CentOS 7 Upload:
   stage: Release Images
   variables:
     OS: centos
     RELEASE: 7
   <<: *upload_template
 
-CentOS Latest Push:
+CentOS Latest Upload:
   stage: Tagged Images
   variables:
     OS: centos
     RELEASE: ''
   <<: *tagged_upload_template
 
-Debian 9 Push:
+Debian 9 Upload:
   stage: Release Images
   variables:
     OS: debian
     RELEASE: 9
   <<: *upload_template
 
-Debian 10 Push:
+Debian 10 Upload:
   stage: Release Images
   variables:
     OS: debian
-    RELEASE: sid
+    RELEASE: 10
   <<: *upload_template
 
-Debian Latest Push:
+Debian Latest Upload:
   stage: Tagged Images
   variables:
     OS: debian
     RELEASE: ''
   <<: *upload_template
 
-Debian Testing Push:
+Debian Testing Upload:
   stage: Tagged Images
   variables:
     OS: debian
     RELEASE: testing
   <<: *tagged_upload_template
 
-Ubuntu 16.04 Push:
+Ubuntu 16.04 Upload:
   stage: Release Images
   variables:
     OS: ubuntu
     RELEASE: '16.04'
   <<: *upload_template
 
-Ubuntu 18.04 Push:
+Ubuntu 18.04 Upload:
   stage: Release Images
   variables:
     OS: ubuntu
     RELEASE: '18.04'
   <<: *upload_template
 
-Ubuntu Latest Push:
+Ubuntu Latest Upload:
   stage: Tagged Images
   variables:
     OS: ubuntu
     RELEASE: ''
   <<: *tagged_upload_template
 
-.Windows Push:
+Ubuntu Devel Upload:
+  stage: Tagged Images
+  variables:
+    OS: ubuntu
+    RELEASE: devel
+  <<: *tagged_upload_template
+
+.Windows Upload:
   stage: Release Images
   variables:
     OS: windows
