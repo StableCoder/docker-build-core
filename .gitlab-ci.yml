@@ -76,7 +76,7 @@ Debian 10 Build:
   stage: Release Images
   variables:
     OS: debian
-    RELEASE: 10
+    RELEASE: sid
   <<: *build_template
 
 Debian Latest Build:
@@ -219,7 +219,7 @@ Debian 10 Push:
   stage: Release Images
   variables:
     OS: debian
-    RELEASE: 10
+    RELEASE: sid
   <<: *upload_template
 
 Debian Latest Push:
