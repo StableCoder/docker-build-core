@@ -1,4 +1,4 @@
-FROM debian:testing
+FROM debian:latest
 
 # Core Packages
 RUN apt-get update \
