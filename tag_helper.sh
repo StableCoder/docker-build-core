@@ -1,8 +1,8 @@
 #!/bin/sh
 
-if [ "${VERSION}" == "" ]; then
-    VERSION=latest
+if [ "${RELEASE}" == "" ]; then
+    RELEASE=latest
 fi
 
-sed -i '1s/.*/FROM ${OS}:${VERSION}/' ${OS}/${OS}${RELEASE}/gcc.dockerfile
-sed -i '1s/.*/FROM ${OS}:${VERSION}/' ${OS}/${OS}${RELEASE}/clang.dockerfile
+sed -i '1s/.*/FROM ${OS}:${RELEASE}/' ${OS}/${OS}${RELEASE}/gcc.dockerfile
+sed -i '1s/.*/FROM ${OS}:${RELEASE}/' ${OS}/${OS}${RELEASE}/clang.dockerfile
