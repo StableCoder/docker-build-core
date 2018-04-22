@@ -3,8 +3,8 @@
 ##########
 
 stages:
-  - Basic Images
-  - Latest Images
+  - Release Images
+  - Tagged Images
   - Post-Pipeline
 
 ######################
@@ -22,71 +22,99 @@ stages:
     - docker build -t stabletec/build-core:${OS}${RELEASE}-gcc-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
     - docker build -t stabletec/build-core:${OS}${RELEASE}-clang-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
 
-Build Fedora26:
-  stage: Basic Images
+Fedora 26 Build:
+  stage: Release Images
   variables:
     OS: fedora
     RELEASE: 26
   <<: *build_template
 
-Build Fedora27:
-  stage: Basic Images
+Fedora 27 Build:
+  stage: Release Images
   variables:
     OS: fedora
     RELEASE: 27
   <<: *build_template
 
-Build Fedora28:
-  stage: Basic Images
+Fedora 28 Build:
+  stage: Release Images
   variables:
     OS: fedora
     RELEASE: 28
   <<: *build_template
 
-Build Fedora (Latest):
-  stage: Latest Images
+Fedora Latest Build:
+  stage: Tagged Images
   variables:
     OS: fedora
     RELEASE: ''
   <<: *build_template
 
-Build CentOS7:
-  stage: Basic Images
+CentOS 7 Build:
+  stage: Release Images
   variables:
     OS: centos
     RELEASE: 7
   <<: *build_template
 
-Build CentOS (Latest):
-  stage: Latest Images
+CentOS Latest Build:
+  stage: Tagged Images
   variables:
     OS: centos
     RELEASE: ''
   <<: *build_template
 
-Build Ubuntu 16:
-  stage: Basic Images
+Debian 9 Build:
+  stage: Release Images
+  variables:
+    OS: debian
+    RELEASE: 9
+  <<: *build_template
+
+Debian 10 Build:
+  stage: Release Images
+  variables:
+    OS: debian
+    RELEASE: 10
+  <<: *build_template
+
+Debian Latest Build:
+  stage: Tagged Images
+  variables:
+    OS: debian
+    RELEASE: ''
+  <<: *build_template
+
+Debian Testing Build:
+  stage: Tagged Images
+  variables:
+    OS: debian
+    RELEASE: testing
+  <<: *build_template
+
+Ubuntu 16.04 Build:
+  stage: Release Images
   variables:
     OS: ubuntu
     RELEASE: '16.04'
   <<: *build_template
 
-Build Ubuntu 18:
-  stage: Basic Images
+Ubuntu 18.04 Build:
+  stage: Release Images
   variables:
     OS: ubuntu
     RELEASE: '18.04'
   <<: *build_template
 
-Build Ubuntu (Latest):
-  stage: Latest Images
+Ubuntu Latest Build:
+  stage: Tagged Images
   variables:
     OS: ubuntu
     RELEASE: ''
   <<: *build_template
 
-.Build Windows:
-  stage: Basic Images
+.Windows Build:
+  stage: Release Images
   variables:
     OS: windows
     RELEASE: ''
@@ -109,7 +137,7 @@ Build Ubuntu (Latest):
   tags:
     - linux
     - docker-builder
-  before_script: 
+  before_script:
     - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD}
   script:
     - docker build ${DOCKER_NO_CACHE} -t stabletec/build-core:${OS}${RELEASE}-gcc -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
@@ -126,7 +154,7 @@ Build Ubuntu (Latest):
   tags:
     - linux
     - docker-builder
-  before_script: 
+  before_script:
     - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD}
   script:
     - docker build -t stabletec/build-core:${OS}${RELEASE}-gcc -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
@@ -136,71 +164,99 @@ Build Ubuntu (Latest):
   after_script:
     - docker logout
 
-Push Fedora26:
-  stage: Basic Images
+Fedora 26 Push:
+  stage: Release Images
   variables:
     OS: fedora
     RELEASE: 26
   <<: *upload_template
 
-Push Fedora27:
-  stage: Basic Images
+Fedora 27 Push:
+  stage: Release Images
   variables:
     OS: fedora
     RELEASE: 27
   <<: *upload_template
 
-Push Fedora28:
-  stage: Basic Images
+Fedora 28 Push:
+  stage: Release Images
   variables:
     OS: fedora
     RELEASE: 28
   <<: *upload_template
 
-Push Fedora (Latest):
-  stage: Latest Images
+Fedora Latest Push:
+  stage: Tagged Images
   variables:
     OS: fedora
     RELEASE: ''
   <<: *latest_upload_template
 
-Push CentOS7:
-  stage: Basic Images
+CentOS 7 Push:
+  stage: Release Images
   variables:
     OS: centos
     RELEASE: 7
   <<: *upload_template
 
-Push CentOS (Latest):
-  stage: Latest Images
+CentOS Latest Push:
+  stage: Tagged Images
   variables:
     OS: centos
     RELEASE: ''
   <<: *latest_upload_template
 
-Push Ubuntu 16.04:
-  stage: Basic Images
+Debian 9 Push:
+  stage: Release Images
+  variables:
+    OS: debian
+    RELEASE: 9
+  <<: *upload_template
+
+Debian 10 Push:
+  stage: Release Images
+  variables:
+    OS: debian
+    RELEASE: 10
+  <<: *upload_template
+
+Debian Latest Push:
+  stage: Tagged Images
+  variables:
+    OS: debian
+    RELEASE: ''
+  <<: *upload_template
+
+Debian Testing Push:
+  stage: Tagged Images
+  variables:
+    OS: debian
+    RELEASE: testing
+  <<: *latest_upload_template
+
+Ubuntu 16.04 Push:
+  stage: Release Images
   variables:
     OS: ubuntu
     RELEASE: '16.04'
   <<: *upload_template
 
-Push Ubuntu 18.04:
-  stage: Basic Images
+Ubuntu 18.04 Push:
+  stage: Release Images
   variables:
     OS: ubuntu
     RELEASE: '18.04'
   <<: *upload_template
 
-Push Ubuntu (Latest):
-  stage: Latest Images
+Ubuntu Latest Push:
+  stage: Tagged Images
   variables:
     OS: ubuntu
     RELEASE: ''
   <<: *latest_upload_template
 
-.Push Windows:
-  stage: Basic Images
+.Windows Push:
+  stage: Release Images
   variables:
     OS: windows
     RELEASE: ''

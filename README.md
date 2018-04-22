@@ -12,7 +12,8 @@ These images form the core of other images used for building an assortment of C/
 On these OS's:
 - Fedora
 - CentOS
-- Windows
+- Debian
 - Ubuntu
+- Windows
 
 These images are used to target platforms, not specific tools or compilers, so there is some overlap between them for certain items.
