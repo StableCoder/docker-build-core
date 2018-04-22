@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM debian:stretch
 
 # Core Packages
 RUN apt-get update \
@@ -18,6 +18,9 @@ RUN wget -q https://cmake.org/files/v${CMAKE_MINOR_VER}/cmake-${CMAKE_VERSION}-L
     && rm -rf cmake-*
 
 # Tag Specific
-RUN apt install -y gcc g++
+RUN apt install -y clang
+
+ENV CC=clang \
+    CXX=clang++
 
 CMD ["bash"]
