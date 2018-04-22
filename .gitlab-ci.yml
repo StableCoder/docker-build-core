@@ -19,6 +19,7 @@ stages:
     - linux
     - docker-builder
   script:
+    - ./tag_helper.sh
     - docker build -t stabletec/build-core:${OS}${RELEASE}-gcc-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
     - docker build -t stabletec/build-core:${OS}${RELEASE}-clang-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
 
@@ -147,7 +148,7 @@ Ubuntu Latest Build:
   after_script:
     - docker logout
 
-.latest_upload_image: &latest_upload_template
+.tagged_upload_image: &tagged_upload_template
   image: docker:dind
   only:
     - master
@@ -157,6 +158,7 @@ Ubuntu Latest Build:
   before_script:
     - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD}
   script:
+    - ./tag_helper.sh
     - docker build -t stabletec/build-core:${OS}${RELEASE}-gcc -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
     - docker build -t stabletec/build-core:${OS}${RELEASE}-clang -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
     - docker push stabletec/build-core:${OS}${RELEASE}-gcc
@@ -190,7 +192,7 @@ Fedora Latest Push:
   variables:
     OS: fedora
     RELEASE: ''
-  <<: *latest_upload_template
+  <<: *tagged_upload_template
 
 CentOS 7 Push:
   stage: Release Images
@@ -204,7 +206,7 @@ CentOS Latest Push:
   variables:
     OS: centos
     RELEASE: ''
-  <<: *latest_upload_template
+  <<: *tagged_upload_template
 
 Debian 9 Push:
   stage: Release Images
@@ -232,7 +234,7 @@ Debian Testing Push:
   variables:
     OS: debian
     RELEASE: testing
-  <<: *latest_upload_template
+  <<: *tagged_upload_template
 
 Ubuntu 16.04 Push:
   stage: Release Images
@@ -253,7 +255,7 @@ Ubuntu Latest Push:
   variables:
     OS: ubuntu
     RELEASE: ''
-  <<: *latest_upload_template
+  <<: *tagged_upload_template
 
 .Windows Push:
   stage: Release Images
