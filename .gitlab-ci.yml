@@ -7,6 +7,13 @@ stages:
   - Tagged Images
   - Post-Pipeline
 
+variables:
+  REGISTRY_ADDRESS: ''
+  CORE_NAME: 'stabletec/build-core'
+  FIRST_SEPARATOR: ':'
+  SECOND_SEPARATOR: '-'
+  TAG_NAME: ${REGISTRY_ADDRESS}${CORE_NAME}${FIRST_SEPARATOR}${OS}${RELEASE}${SECOND_SEPARATOR}
+
 ######################
 # Image Builds Stage #
 ######################
@@ -19,8 +26,8 @@ stages:
     - linux
     - docker-builder
   script:
-    - docker build -t stabletec/build-core:${OS}${RELEASE}-gcc-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
-    - docker build -t stabletec/build-core:${OS}${RELEASE}-clang-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
+    - docker build -t ${TAG_NAME}gcc-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
+    - docker build -t ${TAG_NAME}clang-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
 
 .tagged_build_image: &tagged_build_template
   image: docker:dind
@@ -31,8 +38,8 @@ stages:
     - docker-builder
   script:
     - ./tag_helper.sh
-    - docker build -t stabletec/build-core:${OS}${RELEASE}-gcc-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
-    - docker build -t stabletec/build-core:${OS}${RELEASE}-clang-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
+    - docker build -t ${TAG_NAME}gcc-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
+    - docker build -t ${TAG_NAME}clang-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
 
 Fedora 26 Build:
   stage: Release Images
@@ -143,7 +150,7 @@ Ubuntu Devel Build:
     - windows
     - docker-builder
   script:
-    - docker build -t stabletec/build-core:%OS%%RELEASE%-msvc2017-%CI_COMMIT_REF_NAME% -m 2GB -f windows/msvc2017.dockerfile windows
+    - docker build -t %TAG_NAME%msvc2017-%CI_COMMIT_REF_NAME% -m 2GB -f windows/msvc2017.dockerfile windows
 
 #######################
 # Image Uploads Stage #
@@ -157,12 +164,12 @@ Ubuntu Devel Build:
     - linux
     - docker-builder
   before_script:
-    - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD}
+    - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${DOCKER_REGISTRY}
   script:
-    - docker build ${DOCKER_NO_CACHE} -t stabletec/build-core:${OS}${RELEASE}-gcc -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
-    - docker build -t stabletec/build-core:${OS}${RELEASE}-clang -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
-    - docker push stabletec/build-core:${OS}${RELEASE}-gcc
-    - docker push stabletec/build-core:${OS}${RELEASE}-clang
+    - docker build ${DOCKER_NO_CACHE} -t ${TAG_NAME}gcc -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
+    - docker build -t ${TAG_NAME}clang -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
+    - docker push ${TAG_NAME}gcc
+    - docker push ${TAG_NAME}clang
   after_script:
     - docker logout
 
@@ -174,13 +181,13 @@ Ubuntu Devel Build:
     - linux
     - docker-builder
   before_script:
-    - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD}
+    - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${DOCKER_REGISTRY}
   script:
     - ./tag_helper.sh
-    - docker build -t stabletec/build-core:${OS}${RELEASE}-gcc -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
-    - docker build -t stabletec/build-core:${OS}${RELEASE}-clang -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
-    - docker push stabletec/build-core:${OS}${RELEASE}-gcc
-    - docker push stabletec/build-core:${OS}${RELEASE}-clang
+    - docker build -t ${TAG_NAME}gcc -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
+    - docker build -t ${TAG_NAME}clang -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
+    - docker push ${TAG_NAME}gcc
+    - docker push ${TAG_NAME}clang
   after_script:
     - docker logout
 
@@ -293,10 +300,10 @@ Ubuntu Devel Upload:
     - windows
     - docker-builder
   before_script:
-    - docker login -u %DOCKER_USER% -p %DOCKER_PASSWORD%
+    - docker login -u %DOCKER_USER% -p "%DOCKER_PASSWORD%" %DOCKER_REGISTRY%
   script:
-    - docker build %DOCKER_NO_CACHE% -t stabletec/build-core:%OS%%RELEASE%-msvc2017 -m 2GB -f windows/msvc2017.dockerfile windows
-    - docker push stabletec/build-core:%OS%%RELEASE%-msvc2017
+    - docker build %DOCKER_NO_CACHE% -t %TAG_NAME%msvc2017 -m 2GB -f windows/msvc2017.dockerfile windows
+    - docker push %TAG_NAME%msvc2017
   after_script:
     - docker logout
 
