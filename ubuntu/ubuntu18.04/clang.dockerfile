@@ -7,7 +7,9 @@ RUN apt update \
     && pip3 install conan
 
 # Tag Specific
-RUN apt install -y clang
+RUN apt install -y clang \
+    && conan profile new --detect default \
+    && conan profile update settings.compiler.libcxx=libstdc++11 default
 
 ENV CC=clang \
     CXX=clang++

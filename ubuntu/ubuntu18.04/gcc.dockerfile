@@ -7,6 +7,8 @@ RUN apt update \
     && pip3 install conan
 
 # Tag Specific
-RUN apt install -y gcc g++
+RUN apt install -y gcc g++ \
+    && conan profile new --detect default \
+    && conan profile update settings.compiler.libcxx=libstdc++11 default
 
 CMD ["bash"]

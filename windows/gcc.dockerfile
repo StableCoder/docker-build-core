@@ -11,3 +11,7 @@ RUN choco install -y 7zip cmake python git ninja \
 RUN pip install conan
 
 # Tag Specific
+
+#\
+#   && conan profile new --detect default \
+#   && conan profile update settings.compiler.libcxx=libstdc++11 default

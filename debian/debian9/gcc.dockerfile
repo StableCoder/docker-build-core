@@ -18,6 +18,8 @@ RUN wget -q https://cmake.org/files/v${CMAKE_MINOR_VER}/cmake-${CMAKE_VERSION}-L
     && rm -rf cmake-*
 
 # Tag Specific
-RUN apt install -y gcc g++
+RUN apt install -y gcc g++ \
+    && conan profile new --detect default \
+    && conan profile update settings.compiler.libcxx=libstdc++11 default
 
 CMD ["bash"]

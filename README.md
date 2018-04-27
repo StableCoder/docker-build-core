@@ -16,4 +16,4 @@ On these OS's:
 - Ubuntu
 - Windows
 
-These images are used to target platforms, not specific tools or compilers, so there is some overlap between them for certain items.
+These images are used to target platforms, not specific tools or compilers, so there is some overlap between them for certain items. All images except for CentOS7 have Conan libcxx set to libstdc++11 instead of libstdc++ by default.

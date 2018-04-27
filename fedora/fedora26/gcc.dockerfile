@@ -20,6 +20,8 @@ RUN yum update -y \
 RUN yum install -y \
     gcc \
     gcc-c++ \
-    && yum clean all
+    && yum clean all \
+    && conan profile new --detect default \
+    && conan profile update settings.compiler.libcxx=libstdc++11 default
 
 CMD ["bash"]
