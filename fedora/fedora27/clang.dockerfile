@@ -17,6 +17,9 @@ RUN yum update -y \
     && pip3 install conan
 
 # Tag Specific
+ENV CC=clang \
+    CXX=clang++
+
 RUN yum install -y \
     clang \
     clang-tools-extra \
@@ -25,8 +28,5 @@ RUN yum install -y \
     && yum clean all \
     && conan profile new --detect default \
     && conan profile update settings.compiler.libcxx=libstdc++11 default
-
-ENV CC=clang \
-    CXX=clang++
 
 CMD ["bash"]

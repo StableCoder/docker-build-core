@@ -18,11 +18,11 @@ RUN wget -q https://cmake.org/files/v${CMAKE_MINOR_VER}/cmake-${CMAKE_VERSION}-L
     && rm -rf cmake-*
 
 # Tag Specific
+ENV CC=clang \
+    CXX=clang++
+
 RUN apt install -y clang \
     && conan profile new --detect default \
     && conan profile update settings.compiler.libcxx=libstdc++11 default
-
-ENV CC=clang \
-    CXX=clang++
 
 CMD ["bash"]
