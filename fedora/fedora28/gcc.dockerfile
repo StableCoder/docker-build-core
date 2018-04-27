@@ -8,10 +8,6 @@ RUN yum update -y \
     make \
     ninja-build \
     cmake \
-    libasan \
-    liblsan \
-    libtsan \
-    libubsan \
     && yum clean all \
     && pip3 install --upgrade pip \
     && pip3 install conan

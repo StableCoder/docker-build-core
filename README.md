@@ -9,6 +9,15 @@ These images form the core of other images used for building an assortment of C/
 - Compiler (GCC, Clang or MSVC)
 - Conan
 
+Analysis images are used for code analysis and have several useful tools for performing them. They use the Clang compiler and have these extra tools:
+- AddressSanitizer
+- LeakSanitizer
+- ThreadSanitizer
+- UndefinedBehaviourSanitizer
+- clang-tidy
+- clang-format
+- include what you use
+
 On these OS's:
 - Fedora
 - CentOS

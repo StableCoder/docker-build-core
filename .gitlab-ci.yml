@@ -41,33 +41,58 @@ variables:
     - docker build -t ${TAG_NAME}gcc-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
     - docker build -t ${TAG_NAME}clang-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
 
+.build_analysis_image: &build_analysis_template
+  image: docker:dind
+  except:
+    - master
+  tags:
+    - linux
+    - docker-builder
+  script:
+    - docker build -t ${TAG_NAME}gcc-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
+    - docker build -t ${TAG_NAME}clang-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
+    - docker build -t ${TAG_NAME}analysis-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/analysis.dockerfile ${OS}/${OS}${RELEASE}
+
+.tagged_analysis_build_image: &tagged_build_analysis_template
+  image: docker:dind
+  except:
+    - master
+  tags:
+    - linux
+    - docker-builder
+  script:
+    - ./tag_helper.sh
+    - docker build -t ${TAG_NAME}gcc-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
+    - docker build -t ${TAG_NAME}clang-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
+    - docker build -t ${TAG_NAME}analysis-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/analysis.dockerfile ${OS}/${OS}${RELEASE}
+
 Fedora 26 Build:
   stage: Release Images
   variables:
     OS: fedora
     RELEASE: 26
-  <<: *build_template
+  <<: *build_analysis_template
 
 Fedora 27 Build:
   stage: Release Images
   variables:
     OS: fedora
     RELEASE: 27
-  <<: *build_template
+  <<: *build_analysis_template
 
 Fedora 28 Build:
   stage: Release Images
   variables:
     OS: fedora
     RELEASE: 28
-  <<: *build_template
+  <<: *build_analysis_template
 
 Fedora Latest Build:
   stage: Tagged Images
   variables:
     OS: fedora
     RELEASE: ''
-  <<: *tagged_build_template
+  <<: *tagged_build_analysis_template
 
 CentOS 7 Build:
   stage: Release Images
@@ -191,33 +216,72 @@ Ubuntu Devel Build:
   after_script:
     - docker logout
 
+.upload_analysis_image: &upload_analysis_template
+  image: docker:dind
+  only:
+    - master
+  tags:
+    - linux
+    - docker-builder
+  before_script:
+    - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${DOCKER_REGISTRY}
+  script:
+    - docker build ${DOCKER_NO_CACHE} -t ${TAG_NAME}gcc -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
+    - docker build -t ${TAG_NAME}clang -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
+    - docker build -t ${TAG_NAME}analysis -f ${OS}/${OS}${RELEASE}/analysis.dockerfile ${OS}/${OS}${RELEASE}
+    - docker push ${TAG_NAME}gcc
+    - docker push ${TAG_NAME}clang
+    - docker push ${TAG_NAME}analysis
+  after_script:
+    - docker logout
+
+.tagged_upload_analysis_image: &tagged_upload_analysis_template
+  image: docker:dind
+  only:
+    - master
+  tags:
+    - linux
+    - docker-builder
+  before_script:
+    - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${DOCKER_REGISTRY}
+  script:
+    - ./tag_helper.sh
+    - docker build -t ${TAG_NAME}gcc -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
+    - docker build -t ${TAG_NAME}clang -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
+    - docker build -t ${TAG_NAME}analysis -f ${OS}/${OS}${RELEASE}/analysis.dockerfile ${OS}/${OS}${RELEASE}
+    - docker push ${TAG_NAME}gcc
+    - docker push ${TAG_NAME}clang
+    - docker push ${TAG_NAME}analysis
+  after_script:
+    - docker logout
+
 Fedora 26 Upload:
   stage: Release Images
   variables:
     OS: fedora
     RELEASE: 26
-  <<: *upload_template
+  <<: *upload_analysis_template
 
 Fedora 27 Upload:
   stage: Release Images
   variables:
     OS: fedora
     RELEASE: 27
-  <<: *upload_template
+  <<: *upload_analysis_template
 
 Fedora 28 Upload:
   stage: Release Images
   variables:
     OS: fedora
     RELEASE: 28
-  <<: *upload_template
+  <<: *upload_analysis_template
 
 Fedora Latest Upload:
   stage: Tagged Images
   variables:
     OS: fedora
     RELEASE: ''
-  <<: *tagged_upload_template
+  <<: *tagged_upload_analysis_template
 
 CentOS 7 Upload:
   stage: Release Images

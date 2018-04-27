@@ -8,10 +8,6 @@ RUN yum update -y \
     make \
     ninja-build \
     cmake \
-    libasan \
-    liblsan \
-    libtsan \
-    libubsan \
     && yum clean all \
     && pip3 install --upgrade pip \
     && pip3 install conan
@@ -20,11 +16,7 @@ RUN yum update -y \
 ENV CC=clang \
     CXX=clang++
 
-RUN yum install -y \
-    clang \
-    clang-tools-extra \
-    llvm \
-    llvm-libs \
+RUN yum install -y clang \
     && yum clean all \
     && conan profile new --detect default \
     && conan profile update settings.compiler.libcxx=libstdc++11 default
