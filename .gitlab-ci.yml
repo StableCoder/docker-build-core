@@ -43,28 +43,28 @@ CentOS Latest Build:
   stage: Build Tagged Images
   variables:
     OS: centos
-    RELEASE: 'latest'
+    RELEASE: latest
   <<: *build_template
 
 Debian Latest Build:
   stage: Build Tagged Images
   variables:
     OS: debian
-    RELEASE: 'latest'
+    RELEASE: latest
   <<: *build_template
 
 Ubuntu Latest Build:
   stage: Build Tagged Images
   variables:
     OS: ubuntu
-    RELEASE: 'latest'
+    RELEASE: latest
   <<: *build_template
 
 .Windows Build:
   stage: Release Images
   variables:
     OS: windows
-    RELEASE: ''
+    RELEASE: latest
   tags:
     - windows
     - docker-builder
@@ -85,7 +85,7 @@ Ubuntu Latest Build:
   before_script:
   script:
     - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${DOCKER_REGISTRY}
-    - ./image_builder.sh -bp -o ${OS} -r ${RELEASE} -t ${REGISTRY_ADDRESS}${CORE_NAME} -f ${FIRST_SEPARATOR} -s ${SECOND_SEPARATOR} ${EXTRA_OPTIONS}
+    - ./image_builder.sh -bu -o ${OS} -r ${RELEASE} -t ${REGISTRY_ADDRESS}${CORE_NAME} -f ${FIRST_SEPARATOR} -s ${SECOND_SEPARATOR} ${EXTRA_OPTIONS}
   after_script:
     - docker logout ${DOCKER_REGISTRY}
 
@@ -93,35 +93,35 @@ Fedora Latest Upload:
   stage: Upload Tagged Images
   variables:
     OS: fedora
-    RELEASE: ''
+    RELEASE: latest
   <<: *upload_template
 
 CentOS Latest Upload:
   stage: Upload Tagged Images
   variables:
     OS: centos
-    RELEASE: ''
+    RELEASE: latest
   <<: *upload_template
 
 Debian Latest Upload:
   stage: Upload Tagged Images
   variables:
     OS: debian
-    RELEASE: ''
+    RELEASE: latest
   <<: *upload_template
 
 Ubuntu Latest Upload:
   stage: Upload Tagged Images
   variables:
     OS: ubuntu
-    RELEASE: ''
+    RELEASE: latest
   <<: *upload_template
 
 .Windows Upload:
   stage: Release Images
   variables:
     OS: windows
-    RELEASE: ''
+    RELEASE: latest
   only:
     - master
   tags:
