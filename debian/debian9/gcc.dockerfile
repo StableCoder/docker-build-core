@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM debian:9
 
 # Core Packages
 RUN apt-get update \
