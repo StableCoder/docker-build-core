@@ -1,4 +1,4 @@
-FROM fedora:28
+FROM fedora:26
 
 # OS Updates / Common Packages
 RUN yum update -y \
