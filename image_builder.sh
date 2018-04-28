@@ -71,13 +71,12 @@ if [ "${MAIN_TAG}" = "" ] || [ "${OS}" = "" ] ; then
     usage
 fi
 
-cd ${OS}/${OS}${RELEASE}
-
-# Set TAG to 'latest' if no RELEASE was provided
-if [ "${RELEASE}" == "" ]; then
-    TAG=latest
+if [ "${RELEASE}" = latest ]; then
+    echo "Doing this"
+    cd ${OS}/${OS}
 else
-    TAG=${RELEASE}
+    echo "Doing that"
+    cd ${OS}/${OS}${RELEASE}
 fi
 
 echo "Images for ${OS} ${RELEASE}"
@@ -86,11 +85,11 @@ for i in `find . -name '*.dockerfile'` ; do
     filename=$(basename ${i} .dockerfile)
 
     original=$(head -n 1 ${filename}.dockerfile)
-    sed -i "1s/.*/FROM $OS:$TAG/" ${filename}.dockerfile
+    sed -i "1s/.*/FROM $OS:$RELEASE/" ${filename}.dockerfile
 
     echo "docker build --pull -t ${MAIN_TAG}${FIRST_SEP}${OS}${SECOND_SEP}${filename}${POST_TAG} -f ${filename}.dockerfile ."
     if [ "${BUILD}" = true ] ; then
-        if [ "${FIRST_RUN}" = true ] && [ "${NO_CACHE}" = true] ; then
+        if [ "${FIRST_RUN}" = true ] && [ "${NO_CACHE}" = true ] ; then
             docker build --no-cache --pull -t ${MAIN_TAG}${FIRST_SEP}${OS}${SECOND_SEP}${filename}${POST_TAG} -f ${filename}.dockerfile .
         else
             docker build --pull -t ${MAIN_TAG}${FIRST_SEP}${OS}${SECOND_SEP}${filename}${POST_TAG} -f ${filename}.dockerfile .

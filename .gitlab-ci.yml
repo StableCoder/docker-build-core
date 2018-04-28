@@ -1,10 +1,16 @@
+# Required Environment Variables (For Upload):
+# DOCKER_USER - The username for logging into the Docker registry
+# DOCKER_PASSWORD - The password for logging into the Docker registry
+
 ##########
 # Global #
 ##########
 
 stages:
-  - Release Images
-  - Tagged Images
+  - Build Release Images
+  - Build Tagged Images
+  - Upload Release Images
+  - Upload Tagged Images
   - Post-Pipeline
 
 variables:
@@ -20,157 +26,45 @@ variables:
 
 .build_image: &build_template
   image: docker:dind
-  except:
-    - master
   tags:
     - linux
     - docker-builder
   script:
-    - docker build -t ${TAG_NAME}gcc-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
-    - docker build -t ${TAG_NAME}clang-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
-
-.tagged_build_image: &tagged_build_template
-  image: docker:dind
-  except:
-    - master
-  tags:
-    - linux
-    - docker-builder
-  script:
-    - ./tag_helper.sh
-    - docker build -t ${TAG_NAME}gcc-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
-    - docker build -t ${TAG_NAME}clang-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
-
-.build_analysis_image: &build_analysis_template
-  image: docker:dind
-  except:
-    - master
-  tags:
-    - linux
-    - docker-builder
-  script:
-    - docker build -t ${TAG_NAME}gcc-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
-    - docker build -t ${TAG_NAME}clang-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
-    - docker build -t ${TAG_NAME}analysis-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/analysis.dockerfile ${OS}/${OS}${RELEASE}
-
-.tagged_analysis_build_image: &tagged_build_analysis_template
-  image: docker:dind
-  except:
-    - master
-  tags:
-    - linux
-    - docker-builder
-  script:
-    - ./tag_helper.sh
-    - docker build -t ${TAG_NAME}gcc-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
-    - docker build -t ${TAG_NAME}clang-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
-    - docker build -t ${TAG_NAME}analysis-${CI_COMMIT_REF_NAME} -f ${OS}/${OS}${RELEASE}/analysis.dockerfile ${OS}/${OS}${RELEASE}
-
-Fedora 26 Build:
-  stage: Release Images
-  variables:
-    OS: fedora
-    RELEASE: 26
-  <<: *build_analysis_template
-
-Fedora 27 Build:
-  stage: Release Images
-  variables:
-    OS: fedora
-    RELEASE: 27
-  <<: *build_analysis_template
-
-Fedora 28 Build:
-  stage: Release Images
-  variables:
-    OS: fedora
-    RELEASE: 28
-  <<: *build_analysis_template
+    - ./image_builder.sh -b -o ${OS} -r ${RELEASE} -t ${REGISTRY_ADDRESS}${CORE_NAME} -f ${FIRST_SEPARATOR} -s ${SECOND_SEPARATOR} -p -${CI_COMMIT_REF_NAME} ${EXTRA_OPTIONS}
 
 Fedora Latest Build:
-  stage: Tagged Images
+  stage: Build Tagged Images
   variables:
     OS: fedora
-    RELEASE: ''
-  <<: *tagged_build_analysis_template
-
-CentOS 7 Build:
-  stage: Release Images
-  variables:
-    OS: centos
-    RELEASE: 7
+    RELEASE: 'latest'
   <<: *build_template
 
 CentOS Latest Build:
-  stage: Tagged Images
+  stage: Build Tagged Images
   variables:
     OS: centos
-    RELEASE: ''
-  <<: *tagged_build_template
-
-Debian 9 Build:
-  stage: Release Images
-  variables:
-    OS: debian
-    RELEASE: 9
-  <<: *build_template
-
-Debian 10 Build:
-  stage: Release Images
-  variables:
-    OS: debian
-    RELEASE: 10
+    RELEASE: 'latest'
   <<: *build_template
 
 Debian Latest Build:
-  stage: Tagged Images
+  stage: Build Tagged Images
   variables:
     OS: debian
-    RELEASE: ''
-  <<: *tagged_build_template
-
-Debian Testing Build:
-  stage: Tagged Images
-  variables:
-    OS: debian
-    RELEASE: testing
-  <<: *tagged_build_template
-
-Ubuntu 16.04 Build:
-  stage: Release Images
-  variables:
-    OS: ubuntu
-    RELEASE: '16.04'
-  <<: *build_template
-
-Ubuntu 18.04 Build:
-  stage: Release Images
-  variables:
-    OS: ubuntu
-    RELEASE: '18.04'
+    RELEASE: 'latest'
   <<: *build_template
 
 Ubuntu Latest Build:
-  stage: Tagged Images
+  stage: Build Tagged Images
   variables:
     OS: ubuntu
-    RELEASE: ''
-  <<: *tagged_build_template
-
-Ubuntu Devel Build:
-  stage: Tagged Images
-  variables:
-    OS: ubuntu
-    RELEASE: devel
-  <<: *tagged_build_template
+    RELEASE: 'latest'
+  <<: *build_template
 
 .Windows Build:
   stage: Release Images
   variables:
     OS: windows
     RELEASE: ''
-  except:
-    - master
   tags:
     - windows
     - docker-builder
@@ -189,169 +83,39 @@ Ubuntu Devel Build:
     - linux
     - docker-builder
   before_script:
-    - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${DOCKER_REGISTRY}
   script:
-    - docker build ${DOCKER_NO_CACHE} -t ${TAG_NAME}gcc -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
-    - docker build -t ${TAG_NAME}clang -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
-    - docker push ${TAG_NAME}gcc
-    - docker push ${TAG_NAME}clang
-  after_script:
-    - docker logout
-
-.tagged_upload_image: &tagged_upload_template
-  image: docker:dind
-  only:
-    - master
-  tags:
-    - linux
-    - docker-builder
-  before_script:
     - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${DOCKER_REGISTRY}
-  script:
-    - ./tag_helper.sh
-    - docker build -t ${TAG_NAME}gcc -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
-    - docker build -t ${TAG_NAME}clang -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
-    - docker push ${TAG_NAME}gcc
-    - docker push ${TAG_NAME}clang
+    - ./image_builder.sh -bp -o ${OS} -r ${RELEASE} -t ${REGISTRY_ADDRESS}${CORE_NAME} -f ${FIRST_SEPARATOR} -s ${SECOND_SEPARATOR} ${EXTRA_OPTIONS}
   after_script:
-    - docker logout
-
-.upload_analysis_image: &upload_analysis_template
-  image: docker:dind
-  only:
-    - master
-  tags:
-    - linux
-    - docker-builder
-  before_script:
-    - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${DOCKER_REGISTRY}
-  script:
-    - docker build ${DOCKER_NO_CACHE} -t ${TAG_NAME}gcc -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
-    - docker build -t ${TAG_NAME}clang -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
-    - docker build -t ${TAG_NAME}analysis -f ${OS}/${OS}${RELEASE}/analysis.dockerfile ${OS}/${OS}${RELEASE}
-    - docker push ${TAG_NAME}gcc
-    - docker push ${TAG_NAME}clang
-    - docker push ${TAG_NAME}analysis
-  after_script:
-    - docker logout
-
-.tagged_upload_analysis_image: &tagged_upload_analysis_template
-  image: docker:dind
-  only:
-    - master
-  tags:
-    - linux
-    - docker-builder
-  before_script:
-    - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${DOCKER_REGISTRY}
-  script:
-    - ./tag_helper.sh
-    - docker build -t ${TAG_NAME}gcc -f ${OS}/${OS}${RELEASE}/gcc.dockerfile ${OS}/${OS}${RELEASE}
-    - docker build -t ${TAG_NAME}clang -f ${OS}/${OS}${RELEASE}/clang.dockerfile ${OS}/${OS}${RELEASE}
-    - docker build -t ${TAG_NAME}analysis -f ${OS}/${OS}${RELEASE}/analysis.dockerfile ${OS}/${OS}${RELEASE}
-    - docker push ${TAG_NAME}gcc
-    - docker push ${TAG_NAME}clang
-    - docker push ${TAG_NAME}analysis
-  after_script:
-    - docker logout
-
-Fedora 26 Upload:
-  stage: Release Images
-  variables:
-    OS: fedora
-    RELEASE: 26
-  <<: *upload_analysis_template
-
-Fedora 27 Upload:
-  stage: Release Images
-  variables:
-    OS: fedora
-    RELEASE: 27
-  <<: *upload_analysis_template
-
-Fedora 28 Upload:
-  stage: Release Images
-  variables:
-    OS: fedora
-    RELEASE: 28
-  <<: *upload_analysis_template
+    - docker logout ${DOCKER_REGISTRY}
 
 Fedora Latest Upload:
-  stage: Tagged Images
+  stage: Upload Tagged Images
   variables:
     OS: fedora
     RELEASE: ''
-  <<: *tagged_upload_analysis_template
-
-CentOS 7 Upload:
-  stage: Release Images
-  variables:
-    OS: centos
-    RELEASE: 7
   <<: *upload_template
 
 CentOS Latest Upload:
-  stage: Tagged Images
+  stage: Upload Tagged Images
   variables:
     OS: centos
     RELEASE: ''
-  <<: *tagged_upload_template
-
-Debian 9 Upload:
-  stage: Release Images
-  variables:
-    OS: debian
-    RELEASE: 9
-  <<: *upload_template
-
-Debian 10 Upload:
-  stage: Release Images
-  variables:
-    OS: debian
-    RELEASE: 10
   <<: *upload_template
 
 Debian Latest Upload:
-  stage: Tagged Images
+  stage: Upload Tagged Images
   variables:
     OS: debian
     RELEASE: ''
-  <<: *upload_template
-
-Debian Testing Upload:
-  stage: Tagged Images
-  variables:
-    OS: debian
-    RELEASE: testing
-  <<: *tagged_upload_template
-
-Ubuntu 16.04 Upload:
-  stage: Release Images
-  variables:
-    OS: ubuntu
-    RELEASE: '16.04'
-  <<: *upload_template
-
-Ubuntu 18.04 Upload:
-  stage: Release Images
-  variables:
-    OS: ubuntu
-    RELEASE: '18.04'
   <<: *upload_template
 
 Ubuntu Latest Upload:
-  stage: Tagged Images
+  stage: Upload Tagged Images
   variables:
     OS: ubuntu
     RELEASE: ''
-  <<: *tagged_upload_template
-
-Ubuntu Devel Upload:
-  stage: Tagged Images
-  variables:
-    OS: ubuntu
-    RELEASE: devel
-  <<: *tagged_upload_template
+  <<: *upload_template
 
 .Windows Upload:
   stage: Release Images
@@ -366,23 +130,7 @@ Ubuntu Devel Upload:
   before_script:
     - docker login -u %DOCKER_USER% -p "%DOCKER_PASSWORD%" %DOCKER_REGISTRY%
   script:
-    - docker build %DOCKER_NO_CACHE% -t %TAG_NAME%msvc2017 -m 2GB -f windows/msvc2017.dockerfile windows
+    - docker build -t %TAG_NAME%msvc2017 -m 2GB -f windows/msvc2017.dockerfile windows
     - docker push %TAG_NAME%msvc2017
   after_script:
-    - docker logout
-
-#######################
-# Post-Pipeline Stage #
-#######################
-
-Pipeline Triggers:
-  stage: Post-Pipeline
-  image: stabletec/alpine:curl
-  only:
-    - master
-  tags:
-    - linux
-    - docker
-  script:
-    - echo "Triggering build-stec (13)"
-    - curl --request POST --form "token=$CI_JOB_TOKEN" --form ref=master https://git.stabletec.com/api/v4/projects/13/trigger/pipeline
+    - docker logout %DOCKER_REGISTRY%
