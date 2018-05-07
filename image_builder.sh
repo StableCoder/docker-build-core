@@ -11,6 +11,9 @@ FIRST_RUN=true
 NO_CACHE=false
 PUSH_IMAGES=false
 
+set -e
+set -o pipefail
+
 usage() {
     echo "Used to build and push images from withing the repository dynamically."
     echo ""
@@ -72,10 +75,8 @@ if [ "${MAIN_TAG}" = "" ] || [ "${OS}" = "" ] ; then
 fi
 
 if [ "${RELEASE}" = latest ]; then
-    echo "Doing this"
     cd ${OS}/${OS}
 else
-    echo "Doing that"
     cd ${OS}/${OS}${RELEASE}
 fi
 
