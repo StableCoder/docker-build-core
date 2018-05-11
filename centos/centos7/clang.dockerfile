@@ -20,7 +20,7 @@ RUN wget -q https://cmake.org/files/v${CMAKE_MINOR_VER}/cmake-${CMAKE_VERSION}-L
 ENV NINJA_VER=1.8.2
 RUN wget -q https://github.com/ninja-build/ninja/releases/download/v${NINJA_VER}/ninja-linux.zip \
     && unzip ninja-linux.zip \
-    && cp ninja /usr/local/bin \
+    && mv ninja /usr/local/bin \
     && rm ninja-linux.zip
 
 # Tag Specific
