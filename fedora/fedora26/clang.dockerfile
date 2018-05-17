@@ -1,14 +1,14 @@
 FROM fedora:26
 
 # OS Updates / Common Packages
-RUN yum update -y \
-    && yum install -y \
+RUN dnf update -y \
+    && dnf install -y \
     git \
     subversion \
     make \
     ninja-build \
     cmake \
-    && yum clean all \
+    && dnf clean all \
     && pip3 install --upgrade pip \
     && pip3 install conan
 
@@ -16,8 +16,8 @@ RUN yum update -y \
 ENV CC=clang \
     CXX=clang++
 
-RUN yum install -y clang \
-    && yum clean all \
+RUN dnf install -y clang \
+    && dnf clean all \
     && conan profile new --detect default \
     && conan profile update settings.compiler.libcxx=libstdc++11 default
 

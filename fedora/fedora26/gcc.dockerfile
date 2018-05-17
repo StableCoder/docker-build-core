@@ -1,22 +1,22 @@
 FROM fedora:26
 
 # OS Updates / Common Packages
-RUN yum update -y \
-    && yum install -y \
+RUN dnf update -y \
+    && dnf install -y \
     git \
     subversion \
     make \
     ninja-build \
     cmake \
-    && yum clean all \
+    && dnf clean all \
     && pip3 install --upgrade pip \
     && pip3 install conan
 
 # Tag Specific
-RUN yum install -y \
+RUN dnf install -y \
     gcc \
     gcc-c++ \
-    && yum clean all \
+    && dnf clean all \
     && conan profile new --detect default \
     && conan profile update settings.compiler.libcxx=libstdc++11 default
 
