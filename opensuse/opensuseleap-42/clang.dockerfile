@@ -18,7 +18,7 @@ RUN zypper update -y \
 ENV CC=clang \
     CXX=clang++
 
-RUN zypper install -y clang \
+RUN zypper install -y clang gcc \
     && zypper clean --all \
     && conan profile new --detect default \
     && conan profile update settings.compiler.libcxx=libstdc++11 default
