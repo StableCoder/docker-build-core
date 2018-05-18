@@ -2,23 +2,22 @@
 # DOCKER_USER - The username for logging into the Docker registry
 # DOCKER_PASSWORD - The password for logging into the Docker registry
 
+# Optional Environment Variables
+# DOCKER_REGISTRY - The registry the images will be pushed to, must end with '/'
+
 ##########
 # Global #
 ##########
 
 stages:
-  - Build Release Images
-  - Build Tagged Images
-  - Upload Release Images
-  - Upload Tagged Images
+  - Build Images
+  - Upload Images
   - Post-Pipeline
 
 variables:
-  REGISTRY_ADDRESS: ''
+  DOCKER_REGISTRY: ''
   CORE_NAME: 'stabletec/build-core'
-  FIRST_SEPARATOR: ':'
-  SECOND_SEPARATOR: '-'
-  TAG_NAME: ${REGISTRY_ADDRESS}${CORE_NAME}${FIRST_SEPARATOR}${OS}${RELEASE}${SECOND_SEPARATOR}
+  TAG_NAME: ${DOCKER_REGISTRY}${CORE_NAME}
 
 ######################
 # Image Builds Stage #
@@ -30,41 +29,42 @@ variables:
     - linux
     - docker-builder
   script:
-    - ./image_builder.sh -b -o ${OS} -r ${RELEASE} -t ${REGISTRY_ADDRESS}${CORE_NAME} -f ${FIRST_SEPARATOR} -s ${SECOND_SEPARATOR} -p -${CI_COMMIT_REF_NAME} ${EXTRA_OPTIONS}
+    - ./image_builder.sh -b -o ${OS} -t ${DOCKER_REGISTRY}${CORE_NAME} -p -${CI_COMMIT_REF_NAME} ${EXTRA_OPTIONS}
 
-Fedora Latest Build:
-  stage: Build Tagged Images
+Fedora Build:
+  stage: Build Images
   variables:
     OS: fedora
-    RELEASE: 'latest'
   <<: *build_template
 
-CentOS Latest Build:
-  stage: Build Tagged Images
+CentOS Build:
+  stage: Build Images
   variables:
     OS: centos
-    RELEASE: latest
   <<: *build_template
 
-Debian Latest Build:
-  stage: Build Tagged Images
+Debian Build:
+  stage: Build Images
   variables:
     OS: debian
-    RELEASE: latest
   <<: *build_template
 
-Ubuntu Latest Build:
-  stage: Build Tagged Images
+Ubuntu Build:
+  stage: Build Images
   variables:
     OS: ubuntu
-    RELEASE: latest
+  <<: *build_template
+
+openSUSE Build:
+  stage: Build Images
+  variables:
+    OS: ubuntu
   <<: *build_template
 
 .Windows Build:
-  stage: Release Images
+  stage: Build Images
   variables:
     OS: windows
-    RELEASE: latest
   tags:
     - windows
     - docker-builder
@@ -82,46 +82,46 @@ Ubuntu Latest Build:
   tags:
     - linux
     - docker-builder
-  before_script:
   script:
     - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${DOCKER_REGISTRY}
-    - ./image_builder.sh -bu -o ${OS} -r ${RELEASE} -t ${REGISTRY_ADDRESS}${CORE_NAME} -f ${FIRST_SEPARATOR} -s ${SECOND_SEPARATOR} ${EXTRA_OPTIONS}
+    - ./image_builder.sh -bu -o ${OS} -t ${DOCKER_REGISTRY}${CORE_NAME} ${EXTRA_OPTIONS}
   after_script:
     - docker logout ${DOCKER_REGISTRY}
 
-Fedora Latest Upload:
-  stage: Upload Tagged Images
+Fedora Upload:
+  stage: Upload Images
   variables:
     OS: fedora
-    RELEASE: latest
   <<: *upload_template
 
-CentOS Latest Upload:
-  stage: Upload Tagged Images
+CentOS Upload:
+  stage: Upload Images
   variables:
     OS: centos
-    RELEASE: latest
   <<: *upload_template
 
-Debian Latest Upload:
-  stage: Upload Tagged Images
+Debian Upload:
+  stage: Upload Images
   variables:
     OS: debian
-    RELEASE: latest
   <<: *upload_template
 
-Ubuntu Latest Upload:
-  stage: Upload Tagged Images
+Ubuntu Upload:
+  stage: Upload Images
   variables:
     OS: ubuntu
-    RELEASE: latest
+  <<: *upload_template
+
+openSUSE Upload:
+  stage: Upload Images
+  variables:
+    OS: ubuntu
   <<: *upload_template
 
 .Windows Upload:
-  stage: Release Images
+  stage: Upload Images
   variables:
     OS: windows
-    RELEASE: latest
   only:
     - master
   tags:

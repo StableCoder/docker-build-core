@@ -2,9 +2,6 @@
 
 MAIN_TAG=""
 OS=""
-FIRST_SEP=':'
-RELEASE=""
-SECOND_SEP='-'
 POST_TAG=""
 BUILD=false
 FIRST_RUN=true
@@ -26,16 +23,13 @@ usage() {
     echo "      allowing for a fresh image build."
     echo "  -t  The main name of the tag."
     echo "  -o  Name of the OS building for."
-    echo "  -f  First separator in the tag (default ':')"
-    echo "  -r  Release of the OS"
-    echo "  -s  Second separator in the tag (default '-')"
     echo "  -p  The postfix to add to the tag."
     echo "  -u  Push the build images."
 
     exit
 }
 
-while getopts 'bnt:o:f:r:s:p:u' flag; do
+while getopts 'bnt:o:f:s:p:u' flag; do
     case "${flag}" in
         b)
             BUILD=true
@@ -48,15 +42,6 @@ while getopts 'bnt:o:f:r:s:p:u' flag; do
             ;;
         o)
             OS="${OPTARG}"
-            ;;
-        f)
-            FIRST_SEP="${OPTARG}"
-            ;;
-        r)
-            RELEASE="${OPTARG}"
-            ;;
-        s)
-            SECOND_SEP="${OPTARG}"
             ;;
         p)
             POST_TAG="${OPTARG}"
@@ -74,36 +59,57 @@ if [ "${MAIN_TAG}" = "" ] || [ "${OS}" = "" ] ; then
     usage
 fi
 
-if [ "${RELEASE}" = latest ]; then
-    cd ${OS}/${OS}
-else
-    cd ${OS}/${OS}${RELEASE}
-fi
+cd ${OS}
 
-echo "Images for ${OS} ${RELEASE}"
+for dir in `echo */` ; do
+    dir=${dir%%\/*} # Remove the following '/' for the directory
 
-for i in `find . -name '*.dockerfile'` ; do
-    filename=$(basename ${i} .dockerfile)
+    cd $dir 
+        printf "\nImages of the ${OS}/${dir} directory\n\n"
+        
+        # Determine the source image name
+        source=${OS}
 
-    original=$(head -n 1 ${filename}.dockerfile)
-    sed -i "1s/.*/FROM $OS:$RELEASE/" ${filename}.dockerfile
-
-    echo "docker build --pull -t ${MAIN_TAG}${FIRST_SEP}${OS}${SECOND_SEP}${filename}${POST_TAG} -f ${filename}.dockerfile ."
-    if [ "${BUILD}" = true ] ; then
-        if [ "${FIRST_RUN}" = true ] && [ "${NO_CACHE}" = true ] ; then
-            docker build --no-cache --pull -t ${MAIN_TAG}${FIRST_SEP}${OS}${SECOND_SEP}${filename}${POST_TAG} -f ${filename}.dockerfile .
-        else
-            docker build --pull -t ${MAIN_TAG}${FIRST_SEP}${OS}${SECOND_SEP}${filename}${POST_TAG} -f ${filename}.dockerfile .
+        temp=${dir%%-*}
+        temp=${temp#*${OS}}
+        if [ "${temp}" != "" ] ; then
+            source=${source}/${temp}
         fi
-    fi
 
-    sed -i "1s/.*/${original}/" ${filename}.dockerfile
+        if [ -z "${dir##*-*}" ] ; then
+            source=${source}:${dir#*-}
+        else
+            source=${source}:latest
+        fi
+
+        # Build
+        for i in `find . -name '*.dockerfile'` ; do
+            filename=$(basename ${i} .dockerfile)
+
+            original=$(head -n 1 ${filename}.dockerfile)
+            sed -i "1s#.*#FROM ${source}#" ${filename}.dockerfile
+            
+            printf "Source image: %s\n" $source
+            echo "docker build --pull -t ${MAIN_TAG}:${dir//-}-${filename}${POST_TAG} -f ${filename}.dockerfile ."
+            if [ "${BUILD}" = true ] ; then
+                if [ "${FIRST_RUN}" = true ] && [ "${NO_CACHE}" = true ] ; then
+                    docker build --no-cache --pull -t ${MAIN_TAG}:${dir//-}-${filename}${POST_TAG} -f ${filename}.dockerfile .
+                else
+                    docker build --pull -t ${MAIN_TAG}:${dir//-}-${filename}${POST_TAG} -f ${filename}.dockerfile .
+                fi
+            fi
+
+            sed -i "1s#.*#${original}#" ${filename}.dockerfile
+        done
+
+        # Push
+        if [ "${PUSH_IMAGES}" = true ] ; then
+            for i in `find . -name '*.dockerfile'` ; do
+                filename=$(basename ${i} .dockerfile)
+                echo "docker push ${MAIN_TAG}:${dir//-}-${filename}${POST_TAG}"
+                docker push ${MAIN_TAG}:${dir//-}-${filename}${POST_TAG}
+            done
+        fi
+
+    cd ..
 done
-
-if [ "${PUSH_IMAGES}" = true ] ; then
-    for i in `find . -name '*.dockerfile'` ; do
-        filename=$(basename ${i} .dockerfile)
-        echo "docker push ${MAIN_TAG}${FIRST_SEP}${OS}${SECOND_SEP}${filename}${POST_TAG}"
-        docker push ${MAIN_TAG}${FIRST_SEP}${OS}${SECOND_SEP}${filename}${POST_TAG}
-    done
-fi
