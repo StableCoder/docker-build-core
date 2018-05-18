@@ -58,7 +58,7 @@ Ubuntu Build:
 openSUSE Build:
   stage: Build Images
   variables:
-    OS: ubuntu
+    OS: opensuse
   <<: *build_template
 
 .Windows Build:
@@ -115,7 +115,7 @@ Ubuntu Upload:
 openSUSE Upload:
   stage: Upload Images
   variables:
-    OS: ubuntu
+    OS: opensuse
   <<: *upload_template
 
 .Windows Upload:
