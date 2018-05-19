@@ -1,8 +1,8 @@
 FROM opensuse/leap:42
 
-# OS Updates / Common Packages
 RUN zypper update -y \
     && zypper install -y \
+    # Common
     git \
     subversion \
     make \
@@ -10,16 +10,17 @@ RUN zypper update -y \
     cmake \
     python3 \
     python3-pip \
+    # GCC
+    gcc \
+    gcc-c++ \
+    # Clang
+    clang \
+    # Analysis
     && zypper clean --all \
     && pip3 install --upgrade pip \
     && pip3 install conan
 
-# Tag Specific
-RUN zypper install -y \
-    gcc \
-    gcc-c++ \
-    && zypper clean --all \
-    && conan profile new --detect default \
-    && conan profile update settings.compiler.libcxx=libstdc++11 default
+# Entrypoint
+COPY entrypoint.sh /entrypoint.sh
 
-CMD ["bash"]
+ENTRYPOINT [ "./entrypoint.sh" ]

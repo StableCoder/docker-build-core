@@ -1,9 +1,22 @@
 FROM debian:9
 
-# Core Packages
 RUN apt-get update \
     && apt-get upgrade -y \
-    && apt install -y wget python-pip ninja-build make git subversion \
+    && apt install -y \
+    # Common
+    wget \
+    python-pip \
+    ninja-build \
+    make \
+    git \
+    subversion \
+    # GCC
+    gcc \
+    g++ \
+    # Clang
+    clang \
+    && apt-get clean\
+    && pip install --upgrade pip \
     && pip install conan
 
 # CMake
@@ -17,9 +30,7 @@ RUN wget -q https://cmake.org/files/v${CMAKE_MINOR_VER}/cmake-${CMAKE_VERSION}-L
     && cp -rn cmake-${CMAKE_VERSION}-Linux-x86_64/share/* /usr/local/share/ \
     && rm -rf cmake-*
 
-# Tag Specific
-RUN apt install -y gcc g++ \
-    && conan profile new --detect default \
-    && conan profile update settings.compiler.libcxx=libstdc++11 default
+# Entrypoint
+COPY entrypoint.sh /entrypoint.sh
 
-CMD ["bash"]
+ENTRYPOINT [ "./entrypoint.sh" ]

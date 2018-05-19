@@ -66,7 +66,7 @@ for dir in `echo */` ; do
 
     cd $dir 
         printf "\nImages of the ${OS}/${dir} directory\n\n"
-        
+
         # Determine the source image name
         source=${OS}
 
@@ -82,34 +82,61 @@ for dir in `echo */` ; do
             source=${source}:latest
         fi
 
-        # Build
-        for i in `find . -name '*.dockerfile'` ; do
-            filename=$(basename ${i} .dockerfile)
+        COUNTER=0
+        while [ "$COUNTER" != "4" ] ; do
 
-            original=$(head -n 1 ${filename}.dockerfile)
-            sed -i "1s#.*#FROM ${source}#" ${filename}.dockerfile
-            
-            printf "Source image: %s\n" $source
-            echo "docker build --pull -t ${MAIN_TAG}:${dir//-}-${filename}${POST_TAG} -f ${filename}.dockerfile ."
-            if [ "${BUILD}" = true ] ; then
-                if [ "${FIRST_RUN}" = true ] && [ "${NO_CACHE}" = true ] ; then
-                    docker build --no-cache --pull -t ${MAIN_TAG}:${dir//-}-${filename}${POST_TAG} -f ${filename}.dockerfile .
+            # Build
+
+            ## Change FROM image to the one named by the directory
+            original=$(head -n 1 Dockerfile)
+            sed -i "1s#.*#FROM ${source}#" Dockerfile
+            ## Change the entrypoint to a clang or gcc-specific one
+            if [ "$COUNTER" == "0" ] ; then
+                VARIANT_TAG=
+            elif [ "$COUNTER" == "1" ] ; then
+                VARIANT_TAG=-gcc
+                sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-c" ]/' Dockerfile
+            elif [ "$COUNTER" == "2" ] ; then
+                VARIANT_TAG=-clang
+                sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-g" ]/' Dockerfile
+            elif [ "$COUNTER" == "3" ] ; then
+                if  grep -Fq "# Analysis" Dockerfile ; then
+                    # Analysis capability
+                    VARIANT_TAG=-analysis
+                    sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-c" ]/' Dockerfile
                 else
-                    docker build --pull -t ${MAIN_TAG}:${dir//-}-${filename}${POST_TAG} -f ${filename}.dockerfile .
+                    # No Analysis capability
+                    break
                 fi
             fi
 
-            sed -i "1s#.*#${original}#" ${filename}.dockerfile
-        done
+            printf "Source image: %s\n\n" $source
+            printf "docker build --pull -t %s:%s%s%s .\n\n" $MAIN_TAG ${dir//-} $VARIANT_TAG $POST_TAG
+            if [ "${BUILD}" = true ] ; then
+                if [ "${FIRST_RUN}" = true ] && [ "${NO_CACHE}" = true ] ; then
+                    docker build --no-cache --pull -t ${MAIN_TAG}:${dir//-}${VARIANT_TAG}${POST_TAG} .
+                else
+                    docker build --pull -t ${MAIN_TAG}:${dir//-}${VARIANT_TAG}${POST_TAG} .
+                fi
+            fi
 
-        # Push
-        if [ "${PUSH_IMAGES}" = true ] ; then
-            for i in `find . -name '*.dockerfile'` ; do
-                filename=$(basename ${i} .dockerfile)
-                echo "docker push ${MAIN_TAG}:${dir//-}-${filename}${POST_TAG}"
-                docker push ${MAIN_TAG}:${dir//-}-${filename}${POST_TAG}
-            done
-        fi
+            ## Set Entrypoint back
+            sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh" ]/' Dockerfile
+            ## Set FROM back to original
+            sed -i "1s#.*#${original}#" Dockerfile
+
+            # Push
+            if [ "${PUSH_IMAGES}" = true ] ; then
+                for i in `find . -name '*.dockerfile'` ; do
+                    filename=$(basename ${i} .dockerfile)
+                    printf "docker push %s:%s%s%s .\n\n" $MAIN_TAG ${dir//-} $VARIANT_TAG $POST_TAG
+                    docker push ${MAIN_TAG}:${dir//-}${VARIANT_TAG}${POST_TAG}
+                done
+            fi
+
+            # Increment the counter for the next variant
+            COUNTER=$((COUNTER + 1))
+        done
 
     cd ..
 done

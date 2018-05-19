@@ -1,9 +1,21 @@
 FROM centos:7
 
-# Enable the EPEL repository / Common Packages
 RUN yum update -y \
     && yum install -y epel-release \
-    && yum install -y wget python-pip make git subversion unzip \
+    && yum install -y \
+    # Common
+    wget \
+    python-pip \
+    make \
+    git \
+    subversion \
+    unzip \
+    # GCC
+    gcc \
+    gcc-c++ \
+    # Clang
+    clang \
+    llvm-libs \
     && yum clean all \
     && pip install --upgrade pip \
     && pip install conan
@@ -23,8 +35,7 @@ RUN wget -q https://github.com/ninja-build/ninja/releases/download/v${NINJA_VER}
     && mv ninja /usr/local/bin \
     && rm ninja-linux.zip
 
-# Tag Specific
-RUN yum install -y gcc gcc-c++ \
-    && yum clean all
+# Entrypoint
+COPY entrypoint.sh /entrypoint.sh
 
-CMD ["bash"]
+ENTRYPOINT [ "./entrypoint.sh" ]
