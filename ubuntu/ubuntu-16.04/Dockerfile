@@ -15,7 +15,7 @@ RUN apt-get update \
     g++ \
     # Clang
     clang \
-    && pip install --upgrade pip \
+    && easy_install -U pip \
     && pip install conan
 
 # Entrypoint

@@ -15,7 +15,8 @@ RUN apt update \
     g++ \
     # Clang
     clang \
-    && pip3 install --upgrade pip \
+    && apt clean all \
+    && python3 -m  pip install --upgrade pip \
     && pip3 install conan
 
 # Entrypoint

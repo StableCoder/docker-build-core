@@ -16,7 +16,7 @@ RUN apt-get update \
     # Clang
     clang \
     && apt-get clean\
-    && pip install --upgrade pip \
+    && easy_install -U pip \
     && pip install conan
 
 # CMake
