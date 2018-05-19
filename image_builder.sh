@@ -111,11 +111,12 @@ for dir in `echo */` ; do
             fi
 
             printf "Source image: %s\n\n" $source
-            printf "docker build --pull -t %s:%s%s%s .\n\n" $MAIN_TAG ${dir//-} $VARIANT_TAG $POST_TAG
             if [ "${BUILD}" = true ] ; then
                 if [ "${FIRST_RUN}" = true ] && [ "${NO_CACHE}" = true ] ; then
+                    printf "docker build --pull --no-cache -t %s:%s%s%s .\n\n" $MAIN_TAG ${dir//-} $VARIANT_TAG $POST_TAG
                     docker build --no-cache --pull -t ${MAIN_TAG}:${dir//-}${VARIANT_TAG}${POST_TAG} .
                 else
+                    printf "docker build --pull -t %s:%s%s%s .\n\n" $MAIN_TAG ${dir//-} $VARIANT_TAG $POST_TAG
                     docker build --pull -t ${MAIN_TAG}:${dir//-}${VARIANT_TAG}${POST_TAG} .
                 fi
             fi
@@ -127,11 +128,8 @@ for dir in `echo */` ; do
 
             # Push
             if [ "${PUSH_IMAGES}" = true ] ; then
-                for i in `find . -name '*.dockerfile'` ; do
-                    filename=$(basename ${i} .dockerfile)
-                    printf "docker push %s:%s%s%s .\n\n" $MAIN_TAG ${dir//-} $VARIANT_TAG $POST_TAG
-                    docker push ${MAIN_TAG}:${dir//-}${VARIANT_TAG}${POST_TAG}
-                done
+                printf "docker push %s:%s%s%s .\n\n" $MAIN_TAG ${dir//-} $VARIANT_TAG $POST_TAG
+                docker push ${MAIN_TAG}:${dir//-}${VARIANT_TAG}${POST_TAG}
             fi
 
             # Increment the counter for the next variant
