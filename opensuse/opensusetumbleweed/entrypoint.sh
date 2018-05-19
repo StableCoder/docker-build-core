@@ -30,11 +30,15 @@ if [ $# = 1 ]; then
             g)
                 gcc
                 ;;
+            *)
+                printf "Error: entrypoint.sh called with an invalid argument\n"
+                printf "    Only arguments are (c)lang or (g)cc\n"
+                exit
+                ;;
         esac
     done
-elif [ $# > 1 ]; then
-    printf "Error: Called entrypoint with more than one argument\n"
-fi
 
-# Fallback to bash
-bash
+    bash
+else
+    printf "Error: entrypoint.sh only accepts a single argument!\n"
+fi

@@ -13,9 +13,11 @@ RUN yum update -y \
     # GCC
     gcc \
     gcc-c++ \
+    gdb \
     # Clang
     clang \
     llvm-libs \
+    lldb \
     && yum clean all \
     && pip install --upgrade pip \
     && pip install conan
@@ -38,4 +40,4 @@ RUN wget -q https://github.com/ninja-build/ninja/releases/download/v${NINJA_VER}
 # Entrypoint
 COPY entrypoint.sh /entrypoint.sh
 
-ENTRYPOINT [ "./entrypoint.sh" ]
+ENTRYPOINT [ "bash" ]

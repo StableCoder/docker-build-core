@@ -13,8 +13,11 @@ RUN apt update \
     # GCC
     gcc \
     g++ \
+    gdb \
     # Clang
     clang \
+    lld \
+    lldb \
     && apt clean all \
     && python3 -m  pip install --upgrade pip \
     && pip3 install conan
@@ -22,4 +25,4 @@ RUN apt update \
 # Entrypoint
 COPY entrypoint.sh /entrypoint.sh
 
-ENTRYPOINT [ "./entrypoint.sh" ]
+ENTRYPOINT [ "bash" ]

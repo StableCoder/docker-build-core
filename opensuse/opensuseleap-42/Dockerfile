@@ -1,4 +1,4 @@
-FROM opensuse/leap:42
+FROM opensuse/leap:latest
 
 RUN zypper update -y \
     && zypper install -y \
@@ -13,8 +13,11 @@ RUN zypper update -y \
     # GCC
     gcc \
     gcc-c++ \
+    gdb \
     # Clang
     clang \
+    lld4 \
+    lldb \
     && zypper clean --all \
     && pip3 install --upgrade pip \
     && pip3 install conan
@@ -22,4 +25,4 @@ RUN zypper update -y \
 # Entrypoint
 COPY entrypoint.sh /entrypoint.sh
 
-ENTRYPOINT [ "./entrypoint.sh" ]
+ENTRYPOINT [ "bash" ]

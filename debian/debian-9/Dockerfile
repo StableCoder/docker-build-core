@@ -13,8 +13,10 @@ RUN apt-get update \
     # GCC
     gcc \
     g++ \
+    gdb \
     # Clang
     clang \
+    lldb \
     && apt-get clean\
     && easy_install -U pip \
     && pip install conan
@@ -33,4 +35,4 @@ RUN wget -q https://cmake.org/files/v${CMAKE_MINOR_VER}/cmake-${CMAKE_VERSION}-L
 # Entrypoint
 COPY entrypoint.sh /entrypoint.sh
 
-ENTRYPOINT [ "./entrypoint.sh" ]
+ENTRYPOINT [ "bash" ]

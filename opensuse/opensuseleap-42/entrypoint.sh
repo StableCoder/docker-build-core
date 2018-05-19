@@ -6,11 +6,8 @@ clang() {
 
     conan profile new --detect default
     conan profile update settings.compiler.libcxx=libstdc++11 default
-    printf "!! Converted to libstdc++11 !!"
-
-    bash
-
-    exit
+    printf "!! Converted to libstdc++11 !!\n"
+    printf "Setup Clang\n\n"
 }
 
 gcc() {
@@ -19,23 +16,29 @@ gcc() {
 
     conan profile new --detect default
     conan profile update settings.compiler.libcxx=libstdc++11 default
-    printf "!! Converted to libstdc++11 !!"
-
-    bash
-
-    exit
+    printf "!! Converted to libstdc++11 !!\n"
+    printf "Setup GCC\n\n"
 }
 
-while getopts 'cg' flag; do
-    case "${flag}" in
-        c)
-            clang
-            ;;
-        g)
-            gcc
-            ;;
-    esac
-done
+if [ $# = 1 ]; then
+    # Only if there's a single argument
+    while getopts 'cg' flag; do
+        case "${flag}" in
+            c)
+                clang
+                ;;
+            g)
+                gcc
+                ;;
+            *)
+                printf "Error: entrypoint.sh called with an invalid argument\n"
+                printf "    Only arguments are (c)lang or (g)cc\n"
+                exit
+                ;;
+        esac
+    done
 
-# Fallback to bash
-bash
+    bash
+else
+    printf "Error: entrypoint.sh only accepts a single argument!\n"
+fi

@@ -83,7 +83,7 @@ for dir in `echo */` ; do
         fi
 
         COUNTER=0
-        while [ "$COUNTER" != "4" ] ; do
+        while [ "$COUNTER" != "3" ] ; do
 
             # Build
 
@@ -95,10 +95,10 @@ for dir in `echo */` ; do
                 VARIANT_TAG=
             elif [ "$COUNTER" == "1" ] ; then
                 VARIANT_TAG=-gcc
-                sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-c" ]/' Dockerfile
+                sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-g" ]/' Dockerfile
             elif [ "$COUNTER" == "2" ] ; then
                 VARIANT_TAG=-clang
-                sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-g" ]/' Dockerfile
+                sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-c" ]/' Dockerfile
             elif [ "$COUNTER" == "3" ] ; then
                 if  grep -Fq "# Analysis" Dockerfile ; then
                     # Analysis capability

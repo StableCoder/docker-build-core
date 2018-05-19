@@ -11,8 +11,11 @@ RUN dnf update -y \
     # GCC
     gcc \
     gcc-c++ \
+    gdb \
     # Clang
     clang \
+    lld \
+    lldb \
     # Analysis
     libasan \
     liblsan \
