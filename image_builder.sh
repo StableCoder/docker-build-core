@@ -122,7 +122,7 @@ for dir in `echo */` ; do
             fi
 
             ## Set Entrypoint back
-            sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh" ]/' Dockerfile
+            sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ "bash" ]/' Dockerfile
             ## Set FROM back to original
             sed -i "1s#.*#${original}#" Dockerfile
 
