@@ -26,7 +26,7 @@ variables:
 .build_image: &build_template
   image: docker:dind
   tags:
-    - linux
+    - docker-linux
     - docker-builder
   script:
     - ./image_builder.sh -b -o ${OS} -t ${DOCKER_REGISTRY}${CORE_NAME} -p -${CI_COMMIT_REF_NAME} ${EXTRA_OPTIONS}
@@ -80,7 +80,7 @@ openSUSE Build:
   only:
     - master
   tags:
-    - linux
+    - docker-linux
     - docker-builder
   script:
     - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${DOCKER_REGISTRY}
