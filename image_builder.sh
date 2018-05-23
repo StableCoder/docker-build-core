@@ -90,24 +90,27 @@ for dir in `echo */` ; do
             ## Change FROM image to the one named by the directory
             original=$(head -n 1 Dockerfile)
             sed -i "1s#.*#FROM ${source}#" Dockerfile
-            ## Change the entrypoint to a clang or gcc-specific one
+
+            ## Change the entrypoint to a specific one
             if [ "$COUNTER" == "0" ] ; then
                 VARIANT_TAG=
-            elif [ "$COUNTER" == "1" ] ; then
+
+            elif [ "$COUNTER" == "1" ] && grep -Fq "# GCC" Dockerfile ; then
                 VARIANT_TAG=-gcc
                 sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-g" ]/' Dockerfile
-            elif [ "$COUNTER" == "2" ] ; then
+
+            elif [ "$COUNTER" == "2" ] && grep -Fq "# Clang" Dockerfile ; then
                 VARIANT_TAG=-clang
                 sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-c" ]/' Dockerfile
-            elif [ "$COUNTER" == "3" ] ; then
-                if  grep -Fq "# Analysis" Dockerfile ; then
-                    # Analysis capability
-                    VARIANT_TAG=-analysis
-                    sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-c" ]/' Dockerfile
-                else
-                    # No Analysis capability
-                    break
-                fi
+
+            elif [ "$COUNTER" == "3" ] && grep -Fq "# Analysis" Dockerfile ; then
+                # Analysis capability
+                VARIANT_TAG=-analysis
+                sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-c" ]/' Dockerfile
+
+            else
+                COUNTER=$((COUNTER + 1))
+                continue
             fi
 
             printf "Source image: %s\n\n" $source
