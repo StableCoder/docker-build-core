@@ -10,6 +10,7 @@ RUN yum update -y \
     unzip \
     zlib-devel \
     openssl-devel \
+    sqlite-devel \
     # GCC
     gcc \
     gcc-c++ \

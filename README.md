@@ -49,6 +49,7 @@ An easier to read chart of what has what.
 
 | OS                       | GCC | GDB | Clang | LLD | LLDB | Analysis Tools |
 |--------------------------|-----|-----|-------|-----|------|----------------|
+| CentOS 6                 | X   | X   |       |     |      |                |
 | CentOS 7/Latest          | X   | X   | X     |     | X    |                |
 | Debian 9/Latest          | X   | X   | X     |     | X    |                |
 | Fedora (All)             | X   | X   | X     | X   | X    | X              |
