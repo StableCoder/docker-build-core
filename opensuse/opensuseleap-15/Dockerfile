@@ -16,7 +16,7 @@ RUN zypper update -y \
     gdb \
     # Clang
     clang \
-    lld4 \
+    lld \
     lldb \
     && zypper clean --all \
     && pip3 install --upgrade pip \
