@@ -83,6 +83,7 @@ for dir in `echo */` ; do
         fi
 
         COUNTER=0
+        FIRST_RUN=true
         while [ "$COUNTER" != "3" ] ; do
 
             # Build
@@ -118,6 +119,7 @@ for dir in `echo */` ; do
                 if [ "${FIRST_RUN}" = true ] && [ "${NO_CACHE}" = true ] ; then
                     printf "docker build --pull --no-cache -t %s:%s%s%s .\n\n" $MAIN_TAG ${dir//-} $VARIANT_TAG $POST_TAG
                     docker build --no-cache --pull -t ${MAIN_TAG}:${dir//-}${VARIANT_TAG}${POST_TAG} .
+                    FIRST_RUN=false
                 else
                     printf "docker build --pull -t %s:%s%s%s .\n\n" $MAIN_TAG ${dir//-} $VARIANT_TAG $POST_TAG
                     docker build --pull -t ${MAIN_TAG}:${dir//-}${VARIANT_TAG}${POST_TAG} .
