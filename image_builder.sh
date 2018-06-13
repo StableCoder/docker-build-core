@@ -98,16 +98,16 @@ for dir in `echo */` ; do
 
             elif [ "$COUNTER" == "1" ] && grep -Fq "# GCC" Dockerfile ; then
                 VARIANT_TAG=-gcc
-                sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-g" ]/' Dockerfile
+                sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-g", "--"  ]/' Dockerfile
 
             elif [ "$COUNTER" == "2" ] && grep -Fq "# Clang" Dockerfile ; then
                 VARIANT_TAG=-clang
-                sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-c" ]/' Dockerfile
+                sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-c", "--"  ]/' Dockerfile
 
             elif [ "$COUNTER" == "3" ] && grep -Fq "# Analysis" Dockerfile ; then
                 # Analysis capability
                 VARIANT_TAG=-analysis
-                sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-c" ]/' Dockerfile
+                sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-c", "--" ]/' Dockerfile
 
             else
                 COUNTER=$((COUNTER + 1))

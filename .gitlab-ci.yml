@@ -12,12 +12,10 @@
 stages:
   - Build Images
   - Upload Images
-  - Post-Pipeline
 
 variables:
   DOCKER_REGISTRY: ''
   CORE_NAME: 'stabletec/build-core'
-  TAG_NAME: ${DOCKER_REGISTRY}${CORE_NAME}
 
 ######################
 # Image Builds Stage #

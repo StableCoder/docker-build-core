@@ -49,4 +49,5 @@ RUN pip3 install --upgrade pip \
 # Entrypoint
 COPY entrypoint.sh /entrypoint.sh
 
-ENTRYPOINT [ "bash" ]
+ENTRYPOINT [ "" ]
+CMD [ "bash" ]

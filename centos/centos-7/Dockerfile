@@ -40,4 +40,5 @@ RUN wget -q https://github.com/ninja-build/ninja/releases/download/v${NINJA_VER}
 # Entrypoint
 COPY entrypoint.sh /entrypoint.sh
 
-ENTRYPOINT [ "bash" ]
+ENTRYPOINT [ "" ]
+CMD [ "bash" ]

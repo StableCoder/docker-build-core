@@ -25,4 +25,5 @@ RUN apt update \
 # Entrypoint
 COPY entrypoint.sh /entrypoint.sh
 
-ENTRYPOINT [ "bash" ]
+ENTRYPOINT [ "" ]
+CMD [ "bash" ]

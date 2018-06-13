@@ -33,4 +33,5 @@ RUN dnf update -y \
 # Entrypoint
 COPY entrypoint.sh /entrypoint.sh
 
-ENTRYPOINT [ "bash" ]
+ENTRYPOINT [ "" ]
+CMD [ "bash" ]

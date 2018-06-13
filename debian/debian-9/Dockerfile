@@ -35,4 +35,5 @@ RUN wget -q https://cmake.org/files/v${CMAKE_MINOR_VER}/cmake-${CMAKE_VERSION}-L
 # Entrypoint
 COPY entrypoint.sh /entrypoint.sh
 
-ENTRYPOINT [ "bash" ]
+ENTRYPOINT [ "" ]
+CMD [ "bash" ]
