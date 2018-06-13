@@ -114,7 +114,7 @@ for dir in `echo */` ; do
                 continue
             fi
 
-            printf "Source image: %s\n\n" $source
+            printf "\n!! Source image: %s !!\n" $source
             if [ "${BUILD}" = true ] ; then
                 if [ "${FIRST_RUN}" = true ] && [ "${NO_CACHE}" = true ] ; then
                     printf "docker build --pull --no-cache -t %s:%s%s%s .\n\n" $MAIN_TAG ${dir//-} $VARIANT_TAG $POST_TAG
@@ -127,6 +127,7 @@ for dir in `echo */` ; do
             fi
 
             if [ "$TEST_IMAGES" = true ] ; then
+                printf "\n!! Testing the image !!\n"
                 printf "docker run %s:%s%s%s echo This was a test\n\n" $MAIN_TAG ${dir//-} $VARIANT_TAG $POST_TAG
                 docker run ${MAIN_TAG}:${dir//-}${VARIANT_TAG}${POST_TAG} echo "This was a test"
             fi
@@ -138,6 +139,7 @@ for dir in `echo */` ; do
 
             # Push
             if [ "${PUSH_IMAGES}" = true ] ; then
+                printf "\n!! Pushing image to registry !!\n"
                 printf "docker push %s:%s%s%s .\n\n" $MAIN_TAG ${dir//-} $VARIANT_TAG $POST_TAG
                 docker push ${MAIN_TAG}:${dir//-}${VARIANT_TAG}${POST_TAG}
             fi
