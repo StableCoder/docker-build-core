@@ -7,6 +7,7 @@ BUILD=false
 FIRST_RUN=true
 NO_CACHE=false
 PUSH_IMAGES=false
+TEST_IMAGES=false
 
 set -e
 set -o pipefail
@@ -25,11 +26,12 @@ usage() {
     echo "  -o  Name of the OS building for."
     echo "  -p  The postfix to add to the tag."
     echo "  -u  Push the build images."
+    echo "  -i  Test the built image to ensure is starts up and exits correctly."
 
     exit
 }
 
-while getopts 'bnt:o:f:s:p:u' flag; do
+while getopts 'bnit:o:f:s:p:u' flag; do
     case "${flag}" in
         b)
             BUILD=true
@@ -48,6 +50,9 @@ while getopts 'bnt:o:f:s:p:u' flag; do
             ;;
         u)
             PUSH_IMAGES=true
+            ;;
+        i)
+            TEST_IMAGES=true
             ;;
         *)
            usage
@@ -98,23 +103,18 @@ for dir in `echo */` ; do
 
             elif [ "$COUNTER" == "1" ] && grep -Fq "# GCC" Dockerfile ; then
                 VARIANT_TAG=-gcc
-                sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-g" ]/' Dockerfile
+                sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-g", "--"  ]/' Dockerfile
 
             elif [ "$COUNTER" == "2" ] && grep -Fq "# Clang" Dockerfile ; then
                 VARIANT_TAG=-clang
-                sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-c" ]/' Dockerfile
-
-            elif [ "$COUNTER" == "3" ] && grep -Fq "# Analysis" Dockerfile ; then
-                # Analysis capability
-                VARIANT_TAG=-analysis
-                sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-c" ]/' Dockerfile
+                sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-c", "--"  ]/' Dockerfile
 
             else
                 COUNTER=$((COUNTER + 1))
                 continue
             fi
 
-            printf "Source image: %s\n\n" $source
+            printf "\n!! Source image: %s !!\n" $source
             if [ "${BUILD}" = true ] ; then
                 if [ "${FIRST_RUN}" = true ] && [ "${NO_CACHE}" = true ] ; then
                     printf "docker build --pull --no-cache -t %s:%s%s%s .\n\n" $MAIN_TAG ${dir//-} $VARIANT_TAG $POST_TAG
@@ -126,13 +126,20 @@ for dir in `echo */` ; do
                 fi
             fi
 
+            if [ "$TEST_IMAGES" = true ] ; then
+                printf "\n!! Testing the image !!\n"
+                printf "docker run %s:%s%s%s echo This was a test\n\n" $MAIN_TAG ${dir//-} $VARIANT_TAG $POST_TAG
+                docker run ${MAIN_TAG}:${dir//-}${VARIANT_TAG}${POST_TAG} echo "This was a test"
+            fi
+
             ## Set Entrypoint back
-            sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ "bash" ]/' Dockerfile
+            sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ "" ]/' Dockerfile
             ## Set FROM back to original
             sed -i "1s#.*#${original}#" Dockerfile
 
             # Push
             if [ "${PUSH_IMAGES}" = true ] ; then
+                printf "\n!! Pushing image to registry !!\n"
                 printf "docker push %s:%s%s%s .\n\n" $MAIN_TAG ${dir//-} $VARIANT_TAG $POST_TAG
                 docker push ${MAIN_TAG}:${dir//-}${VARIANT_TAG}${POST_TAG}
             fi

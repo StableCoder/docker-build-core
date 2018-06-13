@@ -12,12 +12,10 @@
 stages:
   - Build Images
   - Upload Images
-  - Post-Pipeline
 
 variables:
   DOCKER_REGISTRY: ''
   CORE_NAME: 'stabletec/build-core'
-  TAG_NAME: ${DOCKER_REGISTRY}${CORE_NAME}
 
 ######################
 # Image Builds Stage #
@@ -28,7 +26,7 @@ variables:
   tags:
     - docker-builder-linux
   script:
-    - ./image_builder.sh -b -o ${OS} -t ${DOCKER_REGISTRY}${CORE_NAME} -p -${CI_COMMIT_REF_NAME} ${EXTRA_OPTIONS} ${NO_CACHE}
+    - ./image_builder.sh -bi -o ${OS} -t ${DOCKER_REGISTRY}${CORE_NAME} -p -${CI_COMMIT_REF_NAME} ${EXTRA_OPTIONS} ${NO_CACHE}
 
 Fedora Build:
   stage: Build Images
@@ -81,7 +79,7 @@ openSUSE Build:
     - docker-builder-linux
   script:
     - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${DOCKER_REGISTRY}
-    - ./image_builder.sh -bu -o ${OS} -t ${DOCKER_REGISTRY}${CORE_NAME} ${EXTRA_OPTIONS}
+    - ./image_builder.sh -biu -o ${OS} -t ${DOCKER_REGISTRY}${CORE_NAME} ${EXTRA_OPTIONS}
   after_script:
     - docker logout ${DOCKER_REGISTRY}
 

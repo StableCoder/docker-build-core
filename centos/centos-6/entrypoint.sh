@@ -1,23 +1,41 @@
-#!/bin/sh
+#!/bin/bash
 
 gcc() {
     export CC=gcc
     export CXX=g++
 
+    conan profile new --detect default
     printf "Setup GCC\n\n"
-
-    bash
-
-    exit
 }
 
-# Only if there's a single argument
-while getopts 'g' flag; do
-    case "${flag}" in
-        g)
+usage() {
+    cat << USAGE >&2
+Usage:
+    entrypoint.sh [OPTIONS] [-- COMMAND ARGS]
+    -g | --gcc                  Start a Conan profile for GCC  
+    -- COMMAND ARGS             Execute command with args at the script end
+USAGE
+    exit 1
+}
+
+while [[ $# -gt 0 ]]
+do
+    case "$1" in
+        -g | --gcc)
             gcc
+            shift 1
+            ;;
+        --)
+            shift
+            CMD=("$@")
+            break
+            ;;
+        -h | --help)
+            usage
             ;;
     esac
 done
 
-bash
+if [[ $CMD != "" ]]; then
+    exec "${CMD[@]}"
+fi
