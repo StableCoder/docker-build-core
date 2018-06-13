@@ -109,11 +109,6 @@ for dir in `echo */` ; do
                 VARIANT_TAG=-clang
                 sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-c", "--"  ]/' Dockerfile
 
-            elif [ "$COUNTER" == "3" ] && grep -Fq "# Analysis" Dockerfile ; then
-                # Analysis capability
-                VARIANT_TAG=-analysis
-                sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-c", "--" ]/' Dockerfile
-
             else
                 COUNTER=$((COUNTER + 1))
                 continue
