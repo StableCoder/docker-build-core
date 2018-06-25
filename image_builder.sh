@@ -1,8 +1,8 @@
 #!/bin/sh
 
-MAIN_TAG=""
+IMAGE_NAME=""
 OS=""
-POST_TAG=""
+SUFFIX=""
 BUILD=false
 FIRST_RUN=true
 NO_CACHE=false
@@ -13,54 +13,82 @@ set -e
 set -o pipefail
 
 usage() {
-    echo "Used to build and push images from withing the repository dynamically."
-    echo ""
-    echo "USAGE:"
-    echo "  ./image_builder.sh [OPTIONS] -t <tagname> -o <OS>"
-    echo ""
-    echo "OPTIONS:"
-    echo "  -b  Builds the images"
-    echo "  -n  Builds the series starting with a --no-cache,"
-    echo "      allowing for a fresh image build."
-    echo "  -t  The main name of the tag."
-    echo "  -o  Name of the OS building for."
-    echo "  -p  The postfix to add to the tag."
-    echo "  -u  Push the build images."
-    echo "  -i  Test the built image to ensure is starts up and exits correctly."
+    cat << USAGE >&2
+Used to build and push images from within the repository dynamically.
 
-    exit
+Usage:
+  ./image_builder.sh [OPTIONS] -t <tagname> -o <OS>
+
+  -b, --build                     Builds the images
+  -n, --no-cache                  Builds the series starting with a --no-cache,
+                                  allowing for a fresh image build.
+  -i <name>, --image=<name>       The main image name.
+  -o <os>, --os=<os>              Name of the OS building for.
+  -s <suffix>, --suffix=<suffix>  The suffix to add to the tag.
+  -p, --push                      Push the build images.
+  -t, --test                      Test the built image to ensure is starts up
+                                  and exits correctly.
+USAGE
+    exit 1
 }
 
-while getopts 'bnit:o:f:s:p:u' flag; do
-    case "${flag}" in
-        b)
+while [[ $# -gt 0 ]]
+do
+    case "$1" in
+        -b | --build)
             BUILD=true
+            shift 1
             ;;
-        n)
+        -n | --no-cache)
             NO_CACHE=true
+            shift 1
             ;;
-        t)
-            MAIN_TAG="${OPTARG}"
+        -i)
+            IMAGE_NAME="$2"
+            if [[ $IMAGE_NAME == "" ]]; then break; fi
+            shift 2
             ;;
-        o)
-            OS="${OPTARG}"
+        --image=*)
+            IMAGE_NAME="${1#*=}"
+            shift 1
             ;;
-        p)
-            POST_TAG="${OPTARG}"
+        -o)
+            OS="$2"
+            if [[ $OS == "" ]]; then break; fi
+            shift 2
             ;;
-        u)
+        --os=*)
+            OS="${1#*=}"
+            shift 1
+            ;;
+        -s)
+            SUFFIX="$2"
+            if [[ $SUFFIX == "" ]]; then break; fi
+            shift 2
+            ;;
+        --suffix=*)
+            SUFFIX="${1#*=}"
+            shift 1
+            ;;
+        -p | --push)
             PUSH_IMAGES=true
+            shift 1
             ;;
-        i)
+        -t | --test)
             TEST_IMAGES=true
+            shift 1
+            ;;
+        -h | --help)
+            usage
             ;;
         *)
-           usage
+            printf "Unknown argument: $1\n"
+            usage
             ;;
     esac
 done
 
-if [ "${MAIN_TAG}" = "" ] || [ "${OS}" = "" ] ; then
+if [ "${IMAGE_NAME}" = "" ] || [ "${OS}" = "" ] ; then
     usage
 fi
 
@@ -117,19 +145,19 @@ for dir in `echo */` ; do
             printf "\n!! Source image: %s !!\n" $source
             if [ "${BUILD}" = true ] ; then
                 if [ "${FIRST_RUN}" = true ] && [ "${NO_CACHE}" = true ] ; then
-                    printf "docker build --pull --no-cache -t %s:%s%s%s .\n\n" $MAIN_TAG ${dir//-} $VARIANT_TAG $POST_TAG
-                    docker build --no-cache --pull -t ${MAIN_TAG}:${dir//-}${VARIANT_TAG}${POST_TAG} .
+                    printf "docker build --pull --no-cache -t %s:%s%s%s .\n\n" $IMAGE_NAME ${dir//-} $VARIANT_TAG $SUFFIX
+                    docker build --no-cache --pull -t ${IMAGE_NAME}:${dir//-}${VARIANT_TAG}${SUFFIX} .
                     FIRST_RUN=false
                 else
-                    printf "docker build --pull -t %s:%s%s%s .\n\n" $MAIN_TAG ${dir//-} $VARIANT_TAG $POST_TAG
-                    docker build --pull -t ${MAIN_TAG}:${dir//-}${VARIANT_TAG}${POST_TAG} .
+                    printf "docker build --pull -t %s:%s%s%s .\n\n" $IMAGE_NAME ${dir//-} $VARIANT_TAG $SUFFIX
+                    docker build --pull -t ${IMAGE_NAME}:${dir//-}${VARIANT_TAG}${SUFFIX} .
                 fi
             fi
 
             if [ "$TEST_IMAGES" = true ] ; then
                 printf "\n!! Testing the image !!\n"
-                printf "docker run %s:%s%s%s echo This was a test\n\n" $MAIN_TAG ${dir//-} $VARIANT_TAG $POST_TAG
-                docker run ${MAIN_TAG}:${dir//-}${VARIANT_TAG}${POST_TAG} echo "This was a test"
+                printf "docker run %s:%s%s%s echo This was a test\n\n" $IMAGE_NAME ${dir//-} $VARIANT_TAG $SUFFIX
+                docker run ${IMAGE_NAME}:${dir//-}${VARIANT_TAG}${SUFFIX} echo "This was a test"
             fi
 
             ## Set Entrypoint back
@@ -140,8 +168,8 @@ for dir in `echo */` ; do
             # Push
             if [ "${PUSH_IMAGES}" = true ] ; then
                 printf "\n!! Pushing image to registry !!\n"
-                printf "docker push %s:%s%s%s .\n\n" $MAIN_TAG ${dir//-} $VARIANT_TAG $POST_TAG
-                docker push ${MAIN_TAG}:${dir//-}${VARIANT_TAG}${POST_TAG}
+                printf "docker push %s:%s%s%s .\n\n" $IMAGE_NAME ${dir//-} $VARIANT_TAG $SUFFIX
+                docker push ${IMAGE_NAME}:${dir//-}${VARIANT_TAG}${SUFFIX}
             fi
 
             # Increment the counter for the next variant
