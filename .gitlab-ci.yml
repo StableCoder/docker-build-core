@@ -4,6 +4,7 @@
 
 # Optional Environment Variables
 # DOCKER_REGISTRY - The registry the images will be pushed to, must end with '/'
+# CORE_NAME - The main name of the image, to override the original name.
 
 ##########
 # Global #
@@ -23,10 +24,12 @@ variables:
 
 .build_image: &build_template
   image: docker:dind
+  except:
+    - master
   tags:
-    - docker-builder-linux
+    - docker-linux
   script:
-    - ./image_builder.sh -bi -o ${OS} -t ${DOCKER_REGISTRY}${CORE_NAME} -p -${CI_COMMIT_REF_NAME} ${EXTRA_OPTIONS} ${NO_CACHE}
+    - ./image_builder.sh -b -t -o ${OS} -i test ${EXTRA_OPTIONS} ${NO_CACHE}
 
 Fedora Build:
   stage: Build Images
@@ -58,14 +61,17 @@ openSUSE Build:
     OS: opensuse
   <<: *build_template
 
-.Windows Build:
+Windows Build:
   stage: Build Images
   variables:
     OS: windows
+  except:
+    - master
   tags:
-    - docker-builder-windows
+    - docker-windows
   script:
-    - docker build -t %TAG_NAME%msvc2017-%CI_COMMIT_REF_NAME% -m 2GB -f windows/msvc2017.dockerfile windows
+    - cd windows/msvc2017
+    - docker build -t test:windows-msvc2017 -m 4GB .
 
 #######################
 # Image Uploads Stage #
@@ -76,10 +82,10 @@ openSUSE Build:
   only:
     - master
   tags:
-    - docker-builder-linux
+    - docker-linux
   script:
     - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${DOCKER_REGISTRY}
-    - ./image_builder.sh -biu -o ${OS} -t ${DOCKER_REGISTRY}${CORE_NAME} ${EXTRA_OPTIONS}
+    - ./image_builder.sh -b -t -p -o ${OS} -i ${DOCKER_REGISTRY}${CORE_NAME} ${EXTRA_OPTIONS} ${NO_CACHE}
   after_script:
     - docker logout ${DOCKER_REGISTRY}
 
@@ -113,18 +119,19 @@ openSUSE Upload:
     OS: opensuse
   <<: *upload_template
 
-.Windows Upload:
+Windows Upload:
   stage: Upload Images
   variables:
     OS: windows
   only:
     - master
   tags:
-    - docker-builder-windows
+    - docker-windows
   before_script:
     - docker login -u %DOCKER_USER% -p "%DOCKER_PASSWORD%" %DOCKER_REGISTRY%
   script:
-    - docker build -t %TAG_NAME%msvc2017 -m 2GB -f windows/msvc2017.dockerfile windows
-    - docker push %TAG_NAME%msvc2017
+    - cd windows/msvc2017
+    - docker build %NO_CACHE% -t %DOCKER_REGISTRY%%CORE_NAME%:windows-msvc2017 -m 4GB .
+    - docker push %DOCKER_REGISTRY%%CORE_NAME%:windows-msvc2017
   after_script:
     - docker logout %DOCKER_REGISTRY%
