@@ -15,8 +15,8 @@ RUN pip install conan
 RUN powershell -command "& { iwr https://aka.ms/vs/15/release/vs_buildtools.exe -OutFile vs_buildtools.exe }" && \
     powershell -command ".\vs_buildtools.exe --quiet --wait --norestart --nocache --installPath C:\BuildTools --add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Component.Windows10SDK.16299.Desktop | Out-Null" && \
     powershell -command "Remove-Item -path .\vs_buildtools.exe"
-COPY setup_msvc2017_x64.bat C:\\setup_msvc2017_x64.bat
-COPY setup_msvc2017_x64.ps1 C:\\setup_msvc2017_x64.ps1
+COPY scripts/setup_msvc2017_x64.bat C:\\setup_msvc2017_x64.bat
+COPY scripts/setup_msvc2017_x64.ps1 C:\\setup_msvc2017_x64.ps1
 
 # Start developer command prompt with any other commands specified.
 ENTRYPOINT C:\setup_msvc2017_x64.bat &&
