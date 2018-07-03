@@ -6,7 +6,7 @@ RUN powershell -command "iex ((New-Object System.Net.WebClient).DownloadString('
 
 # Applications and setting of path
 RUN powershell -command "choco install -y 7zip cmake python git ninja svn"
-RUN powershell -command "[Environment]::SetEnvironmentVariable( \"Path\", [System.Environment]::GetEnvironmentVariable(\"Path\",\"Machine\") + \";C:\Program Files\7-Zip;C:\Program Files\CMake\bin;C:\Program Files\Git\bin;C:\Python36;C:\Python36\Scripts\", [System.EnvironmentVariableTarget]::Machine )"
+RUN powershell -command "[Environment]::SetEnvironmentVariable( \"Path\", [System.Environment]::GetEnvironmentVariable(\"Path\",\"Machine\") + \";C:\Program Files\7-Zip;C:\Program Files\CMake\bin;C:\Program Files\Git\bin;C:\Python37;C:\Python37\Scripts\", [System.EnvironmentVariableTarget]::Machine )"
 
 # Conan
 RUN pip install conan
