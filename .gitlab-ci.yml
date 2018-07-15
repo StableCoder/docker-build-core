@@ -128,10 +128,10 @@ Windows Upload:
   tags:
     - docker-windows
   before_script:
-    - docker login -u %DOCKER_USER% -p "%DOCKER_PASSWORD%" %DOCKER_REGISTRY%
+    - docker login -u $env:DOCKER_USER -p "$env:DOCKER_PASSWORD" $env:DOCKER_REGISTRY
   script:
     - cd windows/msvc2017
-    - docker build %NO_CACHE% -t %DOCKER_REGISTRY%%CORE_NAME%:windows-msvc2017 -m 4GB .
-    - docker push %DOCKER_REGISTRY%%CORE_NAME%:windows-msvc2017
+    - docker build $env:NO_CACHE -t ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-msvc2017 -m 4GB .
+    - docker push ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-msvc2017
   after_script:
-    - docker logout %DOCKER_REGISTRY%
+    - docker logout $env:DOCKER_REGISTRY
