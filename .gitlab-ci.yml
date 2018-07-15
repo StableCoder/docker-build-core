@@ -72,6 +72,7 @@ Windows Build:
   script:
     - cd windows/msvc2017
     - docker build -t test:windows-msvc2017 -m 4GB .
+    - docker run --rm test:windows-msvc2017 conan --version
 
 #######################
 # Image Uploads Stage #
@@ -132,6 +133,7 @@ Windows Upload:
   script:
     - cd windows/msvc2017
     - docker build $env:NO_CACHE -t ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-msvc2017 -m 4GB .
+    - docker run --rm test:windows-msvc2017 conan --version
     - docker push ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-msvc2017
   after_script:
     - docker logout $env:DOCKER_REGISTRY
