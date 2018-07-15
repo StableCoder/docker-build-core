@@ -17,9 +17,7 @@ RUN apt-get update \
     # Clang
     clang \
     lldb \
-    && apt-get clean\
-    && easy_install -U pip \
-    && pip install conan
+    && apt-get clean
 
 # CMake
 ARG CMAKE_MINOR_VER=3.11
@@ -31,6 +29,9 @@ RUN wget -q https://cmake.org/files/v${CMAKE_MINOR_VER}/cmake-${CMAKE_VERSION}-L
     && cp -rn cmake-${CMAKE_VERSION}-Linux-x86_64/man/* /usr/local/man/ \
     && cp -rn cmake-${CMAKE_VERSION}-Linux-x86_64/share/* /usr/local/share/ \
     && rm -rf cmake-*
+
+# Conan
+RUN pip --no-cache-dir install conan
 
 # Entrypoint
 COPY entrypoint.sh /entrypoint.sh

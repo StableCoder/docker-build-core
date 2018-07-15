@@ -156,8 +156,8 @@ for dir in `echo */` ; do
 
             if [ "$TEST_IMAGES" = true ] ; then
                 printf "\n!! Testing the image !!\n"
-                printf "docker run %s:%s%s%s echo This was a test\n\n" $IMAGE_NAME ${dir//-} $VARIANT_TAG $SUFFIX
-                docker run ${IMAGE_NAME}:${dir//-}${VARIANT_TAG}${SUFFIX} echo "This was a test"
+                docker run --rm ${IMAGE_NAME}:${dir//-}${VARIANT_TAG}${SUFFIX} conan --version
+                printf "!! Image testing complete!!\n"
             fi
 
             ## Set Entrypoint back

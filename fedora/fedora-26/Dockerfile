@@ -1,4 +1,4 @@
-FROM fedora:26
+FROM fedora:rawhide
 
 RUN dnf update -y \
     && dnf install -y \
@@ -26,9 +26,10 @@ RUN dnf update -y \
     llvm-libs \
     iwyu \
     cppcheck \
-    && dnf clean all \
-    && pip3 install --upgrade pip \
-    && pip3 install conan
+    && dnf clean all
+
+# Conan
+RUN pip3 --no-cache-dir install conan
 
 # Entrypoint
 COPY entrypoint.sh /entrypoint.sh

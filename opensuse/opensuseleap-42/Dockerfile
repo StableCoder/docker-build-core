@@ -1,4 +1,4 @@
-FROM opensuse/leap:15
+FROM opensuse/leap:42
 
 RUN zypper update -y \
     && zypper install -y \
@@ -18,9 +18,10 @@ RUN zypper update -y \
     clang \
     lld4 \
     lldb \
-    && zypper clean --all \
-    && pip3 install --upgrade pip \
-    && pip3 install conan
+    && zypper clean --all
+
+# Conan
+RUN pip3 --no-cache-dir install conan
 
 # Entrypoint
 COPY entrypoint.sh /entrypoint.sh

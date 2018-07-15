@@ -1,4 +1,4 @@
-FROM centos:7
+FROM centos:latest
 
 RUN yum update -y \
     && yum install -y epel-release \
@@ -18,9 +18,7 @@ RUN yum update -y \
     clang \
     llvm-libs \
     lldb \
-    && yum clean all \
-    && pip install --upgrade pip \
-    && pip install conan
+    && yum clean all
 
 # CMake
 ENV CMAKE_MINOR_VER=3.11 \
@@ -36,6 +34,10 @@ RUN wget -q https://github.com/ninja-build/ninja/releases/download/v${NINJA_VER}
     && unzip ninja-linux.zip \
     && mv ninja /usr/local/bin \
     && rm ninja-linux.zip
+
+# Conan
+RUN pip install --upgrade --user urllib3 \
+    && pip --no-cache-dir install conan
 
 # Entrypoint
 COPY entrypoint.sh /entrypoint.sh

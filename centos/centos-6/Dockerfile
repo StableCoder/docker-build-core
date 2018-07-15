@@ -43,8 +43,7 @@ RUN wget -q https://github.com/ninja-build/ninja/releases/download/v${NINJA_VER}
     && rm ninja-linux.zip
 
 # Conan
-RUN pip3 install --upgrade pip \
-    && pip3 install conan 
+RUN pip3 --no-cache-dir install conan 
 
 # Entrypoint
 COPY entrypoint.sh /entrypoint.sh

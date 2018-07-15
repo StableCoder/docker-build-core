@@ -5,11 +5,11 @@ FROM microsoft/windowsservercore:1803
 RUN powershell -command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))"
 
 # Applications and setting of path
-RUN powershell -command "choco install -y 7zip cmake python git ninja svn"
-RUN powershell -command "[Environment]::SetEnvironmentVariable( \"Path\", [System.Environment]::GetEnvironmentVariable(\"Path\",\"Machine\") + \";C:\Program Files\7-Zip;C:\Program Files\CMake\bin;C:\Program Files\Git\bin;C:\Python37;C:\Python37\Scripts\", [System.EnvironmentVariableTarget]::Machine )"
+RUN powershell -command "choco install -y 7zip cmake python git ninja svn" && \
+    powershell -command "[Environment]::SetEnvironmentVariable( \"Path\", [System.Environment]::GetEnvironmentVariable(\"Path\",\"Machine\") + \";C:\Program Files\7-Zip;C:\Program Files\CMake\bin;C:\Program Files\Git\bin;C:\Python37;C:\Python37\Scripts\", [System.EnvironmentVariableTarget]::Machine )"
 
 # Conan
-RUN pip install conan
+RUN pip --no-cache-dir install conan
 
 # MSVC Build Tools 2017
 RUN powershell -command "& { iwr https://aka.ms/vs/15/release/vs_buildtools.exe -OutFile vs_buildtools.exe }" && \
