@@ -11,15 +11,17 @@ RUN powershell -command "choco install -y 7zip cmake python git ninja svn" && \
 # Conan
 RUN pip --no-cache-dir install conan
 
+# Entrypoints
+COPY entrypoint.bat entrypoint.bat
+COPY entrypoint.ps1 entrypoint.ps1
+
 # MSVC Build Tools 2017
 RUN powershell -command "& { iwr https://aka.ms/vs/15/release/vs_buildtools.exe -OutFile vs_buildtools.exe }" && \
-    powershell -command ".\vs_buildtools.exe --quiet --wait --norestart --nocache --installPath C:\BuildTools --add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Component.Windows10SDK.16299.Desktop | Out-Null" && \
+    powershell -command ".\vs_buildtools.exe --quiet --wait --norestart --nocache --add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Component.Windows10SDK.17134.Desktop | Out-Null" && \
     powershell -command "Remove-Item -path .\vs_buildtools.exe"
-COPY setup_msvc2017_x64.bat C:\\setup_msvc2017_x64.bat
-COPY setup_msvc2017_x64.ps1 C:\\setup_msvc2017_x64.ps1
 
 # Start developer command prompt with any other commands specified.
-ENTRYPOINT C:\setup_msvc2017_x64.bat &&
+ENTRYPOINT call C:\entrypoint.bat x64 &&
 
 # Default to PowerShell if no other command specified.
 CMD ["powershell.exe", "-NoLogo", "-ExecutionPolicy", "Bypass"]
