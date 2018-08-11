@@ -17,7 +17,7 @@ usage() {
 Used to build and push images from within the repository dynamically.
 
 Usage:
-  ./image_builder.sh [OPTIONS] -t <tagname> -o <OS>
+  ./image_builder.sh [OPTIONS] -i <image-name> -o <OS>
 
   -b, --build                     Builds the images
   -n, --no-cache                  Builds the series starting with a --no-cache,
@@ -118,7 +118,6 @@ for dir in `echo */` ; do
         COUNTER=0
         FIRST_RUN=true
         while [ "$COUNTER" != "3" ] ; do
-
             # Build
 
             ## Change FROM image to the one named by the directory
@@ -145,18 +144,18 @@ for dir in `echo */` ; do
             printf "\n!! Source image: %s !!\n" $source
             if [ "${BUILD}" = true ] ; then
                 if [ "${FIRST_RUN}" = true ] && [ "${NO_CACHE}" = true ] ; then
-                    printf "docker build --pull --no-cache -t %s:%s%s%s .\n\n" $IMAGE_NAME ${dir//-} $VARIANT_TAG $SUFFIX
-                    docker build --no-cache --pull -t ${IMAGE_NAME}:${dir//-}${VARIANT_TAG}${SUFFIX} .
+                    printf "docker build --pull --no-cache -t %s:%s%s%s .\n\n" $IMAGE_NAME ${OS} $VARIANT_TAG $SUFFIX
+                    docker build --no-cache --pull -t ${IMAGE_NAME}:${OS}${VARIANT_TAG}${SUFFIX} .
                     FIRST_RUN=false
                 else
-                    printf "docker build --pull -t %s:%s%s%s .\n\n" $IMAGE_NAME ${dir//-} $VARIANT_TAG $SUFFIX
-                    docker build --pull -t ${IMAGE_NAME}:${dir//-}${VARIANT_TAG}${SUFFIX} .
+                    printf "docker build --pull -t %s:%s%s%s .\n\n" $IMAGE_NAME ${OS} $VARIANT_TAG $SUFFIX
+                    docker build --pull -t ${IMAGE_NAME}:${OS}${VARIANT_TAG}${SUFFIX} .
                 fi
             fi
 
             if [ "$TEST_IMAGES" = true ] ; then
                 printf "\n!! Testing the image !!\n"
-                docker run --rm ${IMAGE_NAME}:${dir//-}${VARIANT_TAG}${SUFFIX} conan --version
+                docker run --rm ${IMAGE_NAME}:${OS}${VARIANT_TAG}${SUFFIX} conan --version
                 printf "!! Image testing complete!!\n"
             fi
 
@@ -168,8 +167,8 @@ for dir in `echo */` ; do
             # Push
             if [ "${PUSH_IMAGES}" = true ] ; then
                 printf "\n!! Pushing image to registry !!\n"
-                printf "docker push %s:%s%s%s .\n\n" $IMAGE_NAME ${dir//-} $VARIANT_TAG $SUFFIX
-                docker push ${IMAGE_NAME}:${dir//-}${VARIANT_TAG}${SUFFIX}
+                printf "docker push %s:%s%s%s .\n\n" $IMAGE_NAME ${OS} $VARIANT_TAG $SUFFIX
+                docker push ${IMAGE_NAME}:${OS}${VARIANT_TAG}${SUFFIX}
             fi
 
             # Increment the counter for the next variant

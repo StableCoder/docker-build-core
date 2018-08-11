@@ -18,6 +18,10 @@ RUN zypper update -y \
     clang \
     lld \
     lldb \
+    # Analysis
+    llvm \
+    cppcheck \
+    include-what-you-use \
     && zypper clean --all
 
 # Conan

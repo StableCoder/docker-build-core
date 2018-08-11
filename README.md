@@ -47,13 +47,11 @@ These OS images also have analysis tools used for code analysis available:
 
 An easier to read chart of what has what.
 
-| OS                       | GCC | GDB | Clang | LLD | LLDB | Analysis Tools |
-|--------------------------|-----|-----|-------|-----|------|----------------|
-| CentOS 6                 | X   | X   |       |     |      |                |
-| CentOS 7/Latest          | X   | X   | X     |     | X    |                |
-| Debian 9/Latest          | X   | X   | X     |     | X    |                |
-| Fedora (All)             | X   | X   | X     | X   | X    | X              |
-| openSUSE Leap 42 /Latest | X   | X   | X     | X   | X    |                |
-| openSUSE Tumbleweed      | X   | X   | X     | X   | X    | X              |
-| Ubuntu 16.04             | X   | X   | X     | X   | X    |                |
-| Ubuntu 18.04/Latest      | X   | X   | X     | X   | X    |                |
+| OS                  | GCC | GDB | Clang | LLD | LLDB | Analysis Tools |
+|---------------------|-----|-----|-------|-----|------|----------------|
+| CentOS 6            | X   | X   |       |     |      |                |
+| CentOS 7/Latest     | X   | X   | X     |     | X    |                |
+| Debian (All)        | X   | X   | X     |     | X    |                |
+| Fedora (All)        | X   | X   | X     | X   | X    | X              |
+| openSUSE Leap (All) | X   | X   | X     | X   | X    | X              |
+| Ubuntu (All)        | X   | X   | X     | X   | X    |                |

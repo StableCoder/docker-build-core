@@ -125,6 +125,7 @@ Windows MSVC Upload:
     - docker-windows
   script:
     - docker build $env:NO_CACHE -t ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-msvc2017 -f windows/msvc2017.dockerfile -m 2GB windows
+    - docker run --rm ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-msvc2017 conan --version
     - docker login -u $env:DOCKER_USER -p "$env:DOCKER_PASSWORD" $env:DOCKER_REGISTRY
     - docker push ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-msvc2017
   after_script:
