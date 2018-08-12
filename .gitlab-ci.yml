@@ -68,7 +68,7 @@ Windows MSVC Build:
   tags:
     - docker-windows
   script:
-    - docker build -t test:windows-msvc2017 -f windows/msvc2017.dockerfile -m 2GB windows
+    - docker build -t test:windows-msvc2017 -f windows/msvc2017.dockerfile -m 4GB windows
     - docker run --rm test:windows-msvc2017 conan --version
 
 #######################
@@ -124,7 +124,7 @@ Windows MSVC Upload:
   tags:
     - docker-windows
   script:
-    - docker build $env:NO_CACHE -t ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-msvc2017 -f windows/msvc2017.dockerfile -m 2GB windows
+    - docker build $env:NO_CACHE -t ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-msvc2017 -f windows/msvc2017.dockerfile -m 4GB windows
     - docker run --rm ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-msvc2017 conan --version
     - docker login -u $env:DOCKER_USER -p "$env:DOCKER_PASSWORD" $env:DOCKER_REGISTRY
     - docker push ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-msvc2017
