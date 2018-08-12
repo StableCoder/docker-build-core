@@ -5,7 +5,7 @@ Param(
 if($Target.equals("x64") -Or $Target.equals("x86")) {
     # Setup for MSVC
     pushd "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Auxiliary\Build\"
-    if($Target.equals("msvc-x64")) {
+    if($Target.equals("x64")) {
         cmd /c "vcvars64.bat&set" |
         foreach {
             if ($_ -match "=") {
