@@ -11,6 +11,9 @@ RUN yum update -y \
     zlib-devel \
     openssl-devel \
     sqlite-devel \
+    libffi-devel \
+    readline-devel \
+    ncurses-devel \
     # GCC
     gcc \
     gcc-c++ \
@@ -18,12 +21,12 @@ RUN yum update -y \
     && yum clean all
 
 # Python3
-ENV PYTHON_VER=3.7.0
+ENV PYTHON_VER=3.6.6
 RUN wget -q https://www.python.org/ftp/python/${PYTHON_VER}/Python-${PYTHON_VER}.tgz \
     && tar -zxf Python-${PYTHON_VER}.tgz \
     && cd Python-${PYTHON_VER} \
     && ./configure \
-    && make && make install \
+    && make -j $(nproc) && make install \
     && cd .. \
     && rm -rf Python-*
 
