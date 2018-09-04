@@ -1,4 +1,4 @@
-FROM centos:latest
+FROM centos:7
 
 RUN yum update -y \
     && yum install -y epel-release \
@@ -21,8 +21,8 @@ RUN yum update -y \
     && yum clean all
 
 # CMake
-ENV CMAKE_MINOR_VER=3.11 \
-    CMAKE_VERSION=3.11.1
+ENV CMAKE_MINOR_VER=3.12 \
+    CMAKE_VERSION=3.12.1
 RUN wget -q https://cmake.org/files/v${CMAKE_MINOR_VER}/cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz \
     && tar -zxf cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz \
     && cp -R cmake-${CMAKE_VERSION}-Linux-x86_64/* /usr/local/ \
