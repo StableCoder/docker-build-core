@@ -8,12 +8,12 @@ These images are used to target platforms, not specific tools or compilers, so t
 - CentOS
 - Debian
 - Ubuntu
-- openSUSE
+- openSUSE Leap
 - Windows
 
 ## Tooling Available
 
-These images form the core of other images used for building an assortment of C/C++ projects, and as such include this core infrastructure:
+These images form the core of other images used for building an assortment of C/C++ projects, and as such include this core software:
 - Git
 - Subversion
 - Make
@@ -22,15 +22,16 @@ These images form the core of other images used for building an assortment of C/
 - GCC
 - GDB
 - Clang
-- LLD (except CentOS 7/Debian 9)
+- LLD
 - LLDB
 - Conan
+- Python 3
 
 ## Analysis Tools
 
 On these OS's:
 - Fedora
-- openSUSE Tumbleweed
+- openSUSE Leap
 
 These OS images also have analysis tools used for code analysis available:
 - AddressSanitizer

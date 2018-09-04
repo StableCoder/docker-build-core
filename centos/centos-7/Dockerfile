@@ -10,6 +10,12 @@ RUN yum update -y \
     git \
     subversion \
     unzip \
+    zlib-devel \
+    openssl-devel \
+    sqlite-devel \
+    libffi-devel \
+    readline-devel \
+    ncurses-devel \
     # GCC
     gcc \
     gcc-c++ \
@@ -19,6 +25,16 @@ RUN yum update -y \
     llvm-libs \
     lldb \
     && yum clean all
+
+# Python3
+ENV PYTHON_VER=3.6.6
+RUN wget -q https://www.python.org/ftp/python/${PYTHON_VER}/Python-${PYTHON_VER}.tgz \
+    && tar -zxf Python-${PYTHON_VER}.tgz \
+    && cd Python-${PYTHON_VER} \
+    && ./configure \
+    && make -j $(nproc) && make install \
+    && cd .. \
+    && rm -rf Python-*
 
 # CMake
 ENV CMAKE_MINOR_VER=3.12 \
@@ -36,8 +52,8 @@ RUN wget -q https://github.com/ninja-build/ninja/releases/download/v${NINJA_VER}
     && rm ninja-linux.zip
 
 # Conan
-RUN pip install --upgrade --user urllib3 \
-    && pip --no-cache-dir install conan
+RUN pip3 install --upgrade --user urllib3 \
+    && pip3 --no-cache-dir install conan
 
 # Entrypoint
 COPY entrypoint.sh /entrypoint.sh
