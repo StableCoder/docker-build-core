@@ -61,15 +61,21 @@ openSUSE Build:
     OS: opensuse
   <<: *build_template
 
-Windows MSVC Build:
+Windows MSVC/ClangCL/Clang Build:
   stage: Build Images
   except:
     - master
   tags:
     - docker-windows
   script:
-    - docker build -t test:windows-msvc2017 -f windows/msvc2017.dockerfile -m 4GB windows
-    - docker run --rm test:windows-msvc2017 conan --version
+    - mkdir windows\LLVM
+    - Copy-Item $env:LLVM_DIR\* -Destination ${pwd}\windows\LLVM -Recurse
+    - docker build --pull -t test:windows-msvc -f windows/msvc.dockerfile -m 4GB windows
+    - docker run --rm test:windows-msvc conan --version
+    - docker build --pull -t test:windows-clang-cl -f windows/clang-cl.dockerfile -m 4GB windows
+    - docker run --rm test:windows-clang-cl conan --version
+    - docker build --pull -t test:windows-clang -f windows/clang.dockerfile -m 4GB windows
+    - docker run --rm test:windows-clang conan --version
 
 #######################
 # Image Uploads Stage #
@@ -117,16 +123,24 @@ openSUSE Upload:
     OS: opensuse
   <<: *upload_template
 
-Windows MSVC Upload:
+Windows MSVC/ClangCL/Clang Upload:
   stage: Upload Images
   only:
     - master
   tags:
     - docker-windows
   script:
-    - docker build $env:NO_CACHE -t ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-msvc2017 -f windows/msvc2017.dockerfile -m 4GB windows
-    - docker run --rm ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-msvc2017 conan --version
+    - mkdir windows\LLVM
+    - Copy-Item $env:LLVM_DIR\* -Destination ${pwd}\windows\LLVM -Recurse
+    - docker build --pull $env:NO_CACHE -t ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-msvc -f windows/msvc.dockerfile -m 4GB windows
+    - docker run --rm ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-msvc conan --version
+    - docker build --pull $env:NO_CACHE -t ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-clang-cl -f windows/clang-cl.dockerfile -m 4GB windows
+    - docker run --rm ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-clang-cl conan --version
+    - docker build --pull $env:NO_CACHE -t ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-clang -f windows/clang.dockerfile -m 4GB windows
+    - docker run --rm ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-clang conan --version
     - docker login -u $env:DOCKER_USER -p "$env:DOCKER_PASSWORD" $env:DOCKER_REGISTRY
-    - docker push ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-msvc2017
+    - docker push ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-msvc
+    - docker push ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-clang-cl
+    - docker push ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-clang
   after_script:
     - docker logout $env:DOCKER_REGISTRY

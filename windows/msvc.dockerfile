@@ -21,9 +21,13 @@ RUN "& { iwr https://aka.ms/vs/15/release/vs_buildtools.exe -OutFile vs_buildtoo
     .\vs_buildtools.exe --quiet --wait --norestart --nocache --add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Component.Windows10SDK.17134 | Out-Null; \
     Remove-Item -path .\vs_buildtools.exe
 
+# Clang/LLVM
+COPY LLVM C:\\LLVM
+RUN "[Environment]::SetEnvironmentVariable(\"Path\", [System.Environment]::GetEnvironmentVariable(\"Path\",\"Machine\") + \";C:\LLVM\bin\", [System.EnvironmentVariableTarget]::Machine )"
+
 # Start developer command prompt with any other commands specified.
 COPY entrypoint.ps1 C:\\ps-scripts\\entrypoint.ps1
-ENTRYPOINT C:\ps-scripts\entrypoint.ps1 x64;
+ENTRYPOINT C:\ps-scripts\entrypoint.ps1;
 
 # Default to PowerShell if no other command specified.
 CMD ["powershell.exe", "-NoLogo", "-ExecutionPolicy", "Bypass"]

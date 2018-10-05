@@ -27,7 +27,7 @@ RUN "[Environment]::SetEnvironmentVariable(\"Path\", [System.Environment]::GetEn
 
 # Start developer command prompt with any other commands specified.
 COPY entrypoint.ps1 C:\\ps-scripts\\entrypoint.ps1
-ENTRYPOINT C:\ps-scripts\entrypoint.ps1 clang;
+ENTRYPOINT C:\ps-scripts\entrypoint.ps1 clang-cl;
 
 # Default to PowerShell if no other command specified.
 CMD ["powershell.exe", "-NoLogo", "-ExecutionPolicy", "Bypass"]
