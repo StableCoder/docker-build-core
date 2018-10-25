@@ -22,8 +22,10 @@ RUN "& { iwr https://aka.ms/vs/15/release/vs_buildtools.exe -OutFile vs_buildtoo
     Remove-Item -path .\vs_buildtools.exe
 
 # Clang/LLVM
-COPY LLVM C:\\LLVM
-RUN "[Environment]::SetEnvironmentVariable(\"Path\", [System.Environment]::GetEnvironmentVariable(\"Path\",\"Machine\") + \";C:\LLVM\bin\", [System.EnvironmentVariableTarget]::Machine )"
+RUN wget http://releases.llvm.org/7.0.0/LLVM-7.0.0-win64.exe -OutFile llvm.exe -UseBasicParsing; \
+    .\llvm.exe /S | Out-Null; \
+    Remove-Item -path .\llvm.exe; \
+   "[Environment]::SetEnvironmentVariable(\"Path\", [System.Environment]::GetEnvironmentVariable(\"Path\",\"Machine\") + \";C:\Program Files\LLVM\bin\", [System.EnvironmentVariableTarget]::Machine )"
 
 # Start developer command prompt with any other commands specified.
 COPY entrypoint.ps1 C:\\ps-scripts\\entrypoint.ps1
