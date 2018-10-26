@@ -68,8 +68,6 @@ Windows MSVC/ClangCL/Clang Build:
   tags:
     - docker-windows
   script:
-    - mkdir windows\LLVM
-    - Copy-Item $env:LLVM_DIR\* -Destination ${pwd}\windows\LLVM -Recurse
     - docker build --pull -t test:windows-msvc -f windows/msvc.dockerfile -m 4GB windows
     - docker run --rm test:windows-msvc conan --version
     - docker build --pull -t test:windows-clang-cl -f windows/clang-cl.dockerfile -m 4GB windows
@@ -130,8 +128,6 @@ Windows MSVC/ClangCL/Clang Upload:
   tags:
     - docker-windows
   script:
-    - mkdir windows\LLVM
-    - Copy-Item $env:LLVM_DIR\* -Destination ${pwd}\windows\LLVM -Recurse
     - docker build --pull $env:NO_CACHE -t ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-msvc -f windows/msvc.dockerfile -m 4GB windows
     - docker run --rm ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-msvc conan --version
     - docker build --pull $env:NO_CACHE -t ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-clang-cl -f windows/clang-cl.dockerfile -m 4GB windows
