@@ -145,7 +145,7 @@ for dir in `echo */` ; do
 
             printf "\n >> Source image: %s\n" $source
             if [ "${BUILD}" = true ] ; then
-                if [ "${FIRST_RUN}" = true ] && [ "${NO_CACHE}" = true ] ; then
+                if [ "${FIRST_RUN}" = true ] && [ "${NO_CACHE}" = true ] && [ "${OS_VER}" != "" ]; then
                     echo docker build --no-cache --pull -t ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX} .
                     docker build --no-cache --pull -t ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX} .
                     FIRST_RUN=false
