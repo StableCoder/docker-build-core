@@ -21,7 +21,7 @@ RUN yum update -y \
     && yum clean all
 
 # Python3
-ENV PYTHON_VER=3.7.1
+ENV PYTHON_VER=3.6.7
 RUN wget -q https://www.python.org/ftp/python/${PYTHON_VER}/Python-${PYTHON_VER}.tgz \
     && tar -zxf Python-${PYTHON_VER}.tgz \
     && cd Python-${PYTHON_VER} \
