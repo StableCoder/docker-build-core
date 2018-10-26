@@ -27,7 +27,7 @@ RUN yum update -y \
     && yum clean all
 
 # Python3
-ENV PYTHON_VER=3.6.6
+ENV PYTHON_VER=3.7.1
 RUN wget -q https://www.python.org/ftp/python/${PYTHON_VER}/Python-${PYTHON_VER}.tgz \
     && tar -zxf Python-${PYTHON_VER}.tgz \
     && cd Python-${PYTHON_VER} \
@@ -38,7 +38,7 @@ RUN wget -q https://www.python.org/ftp/python/${PYTHON_VER}/Python-${PYTHON_VER}
 
 # CMake
 ENV CMAKE_MINOR_VER=3.12 \
-    CMAKE_VERSION=3.12.1
+    CMAKE_VERSION=3.12.3
 RUN wget -q https://cmake.org/files/v${CMAKE_MINOR_VER}/cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz \
     && tar -zxf cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz \
     && cp -R cmake-${CMAKE_VERSION}-Linux-x86_64/* /usr/local/ \
