@@ -4,12 +4,19 @@ These images are used to target platforms, not specific tools or compilers, so t
 
 ## OS Images available
 
-- Fedora
-- CentOS
-- Debian
-- Ubuntu
-- openSUSE Leap
-- Windows
+The following also have the 'latest' image available, based on the 'latest' tag of the docker images available.
+- Fedora 26/27/28/29
+- CentOS 6/7
+- Debian 9
+- Ubuntu 18.04
+- openSUSE Leap 15
+
+As well as these rolling release images:
+- Fedora Rawhide
+- openSUSE Tumbleweed
+
+And of course, a Windows build:
+- Windows 1803
 
 ## Tooling Available
 
@@ -29,11 +36,7 @@ These images form the core of other images used for building an assortment of C/
 
 ## Analysis Tools
 
-On these OS's:
-- Fedora
-- openSUSE Leap
-
-These OS images also have analysis tools used for code analysis available:
+The Fedora and openSUSE images also have analysis tools used for code analysis available:
 - AddressSanitizer
 - LeakSanitizer
 - ThreadSanitizer
@@ -54,5 +57,5 @@ An easier to read chart of what has what.
 | CentOS 7/Latest | X   | X   | X     |     | X    |                |
 | Debian          | X   | X   | X     |     | X    |                |
 | Fedora          | X   | X   | X     | X   | X    | X              |
-| openSUSE Leap   | X   | X   | X     | X   | X    | X              |
+| openSUSE        | X   | X   | X     | X   | X    | X              |
 | Ubuntu          | X   | X   | X     | X   | X    |                |

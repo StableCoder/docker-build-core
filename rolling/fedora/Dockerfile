@@ -1,4 +1,4 @@
-FROM fedora:26
+FROM fedora:rawhide
 
 RUN dnf update -y \
     && dnf install -y \

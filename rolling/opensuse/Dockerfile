@@ -1,13 +1,15 @@
-FROM fedora:26
+FROM opensuse/tumbleweed:latest
 
-RUN dnf update -y \
-    && dnf install -y \
+RUN zypper update -y \
+    && zypper install -y \
     # Common
     git \
     subversion \
     make \
-    ninja-build \
+    ninja \
     cmake \
+    python3 \
+    python3-pip \
     # GCC
     gcc \
     gcc-c++ \
@@ -17,16 +19,10 @@ RUN dnf update -y \
     lld \
     lldb \
     # Analysis
-    libasan \
-    liblsan \
-    libtsan \
-    libubsan \
-    clang-tools-extra \
     llvm \
-    llvm-libs \
-    iwyu \
     cppcheck \
-    && dnf clean all
+    include-what-you-use \
+    && zypper clean --all
 
 # Conan
 RUN pip3 --no-cache-dir install conan
