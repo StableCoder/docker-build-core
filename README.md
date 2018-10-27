@@ -8,7 +8,7 @@ The following also have the 'latest' image available, based on the 'latest' tag 
 - Fedora 26/27/28/29
 - CentOS 6/7
 - Debian 9
-- Ubuntu 18.04
+- Ubuntu 18.04/18.10
 - openSUSE Leap 15
 
 As well as these rolling release images:
