@@ -19,9 +19,7 @@ These images are used to target platforms, not specific tools or compilers, so t
 - [`ubuntu18.04`, `ubuntu18.04-gcc`, `ubuntu18.04-clang`, `ubuntu18.10`, `ubuntu18.10-gcc`, `ubuntu18.10-clang`, `ubuntu`, `ubuntu-gcc`, `ubuntu-clang` (x86_64/Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/ubuntu/ubuntu-18.04/Dockerfile)
 - [`fedora-rawhide`, `fedora-rawhide-gcc`, `fedora-rawhide-clang` (x86_64/Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/rolling/fedora/Dockerfile)
 - [`opensuse-tumbleweed`, `opensuse-tumbleweed-gcc`, `opensuse-tumbleweed-clang` (x86_64/Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/rolling/opensuse/Dockerfile)
-- [`windows-msvc` (x86_64/Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/windows/msvc.dockerfile)
-- [`windows-clang-cl` (x86_64/Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/windows/clang-cl.dockerfile)
-- [`windows-clang` (x86_64/Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/windows/clang.dockerfile)
+- [`windows`, `windows-msvc`, `windows-clang-cl`, `windows-clang` (x86_64/Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/windows/Dockerfile)
 
 ##### Note: While they may share dockerfiles, during build time the first `FROM` line is replaced with the correct variant, and the `ENTRYPOINT` line is replaced appropriately for auto-loading the tagged compiler.
 

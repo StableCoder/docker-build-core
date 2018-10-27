@@ -99,15 +99,8 @@ Windows MSVC/ClangCL/Clang Build:
   tags:
     - docker-windows
   script:
-    # MSVC
-    - docker build --pull -t test:windows-msvc -f windows/msvc.dockerfile -m 4GB windows
-    - docker run --rm test:windows-msvc
-    # clang-cl
-    - docker build --pull -t test:windows-clang-cl -f windows/clang-cl.dockerfile -m 4GB windows
-    - docker run --rm test:windows-clang-cl
-    # clang
-    - docker build --pull -t test:windows-clang -f windows/clang.dockerfile -m 4GB windows
-    - docker run --rm test:windows-clang
+    - cd windows
+    - .\image_builder.ps1 ${env:NO_CACHE} -imagename test -test
 
 #######################
 # Image Uploads Stage #
@@ -203,19 +196,8 @@ Windows MSVC/ClangCL/Clang Upload:
   tags:
     - docker-windows
   script:
-    # MSVC
-    - docker build --pull $env:NO_CACHE -t ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-msvc -f windows/msvc.dockerfile -m 4GB windows
-    - docker run --rm ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-msvc
-    # clang-cl
-    - docker build --pull $env:NO_CACHE -t ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-clang-cl -f windows/clang-cl.dockerfile -m 4GB windows
-    - docker run --rm ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-clang-cl
-    # clang
-    - docker build --pull $env:NO_CACHE -t ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-clang -f windows/clang.dockerfile -m 4GB windows
-    - docker run --rm ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-clang
-    # Upload
     - docker login -u $env:DOCKER_USER -p "$env:DOCKER_PASSWORD" $env:DOCKER_REGISTRY
-    - docker push ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-msvc
-    - docker push ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-clang-cl
-    - docker push ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-clang
+    - cd windows
+    - .\image_builder.ps1 ${env:NO_CACHE} -imagename ${env:DOCKER_REGISTRY}${env:CORE_NAME} -test -push
   after_script:
     - docker logout $env:DOCKER_REGISTRY

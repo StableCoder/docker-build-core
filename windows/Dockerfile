@@ -9,7 +9,7 @@ ENV chocolateyUseWindowsCompression=false
 RUN iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 
 # Applications and setting of path
-RUN choco install --yes 7zip cmake git ninja svn; \
+RUN choco install --yes 7zip cmake git ninja svn vswhere; \
     choco install --yes python3 --params '"/InstallDir:C:\Python3"'
 RUN "[Environment]::SetEnvironmentVariable(\"Path\", [System.Environment]::GetEnvironmentVariable(\"Path\",\"Machine\") + \";C:\Program Files\7-Zip;C:\Program Files\CMake\bin;C:\Program Files\Git\bin;C:\Python3;C:\Python3\Scripts\", [System.EnvironmentVariableTarget]::Machine )"
 
@@ -29,7 +29,7 @@ RUN wget http://releases.llvm.org/7.0.0/LLVM-7.0.0-win64.exe -OutFile llvm.exe -
 
 # Start developer command prompt with any other commands specified.
 COPY entrypoint.ps1 C:\\ps-scripts\\entrypoint.ps1
-ENTRYPOINT C:\ps-scripts\entrypoint.ps1 clang-cl;
+ENTRYPOINT C:\ps-scripts\entrypoint.ps1 version;
 
 # Default to PowerShell if no other command specified.
 CMD ["powershell.exe", "-NoLogo", "-ExecutionPolicy", "Bypass"]
