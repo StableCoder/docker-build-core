@@ -58,5 +58,5 @@ RUN pip3 install --upgrade --user urllib3 \
 # Entrypoint
 COPY entrypoint.sh /entrypoint.sh
 
-ENTRYPOINT [ "" ]
+ENTRYPOINT [ "/entrypoint.sh", "-v", "--" ]
 CMD [ "bash" ]

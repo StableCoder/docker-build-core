@@ -51,5 +51,5 @@ RUN pip3 --no-cache-dir install conan
 # Entrypoint
 COPY entrypoint.sh /entrypoint.sh
 
-ENTRYPOINT [ "" ]
+ENTRYPOINT [ "/entrypoint.sh", "-v", "--" ]
 CMD [ "bash" ]

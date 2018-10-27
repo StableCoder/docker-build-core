@@ -160,7 +160,7 @@ for dir in `echo ${OS}/*/` ; do
             fi
 
             ## Set Entrypoint back
-            sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ "" ]/' $OS/$dir/Dockerfile
+            sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ "\/entrypoint.sh", "-v", "--" ]/' $OS/$dir/Dockerfile
             ## Set FROM back to original
             sed -i "1s#.*#${original}#" $OS/$dir/Dockerfile
 
