@@ -165,22 +165,22 @@ Rolling Upload:
   script:
     # Fedora Rawhide
     - docker build --pull -t ${DOCKER_REGISTRY}${CORE_NAME}:fedora-rawhide -f rolling/fedora/Dockerfile .
-    - docker run --rm -${DOCKER_REGISTRY}${CORE_NAME}:fedora-rawhide
+    - docker run --rm ${DOCKER_REGISTRY}${CORE_NAME}:fedora-rawhide
         # GCC
     - sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-g", "--"  ]/' rolling/fedora/Dockerfile
     - docker build --pull -t ${DOCKER_REGISTRY}${CORE_NAME}:fedora-rawhide-gcc -f rolling/fedora/Dockerfile .
-    - docker run --rm -${DOCKER_REGISTRY}${CORE_NAME}:fedora-rawhide-gcc
+    - docker run --rm ${DOCKER_REGISTRY}${CORE_NAME}:fedora-rawhide-gcc
         # Clang
     - sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-c", "--"  ]/' rolling/fedora/Dockerfile
     - docker build --pull -t ${DOCKER_REGISTRY}${CORE_NAME}:fedora-rawhide-clang -f rolling/fedora/Dockerfile .
-    - docker run --rm -${DOCKER_REGISTRY}${CORE_NAME}:fedora-rawhide-clang
+    - docker run --rm ${DOCKER_REGISTRY}${CORE_NAME}:fedora-rawhide-clang
     # openSUSE Tumbleweed
     - docker build --pull -t ${DOCKER_REGISTRY}${CORE_NAME}:opensuse-tumbleweed -f rolling/opensuse/Dockerfile .
-    - docker run --rm -${DOCKER_REGISTRY}${CORE_NAME}:opensuse-tumbleweed
+    - docker run --rm ${DOCKER_REGISTRY}${CORE_NAME}:opensuse-tumbleweed
         # GCC
     - sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-g", "--"  ]/' rolling/opensuse/Dockerfile
     - docker build --pull -t ${DOCKER_REGISTRY}${CORE_NAME}:opensuse-tumbleweed-gcc -f rolling/opensuse/Dockerfile .
-    - docker run --rm -${DOCKER_REGISTRY}${CORE_NAME}:opensuse-tumbleweed-gcc
+    - docker run --rm ${DOCKER_REGISTRY}${CORE_NAME}:opensuse-tumbleweed-gcc
         # Clang
     - sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-c", "--"  ]/' rolling/opensuse/Dockerfile
     - docker build --pull -t ${DOCKER_REGISTRY}${CORE_NAME}:opensuse-tumbleweed-clang -f rolling/opensuse/Dockerfile .
