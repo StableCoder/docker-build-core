@@ -92,12 +92,10 @@ if [ "${IMAGE_NAME}" = "" ] || [ "${OS}" = "" ] ; then
     usage
 fi
 
-cd ${OS}
-
-for dir in `echo */` ; do
+for dir in `echo ${OS}/*/` ; do
+    dir=${dir#*\/}
     dir=${dir%%\/*} # Remove the following '/' for the directory
-
-    cd $dir 
+ 
         printf "\n\n\n >>>> Images of the ${OS}/${dir} directory\n"
 
         # Determine the source image name
@@ -120,23 +118,22 @@ for dir in `echo */` ; do
         COUNTER=0
         FIRST_RUN=true
         while [ "$COUNTER" != "3" ] ; do
-            # Build
 
             ## Change FROM image to the one named by the directory
-            original=$(head -n 1 Dockerfile)
-            sed -i "1s#.*#FROM ${source}#" Dockerfile
+            original=$(head -n 1 $OS/$dir/Dockerfile)
+            sed -i "1s#.*#FROM ${source}#" $OS/$dir/Dockerfile
 
             ## Change the entrypoint to a specific one
             if [ "$COUNTER" == "0" ] ; then
                 VARIANT_TAG=
 
-            elif [ "$COUNTER" == "1" ] && grep -Fq "# GCC" Dockerfile ; then
+            elif [ "$COUNTER" == "1" ] && grep -Fq "gcc" $OS/$dir/Dockerfile ; then
                 VARIANT_TAG=-gcc
-                sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-g", "--"  ]/' Dockerfile
+                sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-g", "--" ]/' $OS/$dir/Dockerfile
 
-            elif [ "$COUNTER" == "2" ] && grep -Fq "# Clang" Dockerfile ; then
+            elif [ "$COUNTER" == "2" ] && grep -Fq "clang" $OS/$dir/Dockerfile ; then
                 VARIANT_TAG=-clang
-                sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-c", "--"  ]/' Dockerfile
+                sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-c", "--" ]/' $OS/$dir/Dockerfile
 
             else
                 COUNTER=$((COUNTER + 1))
@@ -146,26 +143,26 @@ for dir in `echo */` ; do
             printf "\n >> Source image: %s\n" $source
             if [ "${BUILD}" = true ] ; then
                 if [ "${FIRST_RUN}" = true ] && [ "${NO_CACHE}" = true ] && [ "${OS_VER}" != "" ]; then
-                    echo docker build --no-cache --pull -t ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX} .
-                    docker build --no-cache --pull -t ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX} .
+                    echo docker build --no-cache --pull -t ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX} -f $OS/$dir/Dockerfile .
+                    docker build --no-cache --pull -t ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX} -f $OS/$dir/Dockerfile .
                     FIRST_RUN=false
                 else
-                    echo docker build --pull -t ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX} .
-                    docker build --pull -t ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX} .
+                    echo docker build --pull -t ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX} -f $OS/$dir/Dockerfile .
+                    docker build --pull -t ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX} -f $OS/$dir/Dockerfile .
                 fi
             fi
 
             if [ "$TEST_IMAGES" = true ] ; then
                 printf "\n >> Testing the image\n"
-                echo docker run --rm ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX} conan --version
-                docker run --rm ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX} conan --version
+                echo docker run --rm ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX}
+                docker run --rm ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX}
                 printf " >> Image testing complete\n"
             fi
 
             ## Set Entrypoint back
-            sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ "" ]/' Dockerfile
+            sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ "" ]/' $OS/$dir/Dockerfile
             ## Set FROM back to original
-            sed -i "1s#.*#${original}#" Dockerfile
+            sed -i "1s#.*#${original}#" $OS/$dir/Dockerfile
 
             # Push
             if [ "${PUSH_IMAGES}" = true ] ; then
@@ -178,5 +175,4 @@ for dir in `echo */` ; do
             COUNTER=$((COUNTER + 1))
         done
 
-    cd ..
 done

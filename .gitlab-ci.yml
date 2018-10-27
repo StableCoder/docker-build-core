@@ -71,26 +71,26 @@ Rolling Build:
   script:
     # Fedora Rawhide
     - docker build --pull -t test:fedora-rawhide -f rolling/fedora/Dockerfile .
-    - docker run --rm -test:fedora-rawhide conan --version
+    - docker run --rm -test:fedora-rawhide
         # GCC
     - sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-g", "--"  ]/' rolling/fedora/Dockerfile
     - docker build --pull -t test:fedora-rawhide-gcc -f rolling/fedora/Dockerfile .
-    - docker run --rm -test:fedora-rawhide-gcc conan --version
+    - docker run --rm -test:fedora-rawhide-gcc
         # Clang
     - sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-c", "--"  ]/' rolling/fedora/Dockerfile
     - docker build --pull -t test:fedora-rawhide-clang -f rolling/fedora/Dockerfile .
-    - docker run --rm -test:fedora-rawhide-clang conan --version
+    - docker run --rm -test:fedora-rawhide-clang
     # openSUSE Tumbleweed
     - docker build --pull -t test:opensuse-tumbleweed -f rolling/opensuse/Dockerfile .
-    - docker run --rm -test:opensuse-tumbleweed conan --version
+    - docker run --rm -test:opensuse-tumbleweed
         # GCC
     - sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-g", "--"  ]/' rolling/opensuse/Dockerfile
     - docker build --pull -t test:opensuse-tumbleweed-gcc -f rolling/opensuse/Dockerfile .
-    - docker run --rm -test:opensuse-tumbleweed-gcc conan --version
+    - docker run --rm -test:opensuse-tumbleweed-gcc
         # Clang
     - sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-c", "--"  ]/' rolling/opensuse/Dockerfile
     - docker build --pull -t test:opensuse-tumbleweed-clang -f rolling/opensuse/Dockerfile .
-    - docker run --rm -test:opensuse-tumbleweed-clang conan --version
+    - docker run --rm -test:opensuse-tumbleweed-clang
 
 Windows MSVC/ClangCL/Clang Build:
   stage: Build Images
@@ -101,13 +101,13 @@ Windows MSVC/ClangCL/Clang Build:
   script:
     # MSVC
     - docker build --pull -t test:windows-msvc -f windows/msvc.dockerfile -m 4GB windows
-    - docker run --rm test:windows-msvc conan --version
+    - docker run --rm test:windows-msvc
     # clang-cl
     - docker build --pull -t test:windows-clang-cl -f windows/clang-cl.dockerfile -m 4GB windows
-    - docker run --rm test:windows-clang-cl conan --version
+    - docker run --rm test:windows-clang-cl
     # clang
     - docker build --pull -t test:windows-clang -f windows/clang.dockerfile -m 4GB windows
-    - docker run --rm test:windows-clang conan --version
+    - docker run --rm test:windows-clang
 
 #######################
 # Image Uploads Stage #
@@ -158,33 +158,33 @@ openSUSE Upload:
 Rolling Upload:
   stage: Build Images
   image: docker:dind
-  except:
+  only:
     - master
   tags:
     - docker-linux
   script:
     # Fedora Rawhide
     - docker build --pull -t test:fedora-rawhide -f rolling/fedora/Dockerfile .
-    - docker run --rm -test:fedora-rawhide conan --version
+    - docker run --rm -test:fedora-rawhide
         # GCC
     - sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-g", "--"  ]/' rolling/fedora/Dockerfile
     - docker build --pull -t test:fedora-rawhide-gcc -f rolling/fedora/Dockerfile .
-    - docker run --rm -test:fedora-rawhide-gcc conan --version
+    - docker run --rm -test:fedora-rawhide-gcc
         # Clang
     - sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-c", "--"  ]/' rolling/fedora/Dockerfile
     - docker build --pull -t test:fedora-rawhide-clang -f rolling/fedora/Dockerfile .
-    - docker run --rm -test:fedora-rawhide-clang conan --version
+    - docker run --rm -test:fedora-rawhide-clang
     # openSUSE Tumbleweed
     - docker build --pull -t test:opensuse-tumbleweed -f rolling/opensuse/Dockerfile .
-    - docker run --rm -test:opensuse-tumbleweed conan --version
+    - docker run --rm -test:opensuse-tumbleweed
         # GCC
     - sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-g", "--"  ]/' rolling/opensuse/Dockerfile
     - docker build --pull -t test:opensuse-tumbleweed-gcc -f rolling/opensuse/Dockerfile .
-    - docker run --rm -test:opensuse-tumbleweed-gcc conan --version
+    - docker run --rm -test:opensuse-tumbleweed-gcc
         # Clang
     - sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-c", "--"  ]/' rolling/opensuse/Dockerfile
     - docker build --pull -t test:opensuse-tumbleweed-clang -f rolling/opensuse/Dockerfile .
-    - docker run --rm -test:opensuse-tumbleweed-clang conan --version
+    - docker run --rm -test:opensuse-tumbleweed-clang
     # Upload
     - docker login -u $env:DOCKER_USER -p "$env:DOCKER_PASSWORD" $env:DOCKER_REGISTRY
     - docker push ${env:DOCKER_REGISTRY}${env:CORE_NAME}:fedora-rawhide
@@ -205,13 +205,13 @@ Windows MSVC/ClangCL/Clang Upload:
   script:
     # MSVC
     - docker build --pull $env:NO_CACHE -t ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-msvc -f windows/msvc.dockerfile -m 4GB windows
-    - docker run --rm ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-msvc conan --version
+    - docker run --rm ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-msvc
     # clang-cl
     - docker build --pull $env:NO_CACHE -t ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-clang-cl -f windows/clang-cl.dockerfile -m 4GB windows
-    - docker run --rm ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-clang-cl conan --version
+    - docker run --rm ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-clang-cl
     # clang
     - docker build --pull $env:NO_CACHE -t ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-clang -f windows/clang.dockerfile -m 4GB windows
-    - docker run --rm ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-clang conan --version
+    - docker run --rm ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-clang
     # Upload
     - docker login -u $env:DOCKER_USER -p "$env:DOCKER_PASSWORD" $env:DOCKER_REGISTRY
     - docker push ${env:DOCKER_REGISTRY}${env:CORE_NAME}:windows-msvc
