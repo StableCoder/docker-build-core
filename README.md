@@ -1,6 +1,6 @@
 # Build Core Images
 
-[![pipeline status](http://git.stabletec.com/docker/build-core/badges/master/pipeline.svg)](http://git.stabletec.com/docker/build-core/commits/master)
+[![pipeline status](https://git.stabletec.com/docker/build-core/badges/master/pipeline.svg)](https://git.stabletec.com/docker/build-core/commits/master)
 [![license](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://git.stabletec.com/docker/build-core/blob/master/LICENSE)
 [![docker pulls](https://img.shields.io/docker/pulls/stabletec/build-core.svg)](https://hub.docker.com/r/stabletec/build-core/)
 [![docker stars](https://img.shields.io/docker/stars/stabletec/build-core.svg)](https://hub.docker.com/r/stabletec/build-core/)
