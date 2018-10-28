@@ -14,11 +14,11 @@ try {
     (Get-Content $file) -replace $regex, 'ENTRYPOINT C:\ps-scripts\entrypoint.ps1 version;' | Set-Content $file
 
     if($n) {
-        Write-Host "docker build --pull --no-cache -t ${imagename}:windows${suffix} ." -ForegroundColor Yellow
-        docker build --pull --no-cache -t ${imagename}:windows${suffix} .
+        Write-Host "docker build --pull --no-cache -t ${imagename}:windows${suffix} -m 4GB ." -ForegroundColor Yellow
+        docker build --pull --no-cache -t ${imagename}:windows${suffix} -m 4GB .
     } else {
-        Write-Host "docker build --pull -t ${imagename}:windows${suffix} ." -ForegroundColor Yellow
-        docker build --pull -t ${imagename}:windows${suffix} .
+        Write-Host "docker build --pull -t ${imagename}:windows${suffix} -m 4GB ." -ForegroundColor Yellow
+        docker build --pull -t ${imagename}:windows${suffix} -m 4GB .
     }
 
     if($test) {
@@ -36,8 +36,8 @@ try {
     $regex = 'ENTRYPOINT\s.*'
     (Get-Content $file) -replace $regex, 'ENTRYPOINT C:\ps-scripts\entrypoint.ps1;' | Set-Content $file
 
-    Write-Host "docker build --pull -t ${imagename}:windows-msvc${suffix} ." -ForegroundColor Yellow
-    docker build --pull -t ${imagename}:windows-msvc${suffix} .
+    Write-Host "docker build --pull -t ${imagename}:windows-msvc${suffix} -m 4GB ." -ForegroundColor Yellow
+    docker build --pull -t ${imagename}:windows-msvc${suffix} -m 4GB .
 
     if($test) {
         Write-Host "docker run --rm ${imagename}:windows-msvc${suffix}" -ForegroundColor Yellow
@@ -54,8 +54,8 @@ try {
     $regex = 'ENTRYPOINT\s.*'
     (Get-Content $file) -replace $regex, 'ENTRYPOINT C:\ps-scripts\entrypoint.ps1 clang-cl;' | Set-Content $file
 
-    Write-Host "docker build --pull -t ${imagename}:windows-clang-cl${suffix} ." -ForegroundColor Yellow
-    docker build --pull -t ${imagename}:windows-clang-cl${suffix} .
+    Write-Host "docker build --pull -t ${imagename}:windows-clang-cl${suffix} -m 4GB ." -ForegroundColor Yellow
+    docker build --pull -t ${imagename}:windows-clang-cl${suffix} -m 4GB .
 
     if($test) {
         Write-Host "docker run --rm ${imagename}:windows-clang-cl${suffix}" -ForegroundColor Yellow
@@ -72,8 +72,8 @@ try {
     $regex = 'ENTRYPOINT\s.*'
     (Get-Content $file) -replace $regex, 'ENTRYPOINT C:\ps-scripts\entrypoint.ps1 clang;' | Set-Content $file
 
-    Write-Host "docker build --pull -t ${imagename}:windows-clang${suffix} ." -ForegroundColor Yellow
-    docker build --pull -t ${imagename}:windows-clang${suffix} .
+    Write-Host "docker build --pull -t ${imagename}:windows-clang${suffix} -m 4GB ." -ForegroundColor Yellow
+    docker build --pull -t ${imagename}:windows-clang${suffix} -m 4GB .
 
     if($test) {
         Write-Host "docker run --rm ${imagename}:windows-clang${suffix}" -ForegroundColor Yellow
