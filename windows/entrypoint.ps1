@@ -15,33 +15,33 @@ foreach {
 popd
 Write-Host "`nVisual Studio 2017 Command Prompt variables set." -ForegroundColor Yellow
 
-conan profile new --detect default
-
-Write-Host "`n >> Conan Version" -ForegroundColor Yellow
-conan --version
-
-Write-Host "`n >> MSVC Version" -ForegroundColor Yellow
-vswhere -latest -products *
-
 $env:INCLUDE = $env:INCLUDE + ";" + [System.Environment]::GetEnvironmentVariable("CUSTOM_INCLUDE","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("CUSTOM_INCLUDE","User")
 $env:LIB = $env:LIB + ";" + [System.Environment]::GetEnvironmentVariable("CUSTOM_LIB","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("CUSTOM_LIB","User")
 
 if($Target.equals("clang-cl")) {
+    conan profile new --detect default
+
     $env:CC="clang-cl"
     $env:CXX="clang-cl"
-
-    Write-Host "`n >> Clang Version" -ForegroundColor Yellow
-    clang --version
-}
-if($Target.equals("clang")) {
+} elseif($Target.equals("clang")) {
     $env:CC="clang"
     $env:CXX="clang"
     $env:LDFLAGS="-fuse-ld=lld"
 
+    conan profile new --detect default
+} 
+if($Target.equals("version") || $Target.equals("clang") || $Target.equals("clang-cl")) {
+    Write-Host "`n >> Conan Version" -ForegroundColor Yellow
+    conan --version
+    Write-Host "`n >> MSVC Version" -ForegroundColor Yellow
+    vswhere -latest -products *
     Write-Host "`n >> Clang Version" -ForegroundColor Yellow
     clang --version
-}
-if($Target.equals("version")) {
-    Write-Host "`n >> Clang Version" -ForegroundColor Yellow
-    clang --version
+} else {
+    conan profile new --detect default
+
+    Write-Host "`n >> Conan Version" -ForegroundColor Yellow
+    conan --version
+    Write-Host "`n >> MSVC Version" -ForegroundColor Yellow
+    vswhere -latest -products *
 }
