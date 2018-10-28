@@ -15,6 +15,8 @@ foreach {
 popd
 Write-Host "`nVisual Studio 2017 Command Prompt variables set." -ForegroundColor Yellow
 
+conan profile new --detect default
+
 Write-Host "`n >> Conan Version" -ForegroundColor Yellow
 conan --version
 
