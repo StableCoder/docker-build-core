@@ -30,7 +30,7 @@ if($Target.equals("clang-cl")) {
 
     conan profile new --detect default
 } 
-if($Target.equals("version") || $Target.equals("clang") || $Target.equals("clang-cl")) {
+if($Target.equals("version") -or $Target.equals("clang") -or $Target.equals("clang-cl")) {
     Write-Host "`n >> Conan Version" -ForegroundColor Yellow
     conan --version
     Write-Host "`n >> MSVC Version" -ForegroundColor Yellow
