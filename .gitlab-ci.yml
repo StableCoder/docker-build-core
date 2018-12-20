@@ -95,12 +95,27 @@ Rolling Build:
 Windows MSVC/ClangCL/Clang Build:
   stage: Build Images
   except:
-    - master
+    refs:
+      - master
+    variables:
+      - $NO_CACHE
   tags:
     - docker-windows
   script:
-    - cd windows
-    - .\image_builder.ps1 ${env:NO_CACHE} -imagename test -test
+    - cd windows; .\image_builder.ps1 -imagename test -test
+
+Windows MSVC/ClangCL/Clang Build (no cache):
+  stage: Build Images
+  except:
+    refs:
+      - master
+  only:
+    variables:
+      - $NO_CACHE  
+  tags:
+    - docker-windows
+  script:
+    - cd windows; .\image_builder.ps1 -imagename test -test -n
 
 #######################
 # Image Uploads Stage #
@@ -192,12 +207,30 @@ Rolling Upload:
 Windows MSVC/ClangCL/Clang Upload:
   stage: Upload Images
   only:
-    - master
+    refs:
+      - master
+  except:
+    variables:
+      - $NO_CACHE
   tags:
     - docker-windows
   script:
     - docker login -u $env:DOCKER_USER -p "$env:DOCKER_PASSWORD" $env:DOCKER_REGISTRY
-    - cd windows
-    - .\image_builder.ps1 ${env:NO_CACHE} -imagename ${env:DOCKER_REGISTRY}${env:CORE_NAME} -test -push
+    - cd windows; .\image_builder.ps1 -imagename ${env:DOCKER_REGISTRY}${env:CORE_NAME} -test -push
+  after_script:
+    - docker logout $env:DOCKER_REGISTRY
+
+Windows MSVC/ClangCL/Clang Upload (no cache):
+  stage: Upload Images
+  only:
+    refs:
+      - master
+    variables:
+      - $NO_CACHE
+  tags:
+    - docker-windows
+  script:
+    - docker login -u $env:DOCKER_USER -p "$env:DOCKER_PASSWORD" $env:DOCKER_REGISTRY
+    - cd windows; .\image_builder.ps1 -imagename ${env:DOCKER_REGISTRY}${env:CORE_NAME} -test -push -n
   after_script:
     - docker logout $env:DOCKER_REGISTRY
