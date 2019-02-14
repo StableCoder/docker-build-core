@@ -8,6 +8,7 @@ RUN apt update \
     ninja-build \
     make \
     git \
+    git-lfs \
     cmake \
     subversion \
     # GCC

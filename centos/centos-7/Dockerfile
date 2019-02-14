@@ -8,6 +8,7 @@ RUN yum update -y \
     python-pip \
     make \
     git \
+    git-lfs \
     subversion \
     unzip \
     zlib-devel \

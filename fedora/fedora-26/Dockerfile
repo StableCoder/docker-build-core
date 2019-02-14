@@ -4,6 +4,7 @@ RUN dnf update -y \
     && dnf install -y \
     # Common
     git \
+    git-lfs \
     subversion \
     make \
     ninja-build \
