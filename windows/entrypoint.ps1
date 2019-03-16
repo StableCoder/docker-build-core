@@ -29,7 +29,8 @@ if($Target.equals("clang-cl")) {
     $env:LDFLAGS="-fuse-ld=lld"
 
     conan profile new --detect default
-} 
+}
+
 if($Target.equals("version") -or $Target.equals("clang") -or $Target.equals("clang-cl")) {
     Write-Host "`n >> Conan Version" -ForegroundColor Yellow
     conan --version
