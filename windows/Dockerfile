@@ -17,9 +17,7 @@ RUN "[Environment]::SetEnvironmentVariable(\"Path\", [System.Environment]::GetEn
 RUN pip install --no-cache conan
 
 # MSVC Build Tools 2017
-RUN "& { iwr https://aka.ms/vs/15/release/vs_buildtools.exe -OutFile vs_buildtools.exe }"; \
-    .\vs_buildtools.exe --quiet --wait --norestart --nocache --add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Component.Windows10SDK.17134 | Out-Null; \
-    Remove-Item -path .\vs_buildtools.exe
+RUN choco install -y visualstudio2017buildtools --package-parameters "--add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Component.Windows10SDK.17134"
 
 # Clang/LLVM
 RUN choco install -y llvm
