@@ -61,37 +61,6 @@ openSUSE Build:
     OS: opensuse
   <<: *build_template
 
-Rolling Build:
-  stage: Build Images
-  image: docker:dind
-  except:
-    - master
-  tags:
-    - docker-linux
-  script:
-    # Fedora Rawhide
-    - docker build --pull -t test:fedora-rawhide -f rolling/fedora/Dockerfile .
-    - docker run --rm test:fedora-rawhide
-        # GCC
-    - sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-g", "--"  ]/' rolling/fedora/Dockerfile
-    - docker build --pull -t test:fedora-rawhide-gcc -f rolling/fedora/Dockerfile .
-    - docker run --rm test:fedora-rawhide-gcc
-        # Clang
-    - sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-c", "--"  ]/' rolling/fedora/Dockerfile
-    - docker build --pull -t test:fedora-rawhide-clang -f rolling/fedora/Dockerfile .
-    - docker run --rm test:fedora-rawhide-clang
-    # openSUSE Tumbleweed
-    - docker build --pull -t test:opensuse-tumbleweed -f rolling/opensuse/Dockerfile .
-    - docker run --rm test:opensuse-tumbleweed
-        # GCC
-    - sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-g", "--"  ]/' rolling/opensuse/Dockerfile
-    - docker build --pull -t test:opensuse-tumbleweed-gcc -f rolling/opensuse/Dockerfile .
-    - docker run --rm test:opensuse-tumbleweed-gcc
-        # Clang
-    - sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-c", "--"  ]/' rolling/opensuse/Dockerfile
-    - docker build --pull -t test:opensuse-tumbleweed-clang -f rolling/opensuse/Dockerfile .
-    - docker run --rm test:opensuse-tumbleweed-clang
-
 Windows MSVC/ClangCL/Clang Build:
   stage: Build Images
   except:
@@ -162,47 +131,6 @@ openSUSE Upload:
   variables:
     OS: opensuse
   <<: *upload_template
-
-Rolling Upload:
-  stage: Upload Images
-  image: docker:dind
-  only:
-    - master
-  tags:
-    - docker-linux
-  script:
-    # Fedora Rawhide
-    - docker build --pull -t ${DOCKER_REGISTRY}${CORE_NAME}:fedora-rawhide -f rolling/fedora/Dockerfile .
-    - docker run --rm ${DOCKER_REGISTRY}${CORE_NAME}:fedora-rawhide
-        # GCC
-    - sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-g", "--"  ]/' rolling/fedora/Dockerfile
-    - docker build --pull -t ${DOCKER_REGISTRY}${CORE_NAME}:fedora-rawhide-gcc -f rolling/fedora/Dockerfile .
-    - docker run --rm ${DOCKER_REGISTRY}${CORE_NAME}:fedora-rawhide-gcc
-        # Clang
-    - sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-c", "--"  ]/' rolling/fedora/Dockerfile
-    - docker build --pull -t ${DOCKER_REGISTRY}${CORE_NAME}:fedora-rawhide-clang -f rolling/fedora/Dockerfile .
-    - docker run --rm ${DOCKER_REGISTRY}${CORE_NAME}:fedora-rawhide-clang
-    # openSUSE Tumbleweed
-    - docker build --pull -t ${DOCKER_REGISTRY}${CORE_NAME}:opensuse-tumbleweed -f rolling/opensuse/Dockerfile .
-    - docker run --rm ${DOCKER_REGISTRY}${CORE_NAME}:opensuse-tumbleweed
-        # GCC
-    - sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-g", "--"  ]/' rolling/opensuse/Dockerfile
-    - docker build --pull -t ${DOCKER_REGISTRY}${CORE_NAME}:opensuse-tumbleweed-gcc -f rolling/opensuse/Dockerfile .
-    - docker run --rm ${DOCKER_REGISTRY}${CORE_NAME}:opensuse-tumbleweed-gcc
-        # Clang
-    - sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-c", "--"  ]/' rolling/opensuse/Dockerfile
-    - docker build --pull -t ${DOCKER_REGISTRY}${CORE_NAME}:opensuse-tumbleweed-clang -f rolling/opensuse/Dockerfile .
-    - docker run --rm ${DOCKER_REGISTRY}${CORE_NAME}:opensuse-tumbleweed-clang
-    # Upload
-    - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${DOCKER_REGISTRY}
-    - docker push ${DOCKER_REGISTRY}${CORE_NAME}:fedora-rawhide
-    - docker push ${DOCKER_REGISTRY}${CORE_NAME}:fedora-rawhide-gcc
-    - docker push ${DOCKER_REGISTRY}${CORE_NAME}:fedora-rawhide-clang
-    - docker push ${DOCKER_REGISTRY}${CORE_NAME}:opensuse-tumbleweed
-    - docker push ${DOCKER_REGISTRY}${CORE_NAME}:opensuse-tumbleweed-gcc
-    - docker push ${DOCKER_REGISTRY}${CORE_NAME}:opensuse-tumbleweed-clang
-  after_script:
-    - docker logout ${DOCKER_REGISTRY}
 
 Windows MSVC/ClangCL/Clang Upload:
   stage: Upload Images
