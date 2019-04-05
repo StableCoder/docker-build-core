@@ -1,5 +1,5 @@
 # Use the latest Windows Server Core image.
-FROM microsoft/windowsservercore:1803
+FROM mcr.microsoft.com/windows/servercore:1809
 
 # Use powershell by default
 SHELL ["powershell.exe", "-ExecutionPolicy", "Bypass", "-Command"]
@@ -16,8 +16,10 @@ RUN "[Environment]::SetEnvironmentVariable(\"Path\", [System.Environment]::GetEn
 # Conan
 RUN pip install --no-cache conan
 
-# MSVC Build Tools 2017
-RUN choco install -y visualstudio2017buildtools --package-parameters "--add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Component.Windows10SDK.17134"
+# MSVC Build Tools 2019
+RUN "& { iwr https://aka.ms/vs/16/release/vs_buildtools.exe -OutFile vs_buildtools.exe }"; \
+    .\vs_buildtools.exe --quiet --wait --norestart --nocache --add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.Windows10SDK.17763 | Out-Null; \
+    Remove-Item -path .\vs_buildtools.exe
 
 # Clang/LLVM
 RUN choco install -y llvm
