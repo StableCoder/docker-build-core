@@ -23,6 +23,7 @@ variables:
 ######################
 
 .build_image: &build_template
+  stage: Build Images
   image: docker:dind
   except:
     - master
@@ -32,36 +33,31 @@ variables:
     - ./image_builder.sh -b -t -o ${OS} -i test ${EXTRA_OPTIONS} ${NO_CACHE}
 
 Fedora Build:
-  stage: Build Images
   variables:
     OS: fedora
   <<: *build_template
 
 CentOS Build:
-  stage: Build Images
   variables:
     OS: centos
   <<: *build_template
 
 Debian Build:
-  stage: Build Images
   variables:
     OS: debian
   <<: *build_template
 
 Ubuntu Build:
-  stage: Build Images
   variables:
     OS: ubuntu
   <<: *build_template
 
 openSUSE Build:
-  stage: Build Images
   variables:
     OS: opensuse
   <<: *build_template
 
-Windows MSVC/ClangCL/Clang Build:
+Windows Build:
   stage: Build Images
   except:
     refs:
@@ -73,7 +69,7 @@ Windows MSVC/ClangCL/Clang Build:
   script:
     - cd windows; .\image_builder.ps1 -imagename test -test
 
-Windows MSVC/ClangCL/Clang Build (no cache):
+Windows Build (no cache):
   stage: Build Images
   except:
     refs:
@@ -91,6 +87,7 @@ Windows MSVC/ClangCL/Clang Build (no cache):
 #######################
 
 .upload_image: &upload_template
+  stage: Upload Images
   image: docker:dind
   only:
     - master
@@ -103,36 +100,31 @@ Windows MSVC/ClangCL/Clang Build (no cache):
     - docker logout ${DOCKER_REGISTRY}
 
 Fedora Upload:
-  stage: Upload Images
   variables:
     OS: fedora
   <<: *upload_template
 
 CentOS Upload:
-  stage: Upload Images
   variables:
     OS: centos
   <<: *upload_template
 
 Debian Upload:
-  stage: Upload Images
   variables:
     OS: debian
   <<: *upload_template
 
 Ubuntu Upload:
-  stage: Upload Images
   variables:
     OS: ubuntu
   <<: *upload_template
 
 openSUSE Upload:
-  stage: Upload Images
   variables:
     OS: opensuse
   <<: *upload_template
 
-Windows MSVC/ClangCL/Clang Upload:
+Windows Upload:
   stage: Upload Images
   only:
     refs:
@@ -148,7 +140,7 @@ Windows MSVC/ClangCL/Clang Upload:
   after_script:
     - docker logout $env:DOCKER_REGISTRY
 
-Windows MSVC/ClangCL/Clang Upload (no cache):
+Windows Upload (no cache):
   stage: Upload Images
   only:
     refs:
