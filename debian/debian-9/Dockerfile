@@ -20,8 +20,8 @@ RUN apt-get update \
     && apt-get clean
 
 # CMake
-ARG CMAKE_MINOR_VER=3.12
-ARG CMAKE_VERSION=3.12.3
+ARG CMAKE_MINOR_VER=3.14
+ARG CMAKE_VERSION=3.14.3
 RUN wget -q https://cmake.org/files/v${CMAKE_MINOR_VER}/cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz \
     && tar -zxf cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz \
     && cp -rn cmake-${CMAKE_VERSION}-Linux-x86_64/bin/* /usr/local/bin/ \
