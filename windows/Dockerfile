@@ -1,5 +1,5 @@
 # Use the latest Windows Server Core image.
-FROM mcr.microsoft.com/windows/servercore:1809
+FROM mcr.microsoft.com/windows/servercore:ltsc2019
 
 # Use powershell by default
 SHELL ["powershell.exe", "-ExecutionPolicy", "Bypass", "-Command"]
