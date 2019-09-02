@@ -22,6 +22,7 @@ RUN zypper update -y \
     llvm \
     cppcheck \
     include-what-you-use \
+    lcov \
     && zypper clean --all
 
 # Conan

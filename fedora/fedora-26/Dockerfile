@@ -27,6 +27,7 @@ RUN dnf update -y \
     llvm-libs \
     iwyu \
     cppcheck \
+    lcov \
     && dnf clean all
 
 # Conan
