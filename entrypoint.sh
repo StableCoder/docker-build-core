@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env sh
+
+set -e
 
 setup_clang() {
     if ! clang_loc="$(type -p "clang")" || [[ -z $clang_loc ]]; then
