@@ -22,7 +22,8 @@ RUN apt update \
     && apt clean all
 
 # Conan
-RUN pip3 --no-cache-dir install conan
+RUN pip3 --no-cache-dir install conan && \
+    pip3 --no-cache-dir install -U --user six
 
 # Entrypoint
 COPY entrypoint.sh /entrypoint.sh
