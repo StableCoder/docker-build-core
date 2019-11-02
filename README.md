@@ -77,10 +77,7 @@ The Fedora and openSUSE images also have analysis tools used for code analysis a
 - clang-tidy
 - clang-format
 - cppcheck
-- include what you use
 - llvm
-
-
 
 ## Software Chart
 

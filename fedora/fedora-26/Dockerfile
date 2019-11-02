@@ -25,7 +25,6 @@ RUN dnf update -y \
     clang-tools-extra \
     llvm \
     llvm-libs \
-    iwyu \
     cppcheck \
     lcov \
     && dnf clean all
