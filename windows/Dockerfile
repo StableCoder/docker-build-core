@@ -18,7 +18,7 @@ RUN pip install --no-cache conan
 
 # MSVC Build Tools 2019
 RUN "& { iwr https://aka.ms/vs/16/release/vs_buildtools.exe -OutFile vs_buildtools.exe }"; \
-    .\vs_buildtools.exe --quiet --wait --norestart --nocache --add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.Windows10SDK.17763 | Out-Null; \
+    .\vs_buildtools.exe --quiet --wait --norestart --nocache --add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.Windows10SDK.18362 | Out-Null; \
     Remove-Item -path .\vs_buildtools.exe
 
 # Clang/LLVM
