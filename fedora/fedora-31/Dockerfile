@@ -1,6 +1,6 @@
 FROM fedora:31
 
-RUN dnf update -y && \
+RUN dnf update -y --refresh && \
     dnf install -y \
     # Common
     python3-pip \

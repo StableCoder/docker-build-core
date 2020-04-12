@@ -9,6 +9,7 @@ NO_CACHE=false
 PUSH_IMAGES=false
 TEST_IMAGES=false
 POST_RM=false
+IMAGE_LIST=""
 
 set -e
 set -o pipefail
@@ -29,7 +30,7 @@ Usage:
   -p, --push                      Push the build images.
   -t, --test                      Test the built image to ensure is starts up
                                   and exits correctly.
-      --rm                        Untag/remove images after (for test images).
+  -r, --rm                        Untag/remove images after (for test images).
 USAGE
     exit 1
 }
@@ -169,20 +170,29 @@ for dir in $(echo ${OS}/*/); do
         ## Set FROM back to original
         sed -i "1s#.*#${original}#" $OS/$dir/Dockerfile
 
-        # Push
-        if [ "${PUSH_IMAGES}" = true ]; then
-            printf "\n Pushing image to registry \n"
-            echo docker push ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX}
-            docker push ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX}
-        fi
-
-        if [ "${POST_RM}" = true ]; then
-            printf "\n >> Removing the image\n"
-            docker rmi ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX}
-        fi
+        IMAGE_LIST="${IMAGE_LIST} ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX}"
 
         # Increment the counter for the next variant
         COUNTER=$((COUNTER + 1))
     done
 
 done
+
+# Push
+if [ "${PUSH_IMAGES}" = true ]; then
+    for IMAGE in $IMAGE_LIST; do
+
+        printf "\n >> Pushing image to registry: $IMAGE \n"
+        echo docker push $IMAGE
+        docker push $IMAGE
+
+    done
+fi
+
+# Image Removal
+if [ "${POST_RM}" = true ]; then
+    for IMAGE in $IMAGE_LIST; do
+        printf "\n >> Removing the image: $IMAGE\n"
+        docker rmi $IMAGE
+    done
+fi
