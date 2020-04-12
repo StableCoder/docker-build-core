@@ -4,6 +4,7 @@ Param(
     [switch] $n, # --no-cache mode
     [switch] $test, # Test the image
     [switch] $push # Pushes the image (must be logged in previously)
+    [switch] $rm # Removes/untags image after (for testing purposes)
 )
 
 try {
@@ -29,6 +30,10 @@ try {
         Write-Host "docker push ${imagename}:windows${suffix}" -ForegroundColor Yellow
         docker push ${imagename}:windows${suffix}
     }
+    if($rmi) {
+        Write-Host "docker rmi ${imagename}:windows${suffix}" -ForegroundColor Yellow
+        docker rmi ${imagename}:windows${suffix}
+    }
 
     # MSVC
     Write-Host "`n >> MSVC Image" -ForegroundColor Yellow
@@ -46,6 +51,10 @@ try {
     if($push) {
         Write-Host "docker push ${imagename}:windows-msvc${suffix}" -ForegroundColor Yellow
         docker push ${imagename}:windows-msvc${suffix}
+    }
+    if($rm) {
+        Write-Host "docker rmi ${imagename}:windows-msvc${suffix}" -ForegroundColor Yellow
+        docker rmi ${imagename}:windows-msvc${suffix}
     }
 
     # clang-cl
@@ -65,6 +74,10 @@ try {
         Write-Host "docker push ${imagename}:windows-clang-cl${suffix}" -ForegroundColor Yellow
         docker push ${imagename}:windows-clang-cl${suffix}
     }
+    if($rm) {
+        Write-Host "docker rmi ${imagename}:windows-clang-cl${suffix}" -ForegroundColor Yellow
+        docker rmi ${imagename}:windows-clang-cl${suffix}
+    }
 
     # clang
     Write-Host "`n >> clang Image" -ForegroundColor Yellow
@@ -82,6 +95,10 @@ try {
     if($push) {
         Write-Host "docker push ${imagename}:windows-clang${suffix}" -ForegroundColor Yellow
         docker push ${imagename}:windows-clang${suffix}
+    }
+       if($rm) {
+        Write-Host "docker rmi ${imagename}:windows-clang${suffix}" -ForegroundColor Yellow
+        docker rmi ${imagename}:windows-clang${suffix}
     }
 
     # Reset

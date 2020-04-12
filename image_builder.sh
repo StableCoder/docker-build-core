@@ -8,6 +8,7 @@ FIRST_RUN=true
 NO_CACHE=false
 PUSH_IMAGES=false
 TEST_IMAGES=false
+POST_RM=false
 
 set -e
 set -o pipefail
@@ -28,6 +29,7 @@ Usage:
   -p, --push                      Push the build images.
   -t, --test                      Test the built image to ensure is starts up
                                   and exits correctly.
+      --rm                        Untag/remove images after (for test images).
 USAGE
     exit 1
 }
@@ -75,6 +77,10 @@ while [[ $# -gt 0 ]]; do
         ;;
     -t | --test)
         TEST_IMAGES=true
+        shift 1
+        ;;
+    -r | --rm)
+        POST_RM=true
         shift 1
         ;;
     -h | --help)
@@ -168,6 +174,11 @@ for dir in $(echo ${OS}/*/); do
             printf "\n Pushing image to registry \n"
             echo docker push ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX}
             docker push ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX}
+        fi
+
+        if [ "${POST_RM}" = true ]; then
+            printf "\n >> Removing the image\n"
+            docker rmi ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX}
         fi
 
         # Increment the counter for the next variant

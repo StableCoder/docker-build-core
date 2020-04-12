@@ -6,10 +6,6 @@
 # DOCKER_REGISTRY - The registry the images will be pushed to, must end with '/'
 # CORE_NAME - The main name of the image, to override the original name.
 
-##########
-# Global #
-##########
-
 stages:
   - Build Images
   - Upload Images
@@ -18,9 +14,7 @@ variables:
   DOCKER_REGISTRY: ''
   CORE_NAME: 'stabletec/build-core'
 
-######################
-# Image Builds Stage #
-######################
+# Image Build/Testing Stage
 
 .build_image: &build_template
   stage: Build Images
@@ -30,7 +24,7 @@ variables:
   tags:
     - docker-linux
   script:
-    - ./image_builder.sh -b -t -o ${OS} -i test ${EXTRA_OPTIONS} ${NO_CACHE}
+    - ./image_builder.sh -b -t -r -o ${OS} -i test ${EXTRA_OPTIONS} ${NO_CACHE}
 
 Fedora Build:
   variables:
@@ -67,7 +61,7 @@ Windows Build:
   tags:
     - docker-windows
   script:
-    - cd windows; .\image_builder.ps1 -imagename test -test
+    - cd windows; .\image_builder.ps1 -imagename test -test -rm
 
 Windows Build (no cache):
   stage: Build Images
@@ -80,11 +74,9 @@ Windows Build (no cache):
   tags:
     - docker-windows
   script:
-    - cd windows; .\image_builder.ps1 -imagename test -test -n
+    - cd windows; .\image_builder.ps1 -imagename test -test -n -rm
 
-#######################
-# Image Uploads Stage #
-#######################
+# Image Uploads Stage
 
 .upload_image: &upload_template
   stage: Upload Images
