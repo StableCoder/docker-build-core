@@ -13,7 +13,7 @@ set -e
 set -o pipefail
 
 usage() {
-    cat << USAGE >&2
+    cat <<USAGE >&2
 Used to build and push images from within the repository dynamically.
 
 Usage:
@@ -32,147 +32,146 @@ USAGE
     exit 1
 }
 
-while [[ $# -gt 0 ]]
-do
+while [[ $# -gt 0 ]]; do
     case "$1" in
-        -b | --build)
-            BUILD=true
-            shift 1
-            ;;
-        -n | --no-cache)
-            NO_CACHE=true
-            shift 1
-            ;;
-        -i)
-            IMAGE_NAME="$2"
-            if [[ $IMAGE_NAME == "" ]]; then break; fi
-            shift 2
-            ;;
-        --image=*)
-            IMAGE_NAME="${1#*=}"
-            shift 1
-            ;;
-        -o)
-            OS="$2"
-            if [[ $OS == "" ]]; then break; fi
-            shift 2
-            ;;
-        --os=*)
-            OS="${1#*=}"
-            shift 1
-            ;;
-        -s)
-            SUFFIX="$2"
-            if [[ $SUFFIX == "" ]]; then break; fi
-            shift 2
-            ;;
-        --suffix=*)
-            SUFFIX="${1#*=}"
-            shift 1
-            ;;
-        -p | --push)
-            PUSH_IMAGES=true
-            shift 1
-            ;;
-        -t | --test)
-            TEST_IMAGES=true
-            shift 1
-            ;;
-        -h | --help)
-            usage
-            ;;
-        *)
-            printf "Unknown argument: $1\n"
-            usage
-            ;;
+    -b | --build)
+        BUILD=true
+        shift 1
+        ;;
+    -n | --no-cache)
+        NO_CACHE=true
+        shift 1
+        ;;
+    -i)
+        IMAGE_NAME="$2"
+        if [[ $IMAGE_NAME == "" ]]; then break; fi
+        shift 2
+        ;;
+    --image=*)
+        IMAGE_NAME="${1#*=}"
+        shift 1
+        ;;
+    -o)
+        OS="$2"
+        if [[ $OS == "" ]]; then break; fi
+        shift 2
+        ;;
+    --os=*)
+        OS="${1#*=}"
+        shift 1
+        ;;
+    -s)
+        SUFFIX="$2"
+        if [[ $SUFFIX == "" ]]; then break; fi
+        shift 2
+        ;;
+    --suffix=*)
+        SUFFIX="${1#*=}"
+        shift 1
+        ;;
+    -p | --push)
+        PUSH_IMAGES=true
+        shift 1
+        ;;
+    -t | --test)
+        TEST_IMAGES=true
+        shift 1
+        ;;
+    -h | --help)
+        usage
+        ;;
+    *)
+        printf "Unknown argument: $1\n"
+        usage
+        ;;
     esac
 done
 
-if [ "${IMAGE_NAME}" = "" ] || [ "${OS}" = "" ] ; then
+if [ "${IMAGE_NAME}" = "" ] || [ "${OS}" = "" ]; then
     usage
 fi
 
-for dir in `echo ${OS}/*/` ; do
+for dir in $(echo ${OS}/*/); do
     dir=${dir#*\/}
     dir=${dir%%\/*} # Remove the following '/' for the directory
- 
-        printf "\n\n\n >>>> Images of the ${OS}/${dir} directory\n"
 
-        # Determine the source image name
-        source=${OS}
+    printf "\n\n\n >>>> Images of the ${OS}/${dir} directory\n"
 
-        temp=${dir%%-*}
-        temp=${temp#*${OS}}
-        if [ "${temp}" != "" ] ; then
-            source=${source}/${temp}
-        fi
+    # Determine the source image name
+    source=${OS}
 
-        if [ -z "${dir##*-*}" ] ; then
-            source=${source}:${dir#*-}
-            OS_VER=${dir#*-}
+    temp=${dir%%-*}
+    temp=${temp#*${OS}}
+    if [ "${temp}" != "" ]; then
+        source=${source}/${temp}
+    fi
+
+    if [ -z "${dir##*-*}" ]; then
+        source=${source}:${dir#*-}
+        OS_VER=${dir#*-}
+    else
+        source=${source}:latest
+        OS_VER=
+    fi
+
+    COUNTER=0
+    FIRST_RUN=true
+    while [ "$COUNTER" != "3" ]; do
+
+        ## Change FROM image to the one named by the directory
+        original=$(head -n 1 $OS/$dir/Dockerfile)
+        sed -i "1s#.*#FROM ${source}#" $OS/$dir/Dockerfile
+
+        ## Change the entrypoint to a specific one
+        if [ "$COUNTER" == "0" ]; then
+            VARIANT_TAG=
+
+        elif [ "$COUNTER" == "1" ] && grep -Fq "gcc" $OS/$dir/Dockerfile; then
+            VARIANT_TAG=-gcc
+            sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-g", "--" ]/' $OS/$dir/Dockerfile
+
+        elif [ "$COUNTER" == "2" ] && grep -Fq "clang" $OS/$dir/Dockerfile; then
+            VARIANT_TAG=-clang
+            sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-c", "--" ]/' $OS/$dir/Dockerfile
+
         else
-            source=${source}:latest
-            OS_VER=
+            COUNTER=$((COUNTER + 1))
+            continue
         fi
 
-        COUNTER=0
-        FIRST_RUN=true
-        while [ "$COUNTER" != "3" ] ; do
-
-            ## Change FROM image to the one named by the directory
-            original=$(head -n 1 $OS/$dir/Dockerfile)
-            sed -i "1s#.*#FROM ${source}#" $OS/$dir/Dockerfile
-
-            ## Change the entrypoint to a specific one
-            if [ "$COUNTER" == "0" ] ; then
-                VARIANT_TAG=
-
-            elif [ "$COUNTER" == "1" ] && grep -Fq "gcc" $OS/$dir/Dockerfile ; then
-                VARIANT_TAG=-gcc
-                sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-g", "--" ]/' $OS/$dir/Dockerfile
-
-            elif [ "$COUNTER" == "2" ] && grep -Fq "clang" $OS/$dir/Dockerfile ; then
-                VARIANT_TAG=-clang
-                sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ ".\/entrypoint.sh", "-c", "--" ]/' $OS/$dir/Dockerfile
-
+        printf "\n >> Source image: %s\n" $source
+        if [ "${BUILD}" = true ]; then
+            if [ "${FIRST_RUN}" = true ] && [ "${NO_CACHE}" = true ] && [ "${OS_VER}" != "" ]; then
+                echo docker build --no-cache --pull -t ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX} -f $OS/$dir/Dockerfile .
+                docker build --no-cache --pull -t ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX} -f $OS/$dir/Dockerfile .
+                FIRST_RUN=false
             else
-                COUNTER=$((COUNTER + 1))
-                continue
+                echo docker build --pull -t ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX} -f $OS/$dir/Dockerfile .
+                docker build --pull -t ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX} -f $OS/$dir/Dockerfile .
             fi
+        fi
 
-            printf "\n >> Source image: %s\n" $source
-            if [ "${BUILD}" = true ] ; then
-                if [ "${FIRST_RUN}" = true ] && [ "${NO_CACHE}" = true ] && [ "${OS_VER}" != "" ]; then
-                    echo docker build --no-cache --pull -t ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX} -f $OS/$dir/Dockerfile .
-                    docker build --no-cache --pull -t ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX} -f $OS/$dir/Dockerfile .
-                    FIRST_RUN=false
-                else
-                    echo docker build --pull -t ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX} -f $OS/$dir/Dockerfile .
-                    docker build --pull -t ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX} -f $OS/$dir/Dockerfile .
-                fi
-            fi
+        if [ "$TEST_IMAGES" = true ]; then
+            printf "\n >> Testing the image\n"
+            echo docker run --rm ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX}
+            docker run --rm ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX}
+            printf " >> Image testing complete\n"
+        fi
 
-            if [ "$TEST_IMAGES" = true ] ; then
-                printf "\n >> Testing the image\n"
-                echo docker run --rm ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX}
-                docker run --rm ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX}
-                printf " >> Image testing complete\n"
-            fi
+        ## Set Entrypoint back
+        sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ "\/entrypoint.sh", "-v", "--" ]/' $OS/$dir/Dockerfile
+        ## Set FROM back to original
+        sed -i "1s#.*#${original}#" $OS/$dir/Dockerfile
 
-            ## Set Entrypoint back
-            sed -i 's/.*ENTRYPOINT.*/ENTRYPOINT [ "\/entrypoint.sh", "-v", "--" ]/' $OS/$dir/Dockerfile
-            ## Set FROM back to original
-            sed -i "1s#.*#${original}#" $OS/$dir/Dockerfile
+        # Push
+        if [ "${PUSH_IMAGES}" = true ]; then
+            printf "\n Pushing image to registry \n"
+            echo docker push ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX}
+            docker push ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX}
+        fi
 
-            # Push
-            if [ "${PUSH_IMAGES}" = true ] ; then
-                printf "\n Pushing image to registry \n"
-                echo docker push ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX}
-                docker push ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX}
-            fi
-
-            # Increment the counter for the next variant
-            COUNTER=$((COUNTER + 1))
-        done
+        # Increment the counter for the next variant
+        COUNTER=$((COUNTER + 1))
+    done
 
 done

@@ -46,7 +46,7 @@ version_info() {
 }
 
 usage() {
-    cat << USAGE >&2
+    cat <<USAGE >&2
 Usage:
     entrypoint.sh [OPTIONS] [-- COMMAND ARGS]
     -g | --gcc           Start a Conan profile for GCC
@@ -57,29 +57,28 @@ USAGE
     exit 1
 }
 
-while [[ $# -gt 0 ]]
-do
+while [[ $# -gt 0 ]]; do
     case "$1" in
-        -c | --clang)
-            setup_clang
-            shift 1
-            ;;
-        -g | --gcc)
-            setup_gcc
-            shift 1
-            ;;
-        -v | --version)
-            version_info
-            shift 1
-            ;;
-        --)
-            shift
-            CMD=("$@")
-            break
-            ;;
-        -h | --help)
-            usage
-            ;;
+    -c | --clang)
+        setup_clang
+        shift 1
+        ;;
+    -g | --gcc)
+        setup_gcc
+        shift 1
+        ;;
+    -v | --version)
+        version_info
+        shift 1
+        ;;
+    --)
+        shift
+        CMD=("$@")
+        break
+        ;;
+    -h | --help)
+        usage
+        ;;
     esac
 done
 
