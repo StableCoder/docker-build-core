@@ -3,7 +3,7 @@ Param(
     [string] $suffix, # suffix for the tag
     [switch] $n, # --no-cache mode
     [switch] $test, # Test the image
-    [switch] $push # Pushes the image (must be logged in previously)
+    [switch] $push, # Pushes the image (must be logged in previously)
     [switch] $rm # Removes/untags image after (for testing purposes)
 )
 
@@ -30,7 +30,7 @@ try {
         Write-Host "docker push ${imagename}:windows${suffix}" -ForegroundColor Yellow
         docker push ${imagename}:windows${suffix}
     }
-    if($rmi) {
+    if($rm) {
         Write-Host "docker rmi ${imagename}:windows${suffix}" -ForegroundColor Yellow
         docker rmi ${imagename}:windows${suffix}
     }
@@ -96,7 +96,7 @@ try {
         Write-Host "docker push ${imagename}:windows-clang${suffix}" -ForegroundColor Yellow
         docker push ${imagename}:windows-clang${suffix}
     }
-       if($rm) {
+    if($rm) {
         Write-Host "docker rmi ${imagename}:windows-clang${suffix}" -ForegroundColor Yellow
         docker rmi ${imagename}:windows-clang${suffix}
     }
