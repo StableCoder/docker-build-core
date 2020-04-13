@@ -26,14 +26,6 @@ try {
         Write-Host "docker run --rm ${imagename}:windows${suffix}" -ForegroundColor Yellow
         docker run --rm ${imagename}:windows${suffix}
     }
-    if($push) {
-        Write-Host "docker push ${imagename}:windows${suffix}" -ForegroundColor Yellow
-        docker push ${imagename}:windows${suffix}
-    }
-    if($rm) {
-        Write-Host "docker rmi ${imagename}:windows${suffix}" -ForegroundColor Yellow
-        docker rmi ${imagename}:windows${suffix}
-    }
 
     # MSVC
     Write-Host "`n >> MSVC Image" -ForegroundColor Yellow
@@ -47,14 +39,6 @@ try {
     if($test) {
         Write-Host "docker run --rm ${imagename}:windows-msvc${suffix}" -ForegroundColor Yellow
         docker run --rm ${imagename}:windows-msvc${suffix}
-    }
-    if($push) {
-        Write-Host "docker push ${imagename}:windows-msvc${suffix}" -ForegroundColor Yellow
-        docker push ${imagename}:windows-msvc${suffix}
-    }
-    if($rm) {
-        Write-Host "docker rmi ${imagename}:windows-msvc${suffix}" -ForegroundColor Yellow
-        docker rmi ${imagename}:windows-msvc${suffix}
     }
 
     # clang-cl
@@ -70,14 +54,6 @@ try {
         Write-Host "docker run --rm ${imagename}:windows-clang-cl${suffix}" -ForegroundColor Yellow
         docker run --rm ${imagename}:windows-clang-cl${suffix}
     }
-    if($push) {
-        Write-Host "docker push ${imagename}:windows-clang-cl${suffix}" -ForegroundColor Yellow
-        docker push ${imagename}:windows-clang-cl${suffix}
-    }
-    if($rm) {
-        Write-Host "docker rmi ${imagename}:windows-clang-cl${suffix}" -ForegroundColor Yellow
-        docker rmi ${imagename}:windows-clang-cl${suffix}
-    }
 
     # clang
     Write-Host "`n >> clang Image" -ForegroundColor Yellow
@@ -92,11 +68,25 @@ try {
         Write-Host "docker run --rm ${imagename}:windows-clang${suffix}" -ForegroundColor Yellow
         docker run --rm ${imagename}:windows-clang${suffix}
     }
+
     if($push) {
+        Write-Host "docker push ${imagename}:windows${suffix}" -ForegroundColor Yellow
+        docker push ${imagename}:windows${suffix}
+        Write-Host "docker push ${imagename}:windows-msvc${suffix}" -ForegroundColor Yellow
+        docker push ${imagename}:windows-msvc${suffix}
+        Write-Host "docker push ${imagename}:windows-clang-cl${suffix}" -ForegroundColor Yellow
+        docker push ${imagename}:windows-clang-cl${suffix}
         Write-Host "docker push ${imagename}:windows-clang${suffix}" -ForegroundColor Yellow
         docker push ${imagename}:windows-clang${suffix}
     }
+
     if($rm) {
+        Write-Host "docker rmi ${imagename}:windows${suffix}" -ForegroundColor Yellow
+        docker rmi ${imagename}:windows${suffix}
+        Write-Host "docker rmi ${imagename}:windows-msvc${suffix}" -ForegroundColor Yellow
+        docker rmi ${imagename}:windows-msvc${suffix}
+        Write-Host "docker rmi ${imagename}:windows-clang-cl${suffix}" -ForegroundColor Yellow
+        docker rmi ${imagename}:windows-clang-cl${suffix}
         Write-Host "docker rmi ${imagename}:windows-clang${suffix}" -ForegroundColor Yellow
         docker rmi ${imagename}:windows-clang${suffix}
     }
