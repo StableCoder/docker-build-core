@@ -11,11 +11,14 @@ These images are used to target platforms, not specific tools or compilers, so t
 
 ### Supported tags and respective `Dockerfile` links
 
+All images are available in `amd64`.
+`debian` and `ubuntu` tagged images are also available in `armv7`.
+
 - [`centos7`, `centos7-gcc`, `centos7-clang` , `centos`, `centos-gcc`, `centos-clang` (x86_64/Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/centos/centos-7/Dockerfile)
 - [`debian9`, `debian9-gcc`, `debian9-clang`, `debian10`, `debian10-gcc`, `debian10-clang`, `debian`, `debian-gcc`, `debian-clang` (x86_64/Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/debian/debian-9/Dockerfile)
 - [`fedora26`, `fedora26-gcc`, `fedora26-clang` , `fedora27`, `fedora27-gcc`, `fedora27-clang` , `fedora28`, `fedora28-gcc`, `fedora28-clang` , `fedora29`, `fedora29-gcc`, `fedora29-clang`, `fedora30`, `fedora30-gcc`, `fedora30-clang`, `fedora`, `fedora-gcc`, `fedora-clang` (x86_64/Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/fedora/fedora-26/Dockerfile)
 - [`opensuse15`, `opensuse15-gcc`, `opensuse15-clang`, `opensuse`, `opensuse-gcc`, `opensuse-clang` (x86_64/Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/opensuse/opensuseleap-15/Dockerfile)
-- [`ubuntu18.04`, `ubuntu18.04-gcc`, `ubuntu18.04-clang`, `ubuntu18.10`, `ubuntu18.10-gcc`, `ubuntu18.10-clang`, `ubuntu19.04`, `ubuntu19.04-gcc`, `ubuntu19.04-clang`, `ubuntu`, `ubuntu-gcc`, `ubuntu-clang` (x86_64/Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/ubuntu/ubuntu-18.04/Dockerfile)
+- [`ubuntu18.04`, `ubuntu18.04-gcc`, `ubuntu18.04-clang`, `ubuntu20.04-gcc`, `ubuntu20.04-clang`, `ubuntu`, `ubuntu-gcc`, `ubuntu-clang` (x86_64/Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/ubuntu/ubuntu-18.04/Dockerfile)
 - [`windows`, `windows-msvc`, `windows-clang-cl`, `windows-clang` (x86_64/Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/windows/Dockerfile)
 
 ##### Note: While they may share dockerfiles, during build time the first `FROM` line is replaced with the correct variant, and the `ENTRYPOINT` line is replaced appropriately for auto-loading the tagged compiler.
