@@ -4,6 +4,8 @@ IMAGE_NAME=""
 OS=""
 SUFFIX=""
 BUILD=false
+BUILDX=
+PLATFORM=
 FIRST_RUN=true
 NO_CACHE=false
 PUSH_IMAGES=false
@@ -22,6 +24,7 @@ Usage:
   ./image_builder.sh [OPTIONS] -i <image-name> -o <OS>
 
   -b, --build                     Builds the images
+      --buildx                    Builds using 'buildx' instead
   -n, --no-cache                  Builds the series starting with a --no-cache,
                                   allowing for a fresh image build.
   -i <name>, --image=<name>       The main image name.
@@ -40,6 +43,14 @@ while [[ $# -gt 0 ]]; do
     -b | --build)
         BUILD=true
         shift 1
+        ;;
+    --buildx)
+        BUILDX="buildx"
+        shift
+        ;;
+    --builder)
+        BUILDER="--load --builder $2"
+        shift 2
         ;;
     -n | --no-cache)
         NO_CACHE=true
@@ -71,6 +82,14 @@ while [[ $# -gt 0 ]]; do
     --suffix=*)
         SUFFIX="${1#*=}"
         shift 1
+        ;;
+    --platform)
+        if [ "$PLATFORM" == "" ]; then
+            PLATFORM="--platform $2"
+        else
+            PLATFORM="$PLATFORM,$2"
+        fi
+        shift 2
         ;;
     -p | --push)
         PUSH_IMAGES=true
@@ -149,12 +168,12 @@ for dir in $(echo ${OS}/*/); do
         printf "\n >> Source image: %s\n" $source
         if [ "${BUILD}" = true ]; then
             if [ "${FIRST_RUN}" = true ] && [ "${NO_CACHE}" = true ] && [ "${OS_VER}" != "" ]; then
-                echo docker build --no-cache --pull -t ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX} -f $OS/$dir/Dockerfile .
-                docker build --no-cache --pull -t ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX} -f $OS/$dir/Dockerfile .
+                echo docker $BUILDX build $BUILDER --no-cache --pull $PLATFORM -t ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX} -f $OS/$dir/Dockerfile .
+                docker $BUILDX build $BUILDER --no-cache --pull $PLATFORM -t ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX} -f $OS/$dir/Dockerfile .
                 FIRST_RUN=false
             else
-                echo docker build --pull -t ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX} -f $OS/$dir/Dockerfile .
-                docker build --pull -t ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX} -f $OS/$dir/Dockerfile .
+                echo docker $BUILDX build $BUILDER --pull $PLATFORM -t ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX} -f $OS/$dir/Dockerfile .
+                docker $BUILDX build $BUILDER --pull $PLATFORM -t ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX} -f $OS/$dir/Dockerfile .
             fi
         fi
 

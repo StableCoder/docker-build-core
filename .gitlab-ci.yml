@@ -18,44 +18,70 @@ variables:
 # Image Build/Testing Stage #
 #############################
 
-# amd64
-.build_image_amd64: &build_template_amd64
+.build_image: &build_template
   stage: Build Images
-  image: docker:dind
   except:
     - master
-  tags:
-    - docker-linux
-    - amd64
+  before_script:
+    - docker buildx create --use --name job_${CI_JOB_ID}
+    - docker buildx inspect --builder job_${CI_JOB_ID} --bootstrap
   script:
-    - ./image_builder.sh -b -t -r -o ${OS} -i test ${EXTRA_OPTIONS} ${NO_CACHE}
+    - ./image_builder.sh -b --buildx --builder job_${CI_JOB_ID} --platform "${PLATFORMS}" -t -o ${OS} -i test ${EXTRA_OPTIONS} ${NO_CACHE}
+  after_script:
+    - docker buildx rm job_${CI_JOB_ID}
 
-Fedora Build (amd64):
+Fedora Build:
+  tags:
+    - docker-builder-linux
+    - amd64
+    - arm64
   variables:
+    PLATFORMS: "linux/amd64,linux/arm64"
     OS: fedora
-  <<: *build_template_amd64
+  <<: *build_template
 
-CentOS Build (amd64):
+CentOS Build:
+  tags:
+    - docker-builder-linux
+    - amd64
+    - arm64
   variables:
+    PLATFORMS: "linux/amd64,linux/arm64"
     OS: centos
-  <<: *build_template_amd64
+  <<: *build_template
 
-Debian Build (amd64):
+Debian Build:
+  tags:
+    - docker-builder-linux
+    - amd64
+    - armv7
+    - arm64
   variables:
+    PLATFORMS: "linux/amd64,linux/arm/v7,linux/arm64"
     OS: debian
-  <<: *build_template_amd64
+  <<: *build_template
 
-Ubuntu Build (amd64):
+Ubuntu Build:
+  tags:
+    - docker-builder-linux
+    - amd64
+    - armv7
+    - arm64
   variables:
+    PLATFORMS: "linux/amd64,linux/arm/v7,linux/arm64"
     OS: ubuntu
-  <<: *build_template_amd64
+  <<: *build_template
 
-openSUSE Build (amd64):
+openSUSE Build:
+  tags:
+    - docker-builder-linux
+    - amd64
   variables:
+    PLATFORMS: "linux/amd64"
     OS: opensuse
-  <<: *build_template_amd64
+  <<: *build_template
 
-Windows Build (amd64):
+Windows Build:
   stage: Build Images
   except:
     refs:
@@ -63,12 +89,12 @@ Windows Build (amd64):
     variables:
       - $NO_CACHE
   tags:
-    - docker-windows
+    - docker-builder-windows
     - amd64
   script:
-    - cd windows; .\image_builder.ps1 -imagename test -test -rm
+    - cd windows; .\image_builder.ps1 -imagename test -test
 
-Windows Build (amd64)(no cache):
+Windows Build(no cache):
   stage: Build Images
   except:
     refs:
@@ -77,78 +103,81 @@ Windows Build (amd64)(no cache):
     variables:
       - $NO_CACHE  
   tags:
-    - docker-windows
+    - docker-builder-windows
     - amd64
   script:
-    - cd windows; .\image_builder.ps1 -imagename test -test -n -rm
-
-# armv7
-.build_image_armv7: &build_template_armv7
-  stage: Build Images
-  image: docker:dind
-  except:
-    - master
-  tags:
-    - docker-linux
-    - armv7
-  script:
-    - ./image_builder.sh -b -t -r -o ${OS} -i test ${EXTRA_OPTIONS} ${NO_CACHE}
-
-Debian Build (armv7):
-  variables:
-    OS: debian
-  <<: *build_template_armv7
-
-Ubuntu Build (armv7):
-  variables:
-    OS: ubuntu
-  <<: *build_template_armv7
+    - cd windows; .\image_builder.ps1 -imagename test -test -n
 
 #######################
 # Image Uploads Stage #
 #######################
 
-# amd64
-.upload_image_amd64: &upload_template_amd64
+.upload_image: &upload_template
   stage: Upload Images
-  image: docker:dind
   only:
     - master
-  tags:
-    - docker-linux
-    - amd64
-  script:
+  before_script:
+    - docker buildx create --use --name job_${CI_JOB_ID}
+    - docker buildx inspect --builder job_${CI_JOB_ID} --bootstrap
     - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${DOCKER_REGISTRY}
-    - ./image_builder.sh -b -t -p -o ${OS} -i ${DOCKER_REGISTRY}${CORE_NAME} ${EXTRA_OPTIONS} ${NO_CACHE}
+  script:
+    - ./image_builder.sh -b --buildx --builder job_${CI_JOB_ID} --platform "${PLATFORMS}" -t -p -o ${OS} -i ${DOCKER_REGISTRY}${CORE_NAME} ${EXTRA_OPTIONS} ${NO_CACHE}
   after_script:
     - docker logout ${DOCKER_REGISTRY}
+    - docker buildx rm job_${CI_JOB_ID}
 
-Fedora Upload (amd64):
+Fedora Upload:
+  tags:
+    - docker-builder-linux
+    - amd64
+    - arm64
   variables:
+    PLATFORMS: "linux/amd64,linux/arm64"
     OS: fedora
-  <<: *upload_template_amd64
+  <<: *upload_template
 
-CentOS Upload (amd64):
+CentOS Upload:
+  tags:
+    - docker-builder-linux
+    - amd64
+    - arm64
   variables:
+    PLATFORMS: "linux/amd64,linux/arm64"
     OS: centos
-  <<: *upload_template_amd64
+  <<: *upload_template
 
-Debian Upload (amd64):
+Debian Upload:
+  tags:
+    - docker-builder-linux
+    - amd64
+    - armv7
+    - arm64
   variables:
+    PLATFORMS: "linux/amd64,linux/arm/v7,linux/arm64"
     OS: debian
-  <<: *upload_template_amd64
+  <<: *upload_template
 
-Ubuntu Upload (amd64):
+Ubuntu Upload:
+  tags:
+    - docker-builder-linux
+    - amd64
+    - armv7
+    - arm64
   variables:
+    PLATFORMS: "linux/amd64,linux/arm/v7,linux/arm64"
     OS: ubuntu
-  <<: *upload_template_amd64
+  <<: *upload_template
 
-openSUSE Upload (amd64):
+openSUSE Upload:
+  tags:
+    - docker-builder-linux
+    - amd64
   variables:
+    PLATFORMS: "linux/amd64"
     OS: opensuse
-  <<: *upload_template_amd64
+  <<: *upload_template
 
-Windows Upload (amd64):
+Windows Upload:
   stage: Upload Images
   only:
     refs:
@@ -157,7 +186,7 @@ Windows Upload (amd64):
     variables:
       - $NO_CACHE
   tags:
-    - docker-windows
+    - docker-builder-windows
     - amd64
   script:
     - docker login -u $env:DOCKER_USER -p "$env:DOCKER_PASSWORD" $env:DOCKER_REGISTRY
@@ -165,7 +194,7 @@ Windows Upload (amd64):
   after_script:
     - docker logout $env:DOCKER_REGISTRY
 
-Windows Upload (amd64)(no cache):
+Windows Upload(no cache):
   stage: Upload Images
   only:
     refs:
@@ -173,35 +202,10 @@ Windows Upload (amd64)(no cache):
     variables:
       - $NO_CACHE
   tags:
-    - docker-windows
+    - docker-builder-windows
     - amd64
   script:
     - docker login -u $env:DOCKER_USER -p "$env:DOCKER_PASSWORD" $env:DOCKER_REGISTRY
     - cd windows; .\image_builder.ps1 -imagename ${env:DOCKER_REGISTRY}${env:CORE_NAME} -test -n
   after_script:
     - docker logout $env:DOCKER_REGISTRY
-
-# armv7
-.upload_image_armv7: &upload_template_armv7
-  stage: Upload Images
-  image: docker:dind
-  only:
-    - master
-  tags:
-    - docker-linux
-    - armv7
-  script:
-    - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${DOCKER_REGISTRY}
-    - ./image_builder.sh -b -t -p -o ${OS} -i ${DOCKER_REGISTRY}${CORE_NAME} ${EXTRA_OPTIONS} ${NO_CACHE}
-  after_script:
-    - docker logout ${DOCKER_REGISTRY}
-
-Debian Upload (armv7):
-  variables:
-    OS: debian
-  <<: *upload_template_armv7
-
-Ubuntu Upload (armv7):
-  variables:
-    OS: ubuntu
-  <<: *upload_template_armv7
