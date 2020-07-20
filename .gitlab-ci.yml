@@ -82,28 +82,6 @@ Windows Build (amd64)(no cache):
   script:
     - cd windows; .\image_builder.ps1 -imagename test -test -n -rm
 
-# armv7
-.build_image_armv7: &build_template_armv7
-  stage: Build Images
-  image: docker:dind
-  except:
-    - master
-  tags:
-    - docker-linux
-    - armv7
-  script:
-    - ./image_builder.sh -b -t -r -o ${OS} -i test ${EXTRA_OPTIONS} ${NO_CACHE}
-
-Debian Build (armv7):
-  variables:
-    OS: debian
-  <<: *build_template_armv7
-
-Ubuntu Build (armv7):
-  variables:
-    OS: ubuntu
-  <<: *build_template_armv7
-
 #######################
 # Image Uploads Stage #
 #######################
@@ -180,28 +158,3 @@ Windows Upload (amd64)(no cache):
     - cd windows; .\image_builder.ps1 -imagename ${env:DOCKER_REGISTRY}${env:CORE_NAME} -test -n
   after_script:
     - docker logout $env:DOCKER_REGISTRY
-
-# armv7
-.upload_image_armv7: &upload_template_armv7
-  stage: Upload Images
-  image: docker:dind
-  only:
-    - master
-  tags:
-    - docker-linux
-    - armv7
-  script:
-    - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${DOCKER_REGISTRY}
-    - ./image_builder.sh -b -t -p -o ${OS} -i ${DOCKER_REGISTRY}${CORE_NAME} ${EXTRA_OPTIONS} ${NO_CACHE}
-  after_script:
-    - docker logout ${DOCKER_REGISTRY}
-
-Debian Upload (armv7):
-  variables:
-    OS: debian
-  <<: *upload_template_armv7
-
-Ubuntu Upload (armv7):
-  variables:
-    OS: ubuntu
-  <<: *upload_template_armv7
