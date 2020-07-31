@@ -167,7 +167,7 @@ for dir in $(echo ${OS}/*/); do
 
         printf "\n >> Source image: %s\n" $source
         if [ "${BUILD}" = true ]; then
-            if [ "$PUSH_IMAGES" = true ] && [ "$BUILDX" != ""]; then
+            if [ "$PUSH_IMAGES" = true ] && [ "$BUILDX" != "" ]; then
                 EXTRA="--push"
             else
                 EXTRA=""
@@ -205,7 +205,7 @@ for dir in $(echo ${OS}/*/); do
 done
 
 # Push
-if [ "${PUSH_IMAGES}" = true ] && [ "$BUILDX" = ""]; then
+if [ "${PUSH_IMAGES}" = true ] && [ "$BUILDX" = "" ]; then
     for IMAGE in $IMAGE_LIST; do
 
         printf "\n >> Pushing image to registry: $IMAGE \n"
