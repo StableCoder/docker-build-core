@@ -49,7 +49,7 @@ while [[ $# -gt 0 ]]; do
         shift
         ;;
     --builder)
-        BUILDER="--load --builder $2"
+        BUILDER="--builder $2"
         shift 2
         ;;
     -n | --no-cache)
