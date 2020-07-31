@@ -15,14 +15,10 @@ RUN apt update \
     git-lfs \
     cmake \
     subversion \
-    # GCC
+    # Compilers
     gcc \
     g++ \
-    gdb \
-    # Clang
     clang \
-    lld \
-    lldb \
     && apt clean all
 
 # Conan

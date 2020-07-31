@@ -10,14 +10,10 @@ RUN dnf update -y --refresh && \
     make \
     ninja-build \
     cmake \
-    # GCC
+    # Compilers
     gcc \
     gcc-c++ \
-    gdb \
-    # Clang
     clang \
-    lld \
-    lldb \
     # Analysis
     libasan \
     liblsan \

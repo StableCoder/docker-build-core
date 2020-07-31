@@ -10,14 +10,10 @@ RUN zypper update -y \
     cmake \
     python3 \
     python3-pip \
-    # GCC
+    # Compilers
     gcc \
     gcc-c++ \
-    gdb \
-    # Clang
     clang \
-    lld \
-    lldb \
     # Analysis
     llvm \
     cppcheck \

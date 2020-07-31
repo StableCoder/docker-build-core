@@ -10,13 +10,10 @@ RUN apt-get update \
     make \
     git \
     subversion \
-    # GCC
+    # Compilers
     gcc \
     g++ \
-    gdb \
-    # Clang
     clang \
-    lldb \
     && apt-get clean
 
 # CMake
