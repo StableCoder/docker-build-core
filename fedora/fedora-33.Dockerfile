@@ -1,4 +1,4 @@
-FROM fedora:31
+FROM fedora:33
 
 RUN dnf update -y --refresh && \
     dnf install -y \
@@ -33,5 +33,5 @@ RUN pip --no-cache-dir install conan && \
 # Entrypoint
 COPY entrypoint.sh /entrypoint.sh
 
-ENTRYPOINT [ "/entrypoint.sh", "-v", "--" ]
+ENTRYPOINT [ "/entrypoint.sh", "--" ]
 CMD [ "bash" ]

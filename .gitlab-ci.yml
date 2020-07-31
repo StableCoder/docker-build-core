@@ -26,7 +26,9 @@ variables:
     - docker buildx create --use --name job_${CI_JOB_ID}
     - docker buildx inspect --builder job_${CI_JOB_ID} --bootstrap
   script:
-    - ./image_builder.sh -b --buildx --builder job_${CI_JOB_ID} --platform "${PLATFORMS}" -o ${OS} -i test ${EXTRA_OPTIONS} ${NO_CACHE}
+    - cd $OS
+    - cp ../entrypoint.sh .
+    - for FILE in *; do; docker buildx build --builder job_${CI_JOB_ID} --pull ${EXTRA_BUILD_OPTIONS} --platform ${PLATFORMS} -t test:${FILE%.*} -f ${FILE} . ; done
   after_script:
     - docker buildx rm job_${CI_JOB_ID}
 
@@ -119,9 +121,11 @@ Windows Build(no cache):
   before_script:
     - docker buildx create --use --name job_${CI_JOB_ID}
     - docker buildx inspect --builder job_${CI_JOB_ID} --bootstrap
-    - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${DOCKER_REGISTRY}
   script:
-    - ./image_builder.sh -b --buildx --builder job_${CI_JOB_ID} --platform "${PLATFORMS}" -p -o ${OS} -i ${DOCKER_REGISTRY}${CORE_NAME} ${EXTRA_OPTIONS} ${NO_CACHE}
+    - cd $OS
+    - cp ../entrypoint.sh .
+    - for FILE in *; do; docker buildx build --builder job_${CI_JOB_ID} --cache-to=type=local,dest=cache,mode=max --pull ${EXTRA_BUILD_OPTIONS} --platform ${PLATFORMS} -t ${DOCKER_REGISTRY}${CORE_NAME}:${FILE%.*} -f ${FILE} . ; done
+    - for FILE in *; do; docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${DOCKER_REGISTRY}; docker buildx build --builder job_${CI_JOB_ID} --push --cache-from=type=local,src=cache ${EXTRA_PUSH_OPTIONS} --platform ${PLATFORMS} -t ${DOCKER_REGISTRY}${CORE_NAME}:${FILE%.*} -f ${FILE} . ; done
   after_script:
     - docker logout ${DOCKER_REGISTRY}
     - docker buildx rm job_${CI_JOB_ID}
@@ -142,7 +146,7 @@ CentOS Upload:
     - amd64
     - arm64
   variables:
-    PLATFORMS: "linux/amd64,linux/arm64"
+    PLATFORMS: "linux/amd64,linux/arm64,linux/arm/v7"
     OS: centos
   <<: *upload_template
 
@@ -153,7 +157,7 @@ Debian Upload:
     - armv7
     - arm64
   variables:
-    PLATFORMS: "linux/amd64,linux/arm/v7,linux/arm64"
+    PLATFORMS: "linux/amd64,linux/arm64,linux/arm/v7"
     OS: debian
   <<: *upload_template
 
@@ -164,7 +168,7 @@ Ubuntu Upload:
     - armv7
     - arm64
   variables:
-    PLATFORMS: "linux/amd64,linux/arm/v7,linux/arm64"
+    PLATFORMS: "linux/amd64,linux/arm64,linux/arm/v7"
     OS: ubuntu
   <<: *upload_template
 
