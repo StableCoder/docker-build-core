@@ -26,9 +26,7 @@ variables:
     - docker buildx create --use --name job_${CI_JOB_ID}
     - docker buildx inspect --builder job_${CI_JOB_ID} --bootstrap
   script:
-    - cd $OS
-    - cp ../entrypoint.sh .
-    - for FILE in *; do; docker buildx build --builder job_${CI_JOB_ID} --pull ${EXTRA_BUILD_OPTIONS} --platform ${PLATFORMS} -t test:${FILE%.*} -f ${FILE} . ; done
+    - ./linux-build.sh
   after_script:
     - docker buildx rm job_${CI_JOB_ID}
 
@@ -122,10 +120,7 @@ Windows Build(no cache):
     - docker buildx create --use --name job_${CI_JOB_ID}
     - docker buildx inspect --builder job_${CI_JOB_ID} --bootstrap
   script:
-    - cd $OS
-    - cp ../entrypoint.sh .
-    - for FILE in *; do; docker buildx build --builder job_${CI_JOB_ID} --cache-to=type=local,dest=cache,mode=max --pull ${EXTRA_BUILD_OPTIONS} --platform ${PLATFORMS} -t ${DOCKER_REGISTRY}${CORE_NAME}:${FILE%.*} -f ${FILE} . ; done
-    - for FILE in *; do; docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${DOCKER_REGISTRY}; docker buildx build --builder job_${CI_JOB_ID} --push --cache-from=type=local,src=cache ${EXTRA_PUSH_OPTIONS} --platform ${PLATFORMS} -t ${DOCKER_REGISTRY}${CORE_NAME}:${FILE%.*} -f ${FILE} . ; done
+    - ./linux-upload.sh 
   after_script:
     - docker logout ${DOCKER_REGISTRY}
     - docker buildx rm job_${CI_JOB_ID}
