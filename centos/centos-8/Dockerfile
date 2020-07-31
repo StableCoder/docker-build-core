@@ -19,14 +19,11 @@ RUN yum update -y \
     readline-devel \
     ncurses-devel \
     cmake \
-    # GCC
+    # Compilers
     gcc \
     gcc-c++ \
-    gdb \
-    # Clang
     clang \
     llvm-libs \
-    lldb \
     && yum clean all
 
 # Ninja

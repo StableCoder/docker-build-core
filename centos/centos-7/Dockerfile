@@ -17,14 +17,11 @@ RUN yum update -y \
     libffi-devel \
     readline-devel \
     ncurses-devel \
-    # GCC
+    # Compilers
     gcc \
     gcc-c++ \
-    gdb \
-    # Clang
     clang \
     llvm-libs \
-    lldb \
     && yum clean all
 
 # Python3
