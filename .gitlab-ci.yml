@@ -119,6 +119,7 @@ Windows Build(no cache):
   before_script:
     - docker buildx create --use --name job_${CI_JOB_ID}
     - docker buildx inspect --builder job_${CI_JOB_ID} --bootstrap
+    - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${DOCKER_REGISTRY}
   script:
     - ./linux-upload.sh 
   after_script:
