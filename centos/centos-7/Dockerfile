@@ -25,7 +25,7 @@ RUN yum update -y \
     && yum clean all
 
 # Python3
-ENV PYTHON_VER=3.7.3
+ENV PYTHON_VER=3.8.5
 RUN wget -q https://www.python.org/ftp/python/${PYTHON_VER}/Python-${PYTHON_VER}.tgz \
     && tar -zxf Python-${PYTHON_VER}.tgz \
     && cd Python-${PYTHON_VER} \
@@ -43,7 +43,7 @@ RUN wget -q https://cmake.org/files/v${CMAKE_MINOR_VER}/cmake-${CMAKE_VERSION}-L
     && rm -rf cmake-*
 
 # Ninja
-ENV NINJA_VER=1.8.2
+ENV NINJA_VER=1.10.0
 RUN wget -q https://github.com/ninja-build/ninja/releases/download/v${NINJA_VER}/ninja-linux.zip \
     && unzip ninja-linux.zip \
     && mv ninja /usr/local/bin \
