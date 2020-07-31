@@ -167,13 +167,20 @@ for dir in $(echo ${OS}/*/); do
 
         printf "\n >> Source image: %s\n" $source
         if [ "${BUILD}" = true ]; then
+            if [ "$PUSH_IMAGES" = true ] && [ "$BUILDX" != ""]; then
+                EXTRA="--push"
+            else
+                EXTRA=""
+            fi
+
+
             if [ "${FIRST_RUN}" = true ] && [ "${NO_CACHE}" = true ] && [ "${OS_VER}" != "" ]; then
-                echo docker $BUILDX build $BUILDER --no-cache --pull $PLATFORM -t ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX} -f $OS/$dir/Dockerfile .
-                docker $BUILDX build $BUILDER --no-cache --pull $PLATFORM -t ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX} -f $OS/$dir/Dockerfile .
+                echo docker $BUILDX build $BUILDER --no-cache --pull $EXTRA $PLATFORM -t ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX} -f $OS/$dir/Dockerfile .
+                docker $BUILDX build $BUILDER --no-cache --pull $EXTRA $PLATFORM -t ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX} -f $OS/$dir/Dockerfile .
                 FIRST_RUN=false
             else
-                echo docker $BUILDX build $BUILDER --pull $PLATFORM -t ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX} -f $OS/$dir/Dockerfile .
-                docker $BUILDX build $BUILDER --pull $PLATFORM -t ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX} -f $OS/$dir/Dockerfile .
+                echo docker $BUILDX build $BUILDER --pull $EXTRA $PLATFORM -t ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX} -f $OS/$dir/Dockerfile .
+                docker $BUILDX build $BUILDER --pull $EXTRA $PLATFORM -t ${IMAGE_NAME}:${OS}${OS_VER}${VARIANT_TAG}${SUFFIX} -f $OS/$dir/Dockerfile .
             fi
         fi
 
@@ -198,7 +205,7 @@ for dir in $(echo ${OS}/*/); do
 done
 
 # Push
-if [ "${PUSH_IMAGES}" = true ]; then
+if [ "${PUSH_IMAGES}" = true ] && [ "$BUILDX" = ""]; then
     for IMAGE in $IMAGE_LIST; do
 
         printf "\n >> Pushing image to registry: $IMAGE \n"
@@ -209,7 +216,7 @@ if [ "${PUSH_IMAGES}" = true ]; then
 fi
 
 # Image Removal
-if [ "${POST_RM}" = true ]; then
+if [ "${POST_RM}" = true ] && [ "$BUILDX" = ""]; then
     for IMAGE in $IMAGE_LIST; do
         printf "\n >> Removing the image: $IMAGE\n"
         docker rmi $IMAGE
