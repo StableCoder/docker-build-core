@@ -46,7 +46,7 @@ CentOS Build:
     - amd64
     - arm64
   variables:
-    PLATFORMS: "linux/amd64,linux/arm64"
+    PLATFORMS: "linux/amd64,linux/arm64,linux/arm/v7"
     OS: centos
   <<: *build_template
 
@@ -57,7 +57,7 @@ Debian Build:
     - armv7
     - arm64
   variables:
-    PLATFORMS: "linux/amd64,linux/arm/v7,linux/arm64"
+    PLATFORMS: "linux/amd64,linux/arm64,linux/arm/v7"
     OS: debian
   <<: *build_template
 
@@ -68,7 +68,7 @@ Ubuntu Build:
     - armv7
     - arm64
   variables:
-    PLATFORMS: "linux/amd64,linux/arm/v7,linux/arm64"
+    PLATFORMS: "linux/amd64,linux/arm64,linux/arm/v7"
     OS: ubuntu
   <<: *build_template
 

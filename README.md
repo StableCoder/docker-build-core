@@ -19,9 +19,16 @@ These images are used to target platforms, not specific tools or compilers, so t
 - [`ubuntu18.04`, `ubuntu18.04-gcc`, `ubuntu18.04-clang`, `ubuntu20.04`, `ubuntu20.04-gcc`, `ubuntu20.04-clang`, `ubuntu`, `ubuntu-gcc`, `ubuntu-clang` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/ubuntu/ubuntu-18.04/Dockerfile)
 - [`windows`, `windows-msvc`, `windows-clang-cl`, `windows-clang` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/windows/Dockerfile)
 
-#### armv7
-- [`debian9`, `debian9-gcc`, `debian9-clang`, `debian10`, `debian10-gcc`, `debian10-clang`, `debian`, `debian-gcc`, `debian-clang` (armv7/Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/debian/debian-9/Dockerfile)
-- [`ubuntu18.04`, `ubuntu18.04-gcc`, `ubuntu18.04-clang`, `ubuntu20.04`, `ubuntu20.04-gcc`, `ubuntu20.04-clang`, `ubuntu`, `ubuntu-gcc`, `ubuntu-clang` (armv7/Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/ubuntu/ubuntu-18.04/Dockerfile)
+#### Architecture Support
+
+| OS       | amd64 | arm64v8 | arm32v7 |
+| -------- | ----- | ------- | ------- |
+| Centos   | X     | X       | X       |
+| Debian   | X     | X       | X       |
+| Fedora   | X     | X       |         |
+| openSUSE | X     |         |         |
+| Ubtuntu  | X     | X       | X       |
+| Windows  | X     |         |         |
 
 ##### Note: While they may share dockerfiles, during build time the first `FROM` line is replaced with the correct variant, and the `ENTRYPOINT` line is replaced appropriately for auto-loading the tagged compiler.
 
