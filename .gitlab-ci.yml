@@ -45,9 +45,8 @@ CentOS Build:
     - docker-builder-linux
     - amd64
     - arm64
-    - armv7
   variables:
-    PLATFORMS: "linux/amd64,linux/arm64,linux/arm/v7"
+    PLATFORMS: "linux/amd64,linux/arm64"
     OS: centos
   <<: *build_template
 
@@ -142,9 +141,8 @@ CentOS Upload:
     - docker-builder-linux
     - amd64
     - arm64
-    - armv7
   variables:
-    PLATFORMS: "linux/amd64,linux/arm64,linux/arm/v7"
+    PLATFORMS: "linux/amd64,linux/arm64"
     OS: centos
   <<: *upload_template
 
