@@ -11,19 +11,19 @@ These images are used to target platforms, not specific tools or compilers, so t
 
 ### Supported tags and respective `Dockerfile` links
 
-- [`centos7`, `centos7-gcc`, `centos7-clang` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/centos/centos-7/Dockerfile)
-- [`centos8`, `centos8-gcc`, `centos8-clang`, `centos`, `centos-gcc`, `centos-clang` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/centos/centos-8/Dockerfile)
-- [`debian9`, `debian9-gcc`, `debian9-clang`, `debian10`, `debian10-gcc`, `debian10-clang`, `debian`, `debian-gcc`, `debian-clang` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/debian/debian-9/Dockerfile)
-- [`fedora31`, `fedora31-gcc`, `fedora31-clang`, `fedora32`, `fedora32-gcc`, `fedora32-clang`, `fedora33`, `fedora33-gcc`, `fedora33-clang`, `fedora`, `fedora-gcc`, `fedora-clang` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/fedora/fedora-31/Dockerfile)
-- [`opensuse15`, `opensuse15-gcc`, `opensuse15-clang`, `opensuse`, `opensuse-gcc`, `opensuse-clang` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/opensuse/opensuseleap-15/Dockerfile)
-- [`ubuntu18.04`, `ubuntu18.04-gcc`, `ubuntu18.04-clang`, `ubuntu20.04`, `ubuntu20.04-gcc`, `ubuntu20.04-clang`, `ubuntu`, `ubuntu-gcc`, `ubuntu-clang` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/ubuntu/ubuntu-18.04/Dockerfile)
+- [`centos-7` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/centos/centos-7.Dockerfile)
+- [`centos`, `centos-8` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/centos/centos.Dockerfile)
+- [`debian`, `debian-9`, `debian-10` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/debian/debian.Dockerfile)
+- [`fedora`, `fedora-31`, `fedora-32`, `fedora33` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/fedora/fedora.Dockerfile)
+- [`opensuse`, `opensuse-15` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/opensuse/opensuse.Dockerfile)
+- [`ubuntu`, `ubuntu-18.04`, `ubuntu-20.04` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/ubuntu/ubuntu.Dockerfile)
 - [`windows`, `windows-msvc`, `windows-clang-cl`, `windows-clang` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/windows/Dockerfile)
 
 #### Architecture Support
 
 | OS       | amd64 | arm64v8 | arm32v7 |
 | -------- | ----- | ------- | ------- |
-| Centos   | X     | X       | X       |
+| Centos   | X     | X       |         |
 | Debian   | X     | X       | X       |
 | Fedora   | X     | X       |         |
 | openSUSE | X     |         |         |
@@ -32,20 +32,7 @@ These images are used to target platforms, not specific tools or compilers, so t
 
 ##### Note: While they may share dockerfiles, during build time the first `FROM` line is replaced with the correct variant, and the `ENTRYPOINT` line is replaced appropriately for auto-loading the tagged compiler.
 
-### Tagging Scheme
-
-Images are tagged based on the OS and the compilers automatically active when entering the container:
-```
-# Base Image
-stabletec/build-core:${OS}${OS_VERSION}
-
-# Compiler Image
-stabletec/build-core:${OS}${OS_VERSION}-${COMPILER}
-```
-
-Images of the same OS/OS_VERSION are completely the same *except* for the `ENTRYPOINT`, where for the base image the entrypoint lists all compiler versions, and for a compiler image, automatically sets up the tagged compiler as default. Thus many image families share all but a single layer.
-
-Images *without* an OS_VERSION, ex. `debian` or `centos`, are based off the 'latest' tag of the OS, which often means it also shares the same image layers as the OS_VERSION's as well. Ex. `debian` are the same layers as `debian10` and `centos` shares the same layers as `centos8`.
+Images *without* an OS_VERSION, ex. `debian` or `centos`, are based off the 'latest' tag of the OS, which often means it also shares the same image layers as the OS_VERSION's as well. Ex. `debian` are the same layers as `debian-10` and `centos` shares the same layers as `centos-8`.
 
 ## Tooling Available
 
