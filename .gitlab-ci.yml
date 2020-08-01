@@ -22,13 +22,8 @@ variables:
   stage: Build Images
   except:
     - master
-  before_script:
-    - docker buildx create --use --name job_${CI_JOB_ID}
-    - docker buildx inspect --builder job_${CI_JOB_ID} --bootstrap
   script:
     - ./linux-build.sh
-  after_script:
-    - docker buildx rm job_${CI_JOB_ID}
 
 Fedora Build:
   tags:
@@ -117,14 +112,11 @@ Windows Build(no cache):
   only:
     - master
   before_script:
-    - docker buildx create --use --name job_${CI_JOB_ID}
-    - docker buildx inspect --builder job_${CI_JOB_ID} --bootstrap
     - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${DOCKER_REGISTRY}
   script:
-    - ./linux-upload.sh 
+    - ./linux-upload.sh
   after_script:
     - docker logout ${DOCKER_REGISTRY}
-    - docker buildx rm job_${CI_JOB_ID}
 
 Fedora Upload:
   tags:
