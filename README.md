@@ -17,7 +17,7 @@ These images are used to target platforms, not specific tools or compilers, so t
 - [`fedora`, `fedora-31`, `fedora-32`, `fedora33` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/fedora/fedora.Dockerfile)
 - [`opensuse`, `opensuse-15` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/opensuse/opensuse.Dockerfile)
 - [`ubuntu`, `ubuntu-18.04`, `ubuntu-20.04` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/ubuntu/ubuntu.Dockerfile)
-- [`windows`, `windows-msvc`, `windows-clang-cl`, `windows-clang` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/windows/Dockerfile)
+- [`windows` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/windows/Dockerfile)
 
 ## Architecture Support
 
@@ -47,7 +47,7 @@ These images form the core of other images used for building an assortment of C/
 - GCC
 - Clang
 
-The images default to gcc/g++ compiler. TO use the clang/clang++ compilers, simply define the CC/CXX environment variables when starting the container, for example
+The Linux images default to gcc/g++ compiler. To use the clang/clang++ compilers, simply define the CC/CXX environment variables when starting the container, for example:
 ```sh
 # Starts the fedora container, setting up with the clang/clang++ compilers
 docker run -e CC=clang -e CXX=clang++ stabletec/build-core:fedora
@@ -62,10 +62,15 @@ The SDK based images contain two compilers with three options available, and the
 - Ninja Build
 - CMake
 - MSVC
-- Clang
-- Clang-cl
+- Clang/Clang-cl
 - Conan
 - Python 3
+
+The Windows images default to the MSVC compiler. To use the clang/clang-cl compilers, simply define the CC/CXX environment variables when starting the container, for example:
+```powershell
+# Starts the Windows container, setting up with the clang-cl compiler
+docker run -e CC=clang-cl -e CXX=clang-cl stabletec/build-core:windows
+```
 
 ## Analysis Tools
 
