@@ -66,6 +66,10 @@ if [[ $VERSION -ne 1 ]]; then
     printf " >>> Converted to libstdc++11 !!\n"
     printf "\n >>> Conan Version\n"
     conan --version
+    if [ "$CC" = "" ]; then
+        CC=gcc
+        CXX=g++
+    fi
     printf "\n >>> $CC Version\n"
     $CC --version
 fi
