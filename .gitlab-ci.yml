@@ -45,6 +45,7 @@ CentOS Build:
     - docker-builder-linux
     - amd64
     - arm64
+    - armv7
   variables:
     PLATFORMS: "linux/amd64,linux/arm64,linux/arm/v7"
     OS: centos
@@ -54,8 +55,8 @@ Debian Build:
   tags:
     - docker-builder-linux
     - amd64
-    - armv7
     - arm64
+    - armv7
   variables:
     PLATFORMS: "linux/amd64,linux/arm64,linux/arm/v7"
     OS: debian
@@ -65,8 +66,8 @@ Ubuntu Build:
   tags:
     - docker-builder-linux
     - amd64
-    - armv7
     - arm64
+    - armv7
   variables:
     PLATFORMS: "linux/amd64,linux/arm64,linux/arm/v7"
     OS: ubuntu
@@ -141,6 +142,7 @@ CentOS Upload:
     - docker-builder-linux
     - amd64
     - arm64
+    - armv7
   variables:
     PLATFORMS: "linux/amd64,linux/arm64,linux/arm/v7"
     OS: centos
@@ -150,8 +152,8 @@ Debian Upload:
   tags:
     - docker-builder-linux
     - amd64
-    - armv7
     - arm64
+    - armv7
   variables:
     PLATFORMS: "linux/amd64,linux/arm64,linux/arm/v7"
     OS: debian
@@ -161,8 +163,8 @@ Ubuntu Upload:
   tags:
     - docker-builder-linux
     - amd64
-    - armv7
     - arm64
+    - armv7
   variables:
     PLATFORMS: "linux/amd64,linux/arm64,linux/arm/v7"
     OS: ubuntu
