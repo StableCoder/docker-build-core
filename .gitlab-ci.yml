@@ -180,9 +180,10 @@ Windows Upload:
   tags:
     - docker-builder-windows
     - amd64
-  script:
+  before_script:
     - docker login -u $env:DOCKER_USER -p "$env:DOCKER_PASSWORD" $env:DOCKER_REGISTRY
-    - cd windows; .\image_builder.ps1 -imagename ${env:DOCKER_REGISTRY}${env:CORE_NAME} -test
+  script:
+    - cd windows; .\image_builder.ps1 -push -imagename ${env:DOCKER_REGISTRY}${env:CORE_NAME} -test
   after_script:
     - docker logout $env:DOCKER_REGISTRY
 
@@ -196,8 +197,9 @@ Windows Upload(no cache):
   tags:
     - docker-builder-windows
     - amd64
-  script:
+  before_script:
     - docker login -u $env:DOCKER_USER -p "$env:DOCKER_PASSWORD" $env:DOCKER_REGISTRY
-    - cd windows; .\image_builder.ps1 -imagename ${env:DOCKER_REGISTRY}${env:CORE_NAME} -test -n
+  script:
+    - cd windows; .\image_builder.ps1 -push -imagename ${env:DOCKER_REGISTRY}${env:CORE_NAME} -test -n
   after_script:
     - docker logout $env:DOCKER_REGISTRY
