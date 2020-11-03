@@ -36,7 +36,7 @@ RUN wget -q https://www.python.org/ftp/python/${PYTHON_VER}/Python-${PYTHON_VER}
 
 # CMake
 ENV CMAKE_MINOR_VER=3.18 \
-    CMAKE_VERSION=3.18.1
+    CMAKE_VERSION=3.18.4
 RUN wget -q https://cmake.org/files/v${CMAKE_MINOR_VER}/cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz \
     && tar -zxf cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz \
     && cp -R cmake-${CMAKE_VERSION}-Linux-x86_64/* /usr/local/ \
