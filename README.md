@@ -1,7 +1,7 @@
 # Build Core Images
 
-[![pipeline status](https://git.stabletec.com/docker/build-core/badges/master/pipeline.svg)](https://git.stabletec.com/docker/build-core/commits/master)
-[![license](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://git.stabletec.com/docker/build-core/blob/master/LICENSE)
+[![pipeline status](https://git.stabletec.com/docker/build-core/badges/main/pipeline.svg)](https://git.stabletec.com/docker/build-core/commits/main)
+[![license](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://git.stabletec.com/docker/build-core/blob/main/LICENSE)
 [![docker pulls](https://img.shields.io/docker/pulls/stabletec/build-core.svg)](https://hub.docker.com/r/stabletec/build-core/)
 [![docker stars](https://img.shields.io/docker/stars/stabletec/build-core.svg)](https://hub.docker.com/r/stabletec/build-core/)
 
@@ -11,13 +11,13 @@ These images are used to target platforms, not specific tools or compilers, so t
 
 ## Supported tags and respective `Dockerfile` links
 
-- [`centos-7` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/centos/centos-7.Dockerfile)
-- [`centos`, `centos-8` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/centos/centos.Dockerfile)
-- [`debian`, `debian-9`, `debian-10` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/debian/debian.Dockerfile)
-- [`fedora`, `fedora-31`, `fedora-32`, `fedora33` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/fedora/fedora.Dockerfile)
-- [`opensuse`, `opensuse-15` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/opensuse/opensuse.Dockerfile)
-- [`ubuntu`, `ubuntu-18.04`, `ubuntu-20.04` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/ubuntu/ubuntu.Dockerfile)
-- [`windows` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/master/windows/Dockerfile)
+- [`centos-7` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/centos/centos-7.Dockerfile)
+- [`centos`, `centos-8` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/centos/centos.Dockerfile)
+- [`debian`, `debian-9`, `debian-10` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/debian/debian.Dockerfile)
+- [`fedora`, `fedora-31`, `fedora-32`, `fedora33` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/fedora/fedora.Dockerfile)
+- [`opensuse`, `opensuse-15` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/opensuse/opensuse.Dockerfile)
+- [`ubuntu`, `ubuntu-18.04`, `ubuntu-20.04` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/ubuntu/ubuntu.Dockerfile)
+- [`windows` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/windows/Dockerfile)
 
 ## Architecture Support
 
