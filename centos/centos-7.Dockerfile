@@ -43,7 +43,7 @@ RUN wget -q https://cmake.org/files/v${CMAKE_MINOR_VER}/cmake-${CMAKE_VERSION}-L
     && rm -rf cmake-*
 
 # Ninja
-ENV NINJA_VER=1.10.0
+ENV NINJA_VER=1.10.1
 RUN wget -q https://github.com/ninja-build/ninja/releases/download/v${NINJA_VER}/ninja-linux.zip \
     && unzip ninja-linux.zip \
     && mv ninja /usr/local/bin \

@@ -27,7 +27,7 @@ RUN yum update -y \
     && yum clean all
 
 # Ninja
-ENV NINJA_VER=1.10.0
+ENV NINJA_VER=1.10.1
 RUN wget -q https://github.com/ninja-build/ninja/releases/download/v${NINJA_VER}/ninja-linux.zip \
     && unzip ninja-linux.zip \
     && mv ninja /usr/local/bin \
