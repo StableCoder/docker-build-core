@@ -1,4 +1,4 @@
-FROM debian:9
+FROM debian:latest
 
 RUN apt-get update \
     && apt-get upgrade -y \
