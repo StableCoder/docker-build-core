@@ -14,7 +14,7 @@ These images are used to target platforms, not specific tools or compilers, so t
 - [`centos-7` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/centos/centos-7.Dockerfile)
 - [`centos`, `centos-8` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/centos/centos.Dockerfile)
 - [`debian`, `debian-9`, `debian-10` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/debian/debian.Dockerfile)
-- [`fedora`, `fedora-31`, `fedora-32`, `fedora33` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/fedora/fedora.Dockerfile)
+- [`fedora`, `fedora-31`, `fedora-32`, `fedora33`, `fedora34` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/fedora/fedora.Dockerfile)
 - [`opensuse`, `opensuse-15` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/opensuse/opensuse.Dockerfile)
 - [`ubuntu`, `ubuntu-18.04`, `ubuntu-20.04` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/ubuntu/ubuntu.Dockerfile)
 - [`windows` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/windows/Dockerfile)
