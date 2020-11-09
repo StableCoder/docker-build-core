@@ -17,9 +17,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-cd $OS
-cp ../entrypoint.sh .
-
-for FILE in *.Dockerfile; do
-    docker buildx build --pull ${PUSH} ${EXTRA_BUILD_OPTIONS} --platform ${PLATFORMS} -t ${TAG}:${FILE%.*} -f ${FILE} .
+for FILE in ${OS}/*.Dockerfile; do
+    FILE="$(basename -- $FILE)"
+    docker buildx build --pull ${PUSH} ${EXTRA_BUILD_OPTIONS} --platform ${PLATFORMS} -t ${TAG}:${FILE%.*} -f ${OS}/${FILE} .
 done
