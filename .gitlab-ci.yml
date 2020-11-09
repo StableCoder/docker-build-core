@@ -23,7 +23,7 @@ variables:
   except:
     - main
   script:
-    - ./linux-build.sh
+    - ./linux-build.sh --tag test
 
 Fedora Build:
   tags:
@@ -114,7 +114,7 @@ Windows Build(no cache):
   before_script:
     - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${DOCKER_REGISTRY}
   script:
-    - ./linux-upload.sh
+    - ./linux-build.sh --tag ${DOCKER_REGISTRY}${CORE_NAME} --push
   after_script:
     - docker logout ${DOCKER_REGISTRY}
 
