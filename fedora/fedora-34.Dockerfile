@@ -26,10 +26,6 @@ RUN dnf update -y --refresh && \
     lcov && \
     dnf clean all
 
-# Conan
-RUN pip --no-cache-dir install conan && \
-    pip --no-cache-dir install -Iv --user six==1.12
-
 # Entrypoint
 COPY entrypoint.sh /entrypoint.sh
 

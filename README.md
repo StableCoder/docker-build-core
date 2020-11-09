@@ -7,7 +7,7 @@
 
 This contains a bunch of Dockerfiles for generating images useful as a basis for performing C/C++ development work, including available compilers and base tools. These images are meant to either be used on their own for very basic items, or as base images to be extended with additional required libraries for specific projects.
 
-These images are used to target platforms, not specific tools or compilers, so there is some overlap between them for certain items. All images except for CentOS7 have Conan libcxx set to libstdc++11 instead of libstdc++ by default.
+These images are used to target platforms/distributions, not specific tools or compilers, so there is some overlap between them for certain items.
 
 ## Supported tags and respective `Dockerfile` links
 
@@ -42,7 +42,6 @@ These images form the core of other images used for building an assortment of C/
 - Make
 - Ninja Build
 - CMake
-- Conan
 - Python 3
 - GCC
 - Clang
@@ -63,7 +62,6 @@ The SDK based images contain two compilers with three options available, and the
 - CMake
 - MSVC
 - Clang/Clang-cl
-- Conan
 - Python 3
 
 The Windows images default to the MSVC compiler. To use the clang/clang-cl compilers, simply define the CC/CXX environment variables when starting the container, for example:

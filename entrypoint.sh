@@ -13,8 +13,6 @@ setup_gcc() {
 }
 
 version_info() {
-    printf "\n >>> Conan Version\n"
-    conan --version
     printf "\n >>> GCC Version\n"
     gcc --version
     printf " >>> Clang Version\n"
@@ -28,7 +26,7 @@ Usage:
     entrypoint.sh [OPTIONS] [-- COMMAND ARGS]
     -g | --gcc           Set environment to use GCC
     -c | --clang         Set environment to use Clang
-    -v | --version       Prints out conan/compiler versions available
+    -v | --version       Prints out compiler versions available
     -- COMMAND ARGS      Execute command with args at the script end
 USAGE
     exit 1
@@ -61,11 +59,6 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ $VERSION -ne 1 ]]; then
-    conan profile new --detect default
-    conan profile update settings.compiler.libcxx=libstdc++11 default
-    printf " >>> Converted to libstdc++11 !!\n"
-    printf "\n >>> Conan Version\n"
-    conan --version
     if [ "$CC" = "" ]; then
         CC=gcc
         CXX=g++

@@ -18,10 +18,6 @@ if($env:CXX -eq "clang") {
     $env:LDFLAGS="-fuse-ld=lld"
 }
 
-conan profile new --detect default
-
-Write-Host "`n >> Conan Version" -ForegroundColor Yellow
-conan --version
 Write-Host "`n >> MSVC Version" -ForegroundColor Yellow
 vswhere -latest -products *
 Write-Host "`n >> Clang Version" -ForegroundColor Yellow
