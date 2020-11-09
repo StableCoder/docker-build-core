@@ -21,7 +21,7 @@ variables:
 .build_image: &build_template
   stage: Build Images
   except:
-    - master
+    - main
   script:
     - ./linux-build.sh
 
@@ -80,7 +80,7 @@ Windows Build:
   stage: Build Images
   except:
     refs:
-      - master
+      - main
     variables:
       - $NO_CACHE
   tags:
@@ -93,7 +93,7 @@ Windows Build(no cache):
   stage: Build Images
   except:
     refs:
-      - master
+      - main
   only:
     variables:
       - $NO_CACHE  
@@ -110,7 +110,7 @@ Windows Build(no cache):
 .upload_image: &upload_template
   stage: Upload Images
   only:
-    - master
+    - main
   before_script:
     - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${DOCKER_REGISTRY}
   script:
@@ -173,7 +173,7 @@ Windows Upload:
   stage: Upload Images
   only:
     refs:
-      - master
+      - main
   except:
     variables:
       - $NO_CACHE
@@ -191,7 +191,7 @@ Windows Upload(no cache):
   stage: Upload Images
   only:
     refs:
-      - master
+      - main
     variables:
       - $NO_CACHE
   tags:
