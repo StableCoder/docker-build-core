@@ -13,7 +13,7 @@ while [[ $# -gt 0 ]]; do
         shift # past value
         ;;
     --push)
-        PUSH=1
+        PUSH="--push"
         shift # past argument
         ;;
     esac
@@ -21,8 +21,5 @@ done
 
 for FILE in ${OS}/*.Dockerfile; do
     FILE="$(basename -- $FILE)"
-    docker buildx build --pull ${FROM_CACHE} ${TO_CACHE} --platform ${PLATFORMS} -t ${TAG}:${FILE%.*} -f ${OS}/${FILE} .
-    if [[ $PUSH -eq 1 ]]; then
-        docker buildx build --push ${FROM_CACHE} --platform ${PLATFORMS} -t ${TAG}:${FILE%.*} -f ${OS}/${FILE} .
-    fi
+    docker buildx build --pull ${PUSH} --platform ${PLATFORMS} -t ${TAG}:${FILE%.*} -f ${OS}/${FILE} .
 done
