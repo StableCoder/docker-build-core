@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 set -e
 
-PUSH=0
+PUSH=
 
 while [[ $# -gt 0 ]]; do
     key="$1"
