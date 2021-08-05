@@ -1,18 +1,19 @@
 #!/usr/bin/bash
 set -e
 
+TAG=
 PUSH=
 
 while [[ $# -gt 0 ]]; do
     key="$1"
 
     case $key in
-    --tag)
+    -t | --tag)
         TAG="$2"
         shift # past argument
         shift # past value
         ;;
-    --push)
+    -p | --push)
         PUSH="--push"
         shift # past argument
         ;;
