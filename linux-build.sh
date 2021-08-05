@@ -22,5 +22,6 @@ done
 
 for FILE in ${OS}/*.Dockerfile; do
     FILE="$(basename -- $FILE)"
-    docker buildx build --pull ${PUSH} --platform ${PLATFORMS} -t ${TAG}:${FILE%.*} -f ${OS}/${FILE} .
+    echo "docker buildx build --pull ${PUSH} --platform $(cat ${OS}/${FILE%.*}.cfg) -t ${TAG}:${FILE%.*} -f ${OS}/${FILE} ."
+    docker buildx build --pull ${PUSH} --platform $(cat ${OS}/${FILE%.*}.cfg) -t ${TAG}:${FILE%.*} -f ${OS}/${FILE} .
 done

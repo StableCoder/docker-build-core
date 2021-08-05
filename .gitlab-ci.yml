@@ -30,8 +30,8 @@ Fedora Build:
     - docker-builder-linux
     - amd64
     - arm64
+    - ppc64le
   variables:
-    PLATFORMS: "linux/amd64,linux/arm64"
     OS: fedora
   <<: *build_template
 
@@ -41,7 +41,6 @@ CentOS Build:
     - amd64
     - arm64
   variables:
-    PLATFORMS: "linux/amd64,linux/arm64"
     OS: centos
   <<: *build_template
 
@@ -50,9 +49,8 @@ Debian Build:
     - docker-builder-linux
     - amd64
     - arm64
-    - armv7
+    - ppc64le
   variables:
-    PLATFORMS: "linux/amd64,linux/arm64,linux/arm/v7"
     OS: debian
   <<: *build_template
 
@@ -62,8 +60,9 @@ Ubuntu Build:
     - amd64
     - arm64
     - armv7
+    - ppc64le
+    - riscv64
   variables:
-    PLATFORMS: "linux/amd64,linux/arm64,linux/arm/v7"
     OS: ubuntu
   <<: *build_template
 
@@ -71,8 +70,10 @@ openSUSE Build:
   tags:
     - docker-builder-linux
     - amd64
+    - arm64
+    - armv7
+    - ppc64le
   variables:
-    PLATFORMS: "linux/amd64"
     OS: opensuse
   <<: *build_template
 
@@ -123,8 +124,8 @@ Fedora Upload:
     - docker-builder-linux
     - amd64
     - arm64
+    - ppc64le
   variables:
-    PLATFORMS: "linux/amd64,linux/arm64"
     OS: fedora
   <<: *upload_template
 
@@ -134,7 +135,6 @@ CentOS Upload:
     - amd64
     - arm64
   variables:
-    PLATFORMS: "linux/amd64,linux/arm64"
     OS: centos
   <<: *upload_template
 
@@ -143,9 +143,8 @@ Debian Upload:
     - docker-builder-linux
     - amd64
     - arm64
-    - armv7
+    - ppc64le
   variables:
-    PLATFORMS: "linux/amd64,linux/arm64,linux/arm/v7"
     OS: debian
   <<: *upload_template
 
@@ -155,8 +154,9 @@ Ubuntu Upload:
     - amd64
     - arm64
     - armv7
+    - ppc64le
+    - riscv64
   variables:
-    PLATFORMS: "linux/amd64,linux/arm64,linux/arm/v7"
     OS: ubuntu
   <<: *upload_template
 
@@ -164,6 +164,9 @@ openSUSE Upload:
   tags:
     - docker-builder-linux
     - amd64
+    - arm64
+    - armv7
+    - ppc64le
   variables:
     PLATFORMS: "linux/amd64"
     OS: opensuse
