@@ -30,7 +30,6 @@ Fedora Build:
     - docker-builder-linux
     - amd64
     - arm64
-    - ppc64le
   variables:
     OS: fedora
   <<: *build_template
@@ -49,7 +48,6 @@ Debian Build:
     - docker-builder-linux
     - amd64
     - arm64
-    - ppc64le
   variables:
     OS: debian
   <<: *build_template
@@ -60,7 +58,6 @@ Ubuntu Build:
     - amd64
     - arm64
     - armv7
-    - ppc64le
     - riscv64
   variables:
     OS: ubuntu
@@ -72,7 +69,6 @@ openSUSE Build:
     - amd64
     - arm64
     - armv7
-    - ppc64le
   variables:
     OS: opensuse
   <<: *build_template
@@ -124,7 +120,6 @@ Fedora Upload:
     - docker-builder-linux
     - amd64
     - arm64
-    - ppc64le
   variables:
     OS: fedora
   <<: *upload_template
@@ -143,7 +138,6 @@ Debian Upload:
     - docker-builder-linux
     - amd64
     - arm64
-    - ppc64le
   variables:
     OS: debian
   <<: *upload_template
@@ -154,7 +148,6 @@ Ubuntu Upload:
     - amd64
     - arm64
     - armv7
-    - ppc64le
     - riscv64
   variables:
     OS: ubuntu
@@ -166,7 +159,6 @@ openSUSE Upload:
     - amd64
     - arm64
     - armv7
-    - ppc64le
   variables:
     PLATFORMS: "linux/amd64"
     OS: opensuse
