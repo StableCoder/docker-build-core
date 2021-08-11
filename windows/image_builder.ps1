@@ -12,11 +12,11 @@ try {
     Write-Host "`n >> Base Image" -ForegroundColor Yellow
 
     if($n) {
-        Write-Host "docker build --pull --no-cache -t ${imagename}:windows${suffix} -m 4GB ." -ForegroundColor Yellow
-        docker build --pull --no-cache -t ${imagename}:windows${suffix} -m 4GB .
+        Write-Host "docker build --pull --no-cache -t ${imagename}:windows${suffix} ." -ForegroundColor Yellow
+        docker build --pull --no-cache -t ${imagename}:windows${suffix} .
     } else {
-        Write-Host "docker build --pull -t ${imagename}:windows${suffix} -m 4GB ." -ForegroundColor Yellow
-        docker build --pull -t ${imagename}:windows${suffix} -m 4GB .
+        Write-Host "docker build --pull -t ${imagename}:windows${suffix} ." -ForegroundColor Yellow
+        docker build --pull -t ${imagename}:windows${suffix} .
     }
 
     if($test) {
