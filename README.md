@@ -11,24 +11,26 @@ These images are used to target platforms/distributions, not specific tools or c
 
 ## Supported tags and respective `Dockerfile` links
 
+- [`arch` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/arch/arch.Dockerfile)
 - [`centos-7` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/centos/centos-7.Dockerfile)
 - [`centos`, `centos-8` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/centos/centos.Dockerfile)
 - [`debian`, `debian-9`, `debian-10` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/debian/debian.Dockerfile)
-- [`fedora`, `fedora-31`, `fedora-32`, `fedora33`, `fedora34` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/fedora/fedora.Dockerfile)
+- [`fedora`, `fedora-32`, `fedora33`, `fedora34`, `fedora35` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/fedora/fedora.Dockerfile)
 - [`opensuse`, `opensuse-15` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/opensuse/opensuse.Dockerfile)
 - [`ubuntu`, `ubuntu-18.04`, `ubuntu-20.04` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/ubuntu/ubuntu.Dockerfile)
 - [`windows` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/windows/Dockerfile)
 
 ## Architecture Support
 
-| OS       | amd64 | arm64v8 | arm32v7 | ppc64le | riscv64 |
-| -------- | ----- | ------- | ------- | ------- | ------- |
-| Centos   | X     | X       |         |         |         |
-| Debian   | X     | X       | X       |         |         |
-| Fedora   | X     | X       |         |         |         |
-| openSUSE | X     |         |         |         |         |
-| Ubtuntu  | X     | X       | X       |         | X       |
-| Windows  | X     |         |         |         |         |
+| OS             | amd64 | arm64 | arm32v7 | ppc64le | riscv64 |
+| -------------- | ----- | ----- | ------- | ------- | ------- |
+| Arch (SteamOS) | X     |       |         |         |         |
+| Centos         | X     | X     |         |         |         |
+| Debian         | X     | X     | X       |         |         |
+| Fedora         | X     | X     |         |         |         |
+| openSUSE       | X     |       |         |         |         |
+| Ubtuntu        | X     | X     | X       |         | X       |
+| Windows        | X     |       |         |         |         |
 
 Images *without* an OS_VERSION, ex. `debian` or `centos`, are based off the 'latest' tag of the OS, which often means it also shares the same image layers as the OS_VERSION's as well. Ex. `debian` uses the same layers as `debian-10` and `centos` shares the same layers as `centos-8`.
 
@@ -72,7 +74,7 @@ docker run -e CC=clang-cl -e CXX=clang-cl stabletec/build-core:windows
 
 ## Analysis Tools
 
-The Fedora and openSUSE images also have analysis tools used for code analysis available:
+The Arch, Fedora and openSUSE images also have analysis tools used for code analysis available:
 - AddressSanitizer
 - LeakSanitizer
 - ThreadSanitizer
