@@ -10,6 +10,8 @@ RUN pacman -Sy && \
     # Compilers
     gcc clang llvm python \
     # Dev Tools
-    doxygen cppcheck git git-lfs subversion cmake make ninja && \
+    doxygen cppcheck git git-lfs subversion cmake make ninja python-pip && \
     # Cleanup
     pacman -Scc --noconfirm
+
+RUN pip install cmake-format
