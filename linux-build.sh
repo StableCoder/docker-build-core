@@ -22,6 +22,9 @@ done
 
 for FILE in ${OS}/*.Dockerfile; do
     FILE="$(basename -- $FILE)"
+    if [ ! -z $PUSH ]; then
+       docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${DOCKER_REGISTRY}
+    fi
     echo "docker buildx build --pull ${PUSH} --platform $(cat ${OS}/${FILE%.*}.cfg) -t ${TAG}:${FILE%.*} -f ${OS}/${FILE} ."
     docker buildx build --pull ${PUSH} --platform $(cat ${OS}/${FILE%.*}.cfg) -t ${TAG}:${FILE%.*} -f ${OS}/${FILE} .
 done
