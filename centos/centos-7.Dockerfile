@@ -25,7 +25,7 @@ RUN yum update -y \
     && yum clean all
 
 # Python3
-ENV PYTHON_VER=3.9.0
+ENV PYTHON_VER=3.9.6
 RUN wget -q https://www.python.org/ftp/python/${PYTHON_VER}/Python-${PYTHON_VER}.tgz \
     && tar -zxf Python-${PYTHON_VER}.tgz \
     && cd Python-${PYTHON_VER} \
@@ -35,19 +35,26 @@ RUN wget -q https://www.python.org/ftp/python/${PYTHON_VER}/Python-${PYTHON_VER}
     && rm -rf Python-*
 
 # CMake
-ENV CMAKE_MINOR_VER=3.18 \
-    CMAKE_VERSION=3.18.4
-RUN wget -q https://cmake.org/files/v${CMAKE_MINOR_VER}/cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz \
-    && tar -zxf cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz \
-    && cp -R cmake-${CMAKE_VERSION}-Linux-x86_64/* /usr/local/ \
+ENV CMAKE_VER=3.21.1
+RUN wget -q https://github.com/Kitware/CMake/releases/download/v${CMAKE_VER}/cmake-${CMAKE_VER}.tar.gz \
+    && tar -zxf cmake-${CMAKE_VER}.tar.gz \
+    && cd cmake-${CMAKE_VER} \
+    && ./configure \
+    && make -j $(nproc --all) \
+    && make install \
+    && cd .. \
     && rm -rf cmake-*
 
 # Ninja
-ENV NINJA_VER=1.10.1
-RUN wget -q https://github.com/ninja-build/ninja/releases/download/v${NINJA_VER}/ninja-linux.zip \
-    && unzip ninja-linux.zip \
-    && mv ninja /usr/local/bin \
-    && rm ninja-linux.zip
+ENV NINJA_VER=1.10.2
+RUN wget -q https://github.com/ninja-build/ninja/archive/refs/tags/v${NINJA_VER}.tar.gz \
+    && tar -zxf v${NINJA_VER}.tar.gz \
+    && cd ninja-${NINJA_VER} \
+    && cmake -Bbuild-cmake -H. \
+    && cmake --build build-cmake \
+    && cmake --install build-cmake \
+    && cd .. \
+    && rm -rf ninja-${NINJA_VER} v${NINJA_VER}.tar.gz
 
 # Entrypoint
 COPY entrypoint.sh /entrypoint.sh

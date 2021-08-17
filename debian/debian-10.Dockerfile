@@ -4,6 +4,7 @@ RUN apt-get update \
     && apt-get upgrade -y \
     && apt install -y \
     # Common
+    libssl-dev \
     wget \
     python-pip \
     ninja-build \
@@ -17,14 +18,14 @@ RUN apt-get update \
     && apt-get clean
 
 # CMake
-ARG CMAKE_MINOR_VER=3.18
-ARG CMAKE_VERSION=3.18.4
-RUN wget -q https://cmake.org/files/v${CMAKE_MINOR_VER}/cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz \
-    && tar -zxf cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz \
-    && cp -rn cmake-${CMAKE_VERSION}-Linux-x86_64/bin/* /usr/local/bin/ \
-    && cp -rn cmake-${CMAKE_VERSION}-Linux-x86_64/doc/* /usr/local/doc/ \
-    && cp -rn cmake-${CMAKE_VERSION}-Linux-x86_64/man/* /usr/local/man/ \
-    && cp -rn cmake-${CMAKE_VERSION}-Linux-x86_64/share/* /usr/local/share/ \
+ENV CMAKE_VER=3.21.1
+RUN wget -q https://github.com/Kitware/CMake/releases/download/v${CMAKE_VER}/cmake-${CMAKE_VER}.tar.gz \
+    && tar -zxf cmake-${CMAKE_VER}.tar.gz \
+    && cd cmake-${CMAKE_VER} \
+    && ./configure \
+    && make -j $(nproc --all) \
+    && make install \
+    && cd .. \
     && rm -rf cmake-*
 
 # Entrypoint
