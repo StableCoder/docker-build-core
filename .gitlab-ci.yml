@@ -56,7 +56,6 @@ Debian Build:
     - docker-builder-linux
     - amd64
     - arm64
-    - riscv64
   variables:
     OS: debian
   <<: *build_template
@@ -153,7 +152,6 @@ Debian Upload:
     - docker-builder-linux
     - amd64
     - arm64
-    - riscv64
   variables:
     OS: debian
   <<: *upload_template

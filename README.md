@@ -26,7 +26,7 @@ These images are used to target platforms/distributions, not specific tools or c
 | -------------- | ----- | ----- | ------- | ------- | ------- |
 | Arch (SteamOS) | X     |       |         |         |         |
 | Centos         | X     | X     |         |         |         |
-| Debian         | X     | X     | X       |         | X        |
+| Debian         | X     | X     | X       |         |         |
 | Fedora         | X     | X     |         |         |         |
 | openSUSE       | X     |       |         |         |         |
 | Ubtuntu        | X     | X     | X       |         | X       |
