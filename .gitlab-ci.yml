@@ -18,63 +18,42 @@ variables:
 
 .build_image: &build_template
   stage: Build Images
+  tags:
+    - container-builder
+    - linux
+    - podman
+    - qemu
   except:
     - main
   script:
-    - ./linux-build.sh --tag test
+    - ./linux-build.sh $NO_CACHE --tag test
 
 Arch/SteamOS Build:
-  tags:
-    - docker-builder-linux
-    - amd64
   variables:
     OS: arch
   <<: *build_template
 
 Fedora Build:
-  tags:
-    - docker-builder-linux
-    - amd64
-    - arm64
   variables:
     OS: fedora
   <<: *build_template
 
 CentOS Build:
-  tags:
-    - docker-builder-linux
-    - amd64
-    - arm64
   variables:
     OS: centos
   <<: *build_template
 
 Debian Build:
-  tags:
-    - docker-builder-linux
-    - amd64
-    - arm64
   variables:
     OS: debian
   <<: *build_template
 
 Ubuntu Build:
-  tags:
-    - docker-builder-linux
-    - amd64
-    - arm64
-    - armv7
-    - riscv64
   variables:
     OS: ubuntu
   <<: *build_template
 
 openSUSE Build:
-  tags:
-    - docker-builder-linux
-    - amd64
-    - arm64
-    - armv7
   variables:
     OS: opensuse
   <<: *build_template
@@ -112,65 +91,43 @@ Windows Build(no cache):
 
 .upload_image: &upload_template
   stage: Upload Images
+  tags:
+    - container-builder
+    - linux
+    - podman
+    - qemu
   only:
     - main
   script:
-    - ./linux-build.sh --tag ${CORE_NAME} --push
+    - ./linux-build.sh $NO_CACHE --tag ${CORE_NAME} --push
 
 Arch/SteamOS Upload:
-  tags:
-    - docker-builder-linux
-    - amd64
   variables:
     OS: arch
   <<: *upload_template
 
 Fedora Upload:
-  tags:
-    - docker-builder-linux
-    - amd64
-    - arm64
   variables:
     OS: fedora
   <<: *upload_template
 
 CentOS Upload:
-  tags:
-    - docker-builder-linux
-    - amd64
-    - arm64
   variables:
     OS: centos
   <<: *upload_template
 
 Debian Upload:
-  tags:
-    - docker-builder-linux
-    - amd64
-    - arm64
   variables:
     OS: debian
   <<: *upload_template
 
 Ubuntu Upload:
-  tags:
-    - docker-builder-linux
-    - amd64
-    - arm64
-    - armv7
-    - riscv64
   variables:
     OS: ubuntu
   <<: *upload_template
 
 openSUSE Upload:
-  tags:
-    - docker-builder-linux
-    - amd64
-    - arm64
-    - armv7
   variables:
-    PLATFORMS: "linux/amd64"
     OS: opensuse
   <<: *upload_template
 

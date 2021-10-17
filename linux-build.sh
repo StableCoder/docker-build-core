@@ -1,6 +1,7 @@
 #!/usr/bin/bash
 set -e
 
+NO_CACHE=
 TAG=
 PUSH=
 
@@ -8,6 +9,10 @@ while [[ $# -gt 0 ]]; do
     key="$1"
 
     case $key in
+    -n | --no-cache)
+        NO_CACHE="--no-cache"
+        shift
+        ;;
     -t | --tag)
         TAG="$2"
         shift # past argument
@@ -20,11 +25,31 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-for FILE in ${OS}/*.Dockerfile; do
+for FILE in $OS/*.Dockerfile; do
     FILE="$(basename -- $FILE)"
-    if [ ! -z $PUSH ]; then
-       docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${DOCKER_REGISTRY}
+
+    # Remove any previous manifest
+    echo "> Attempting to remove any previous manifest for $TAG:${FILE%.*}"
+    if podman manifest rm $TAG:${FILE%.*}; then
+        echo "> Removed old manifest for $TAG:${FILE%.*}"
     fi
-    echo "docker buildx build --pull ${PUSH} --platform $(cat ${OS}/${FILE%.*}.cfg) -t ${TAG}:${FILE%.*} -f ${OS}/${FILE} ."
-    docker buildx build --pull ${PUSH} --platform $(cat ${OS}/${FILE%.*}.cfg) -t ${TAG}:${FILE%.*} -f ${OS}/${FILE} .
+
+    # Go through each platform and build the image for it, adding to the common manifest tag
+    IFS=','
+    for PLATFORM in $(cat $OS/${FILE%.*}.cfg); do
+        echo "> Running: podman build --pull --layers $NO_CACHE --platform $PLATFORM --file $OS/$FILE --manifest $TAG:${FILE%.*} --tag $TAG:${FILE%.*}-$(cut -d '/' -f2 <<<$PLATFORM) ."
+        podman build --pull --layers $NO_CACHE --platform $PLATFORM --file $OS/$FILE --manifest $TAG:${FILE%.*} --tag $TAG:${FILE%.*}-$(cut -d '/' -f2 <<<$PLATFORM) .
+    done
+
+    # If selected, login and push the manifest tag and associated images
+    if [ ! -z $PUSH ]; then
+        podman login -u $DOCKER_USER -p $DOCKER_PASSWORD docker.io
+        # Using the v2s2 format to 
+        echo "> Running: podman manifest push --all --format v2s2 ${TAG}:${FILE%.*} docker://$TAG:${FILE%.*}"
+        podman manifest push --all -f v2s2 $TAG:${FILE%.*} docker://$TAG:${FILE%.*}
+    fi
+
+    # Cleanup any manifest
+    echo "> Remove image $TAG:${FILE%.*}"
+    podman manifest rm $TAG:${FILE%.*}
 done
