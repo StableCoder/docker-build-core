@@ -1,4 +1,4 @@
-FROM debian:10
+FROM docker.io/debian:10
 
 RUN apt-get update \
     && apt-get upgrade -y \

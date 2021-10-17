@@ -1,4 +1,4 @@
-FROM fedora:32
+FROM docker.io/fedora:32
 
 RUN dnf update -y --refresh && \
     dnf install -y \

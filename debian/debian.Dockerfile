@@ -1,4 +1,4 @@
-FROM debian:latest
+FROM docker.io/debian:latest
 
 RUN apt-get update \
     && apt-get upgrade -y \

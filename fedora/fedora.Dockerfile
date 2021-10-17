@@ -1,4 +1,4 @@
-FROM fedora:latest
+FROM docker.io/fedora:latest
 
 RUN dnf update -y --refresh && \
     dnf install -y \

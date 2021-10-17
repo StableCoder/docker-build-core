@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM docker.io/ubuntu:20.04
 
 # Set for tzdata to noninteractive mode
 RUN ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime

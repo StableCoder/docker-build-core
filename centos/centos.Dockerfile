@@ -1,4 +1,4 @@
-FROM centos:latest
+FROM docker.io/centos:latest
 
 RUN yum update -y \
     && yum install -y epel-release \

@@ -1,4 +1,4 @@
-FROM opensuse/leap:latest
+FROM docker.io/opensuse/leap:latest
 
 RUN zypper update -y \
     && zypper install -y \
