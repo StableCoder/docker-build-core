@@ -1,11 +1,6 @@
 FROM docker.io/archlinux:latest
 
-# Updates
 RUN pacman -Syu --noconfirm && \
-    pacman -Scc --noconfirm
-
-# Base Compilers
-RUN pacman -Sy && \
     pacman -S --noconfirm \
     # Compilers
     gcc clang llvm python \
