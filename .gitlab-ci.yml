@@ -3,7 +3,6 @@
 # DOCKER_PASSWORD - The password for logging into the Docker registry
 
 # Optional Environment Variables
-# DOCKER_REGISTRY - The registry the images will be pushed to, must end with '/'
 # CORE_NAME - The main name of the image, to override the original name.
 
 stages:
@@ -11,7 +10,6 @@ stages:
   - Upload Images
 
 variables:
-  DOCKER_REGISTRY: ''
   CORE_NAME: 'stabletec/build-core'
 
 #############################
@@ -117,9 +115,7 @@ Windows Build(no cache):
   only:
     - main
   script:
-    - ./linux-build.sh --tag ${DOCKER_REGISTRY}${CORE_NAME} --push
-  after_script:
-    - docker logout ${DOCKER_REGISTRY}
+    - ./linux-build.sh --tag ${CORE_NAME} --push
 
 Arch/SteamOS Upload:
   tags:
@@ -190,11 +186,11 @@ Windows Upload:
     - docker-builder-windows
     - amd64
   before_script:
-    - docker login -u $env:DOCKER_USER -p "$env:DOCKER_PASSWORD" $env:DOCKER_REGISTRY
+    - docker login -u $env:DOCKER_USER -p "$env:DOCKER_PASSWORD" 
   script:
-    - cd windows; .\image_builder.ps1 -push -imagename ${env:DOCKER_REGISTRY}${env:CORE_NAME} -test
+    - cd windows; .\image_builder.ps1 -push -imagename ${env:CORE_NAME} -test
   after_script:
-    - docker logout $env:DOCKER_REGISTRY
+    - docker logout
 
 Windows Upload(no cache):
   stage: Upload Images
@@ -207,8 +203,8 @@ Windows Upload(no cache):
     - docker-builder-windows
     - amd64
   before_script:
-    - docker login -u $env:DOCKER_USER -p "$env:DOCKER_PASSWORD" $env:DOCKER_REGISTRY
+    - docker login -u $env:DOCKER_USER -p "$env:DOCKER_PASSWORD"
   script:
-    - cd windows; .\image_builder.ps1 -push -imagename ${env:DOCKER_REGISTRY}${env:CORE_NAME} -test -n
+    - cd windows; .\image_builder.ps1 -push -imagename ${env:CORE_NAME} -test -n
   after_script:
-    - docker logout $env:DOCKER_REGISTRY
+    - docker logout
