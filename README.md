@@ -32,7 +32,7 @@ These images are used to target platforms/distributions, not specific tools or c
 | Ubtuntu        | X     | X     | X       |         | X       |
 | Windows        | X     |       |         |         |         |
 
-Images *without* an OS_VERSION, ex. `debian` or `centos`, are based off the 'latest' tag of the OS, which often means it also shares the same image layers as the OS_VERSION's as well. Ex. `debian` uses the same layers as `debian-10` and `centos` shares the same layers as `centos-8`.
+Images *without* an OS_VERSION, ex. `debian` or `centos`, are based off the 'latest' tag of the OS, which often means it also shares the same image layers as the OS_VERSION's as well. Ex. `debian` uses the same layers as `debian-11` and `centos` shares the same layers as `centos-8`.
 
 ## Tooling Available
 
