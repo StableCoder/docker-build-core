@@ -43,6 +43,11 @@ CentOS Build:
     OS: centos
   <<: *build_template
 
+Rocky Build:
+  variables:
+    OS: rocky
+  <<: *build_template
+
 Debian Build:
   variables:
     OS: debian
@@ -114,6 +119,11 @@ Fedora Upload:
 CentOS Upload:
   variables:
     OS: centos
+  <<: *upload_template
+
+Rocky Upload:
+  variables:
+    OS: rocky
   <<: *upload_template
 
 Debian Upload:
