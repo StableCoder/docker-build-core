@@ -14,6 +14,7 @@ These images are used to target platforms/distributions, not specific tools or c
 - [`arch` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/arch/arch.Dockerfile)
 - [`centos-7` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/centos/centos-7.Dockerfile)
 - [`centos`, `centos-8` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/centos/centos.Dockerfile)
+- [`rocky`, `rocky-8` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/rocky/rocky.Dockerfile)
 - [`debian`, `debian-9`, `debian-10`, `debian-11` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/debian/debian.Dockerfile)
 - [`fedora`, `fedora34`, `fedora35` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/fedora/fedora.Dockerfile)
 - [`opensuse`, `opensuse-15` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/opensuse/opensuse.Dockerfile)
@@ -26,13 +27,14 @@ These images are used to target platforms/distributions, not specific tools or c
 | -------------- | ----- | ----- | ------- | ------- | ------- |
 | Arch (SteamOS) | X     |       |         |         |         |
 | Centos         | X     | X     |         |         |         |
+| Rocky          | X     | X     |         |         |         |
 | Debian         | X     | X     | X       |         |         |
 | Fedora         | X     | X     |         |         |         |
 | openSUSE       | X     |       |         |         |         |
 | Ubtuntu        | X     | X     | X       |         | X       |
 | Windows        | X     |       |         |         |         |
 
-Images *without* an OS_VERSION, ex. `debian` or `centos`, are based off the 'latest' tag of the OS, which often means it also shares the same image layers as the OS_VERSION's as well. Ex. `debian` uses the same layers as `debian-11` and `centos` shares the same layers as `centos-8`.
+Images *without* an OS_VERSION, ex. `debian` or `centos`, are based off the 'latest' tag of the OS, which often means it also shares the same image layers as the OS_VERSION's as well. Ex. `debian` uses the same layers as `debian-11` and `rocky` shares the same layers as `rocky-8`.
 
 ## Tooling Available
 
@@ -70,6 +72,9 @@ The Windows images default to the MSVC compiler. To use the clang/clang-cl compi
 ```powershell
 # Starts the Windows container, setting up with the clang-cl compiler
 docker run -e CC=clang-cl -e CXX=clang-cl stabletec/build-core:windows
+
+# Starts the Windows container, setting up with the clang compiler
+docker run -e CC=clang -e CXX=clang stabletec/build-core:windows
 ```
 
 ## Analysis Tools
