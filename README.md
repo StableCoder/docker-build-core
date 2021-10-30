@@ -30,7 +30,7 @@ These images are used to target platforms/distributions, not specific tools or c
 | Rocky          | X     | X     |         |         |         |
 | Debian         | X     | X     | X       | X       |         |
 | Fedora         | X     | X     |         | X       |         |
-| openSUSE       | X     |       |         | X       |         |
+| openSUSE       | X     | X     | X       | X       |         |
 | Ubtuntu        | X     | X     | X       | X       | X       |
 | Windows        | X     |       |         |         |         |
 
