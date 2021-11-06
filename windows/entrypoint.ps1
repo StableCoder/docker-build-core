@@ -1,5 +1,9 @@
+# Get VS name and path
+$VS_Name=vswhere -latest -products * -property displayName
+$VS_Path=vswhere -latest -products * -property installationPath
+
 # Setup for MSVC
-pushd "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\"
+pushd "$VS_Path\VC\Auxiliary\Build\"
 
 cmd /c "vcvars64.bat&set" |
 foreach {
@@ -9,7 +13,7 @@ foreach {
 }
 
 popd
-Write-Host "`nVisual Studio 2019 Command Prompt variables set." -ForegroundColor Yellow
+Write-Host "`n$VS_Name Command Prompt variables set." -ForegroundColor Yellow
 
 $env:INCLUDE = $env:INCLUDE + ";" + [System.Environment]::GetEnvironmentVariable("CUSTOM_INCLUDE","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("CUSTOM_INCLUDE","User")
 $env:LIB = $env:LIB + ";" + [System.Environment]::GetEnvironmentVariable("CUSTOM_LIB","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("CUSTOM_LIB","User")
