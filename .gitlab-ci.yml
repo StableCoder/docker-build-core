@@ -152,12 +152,8 @@ Windows Upload:
   tags:
     - docker-builder-windows
     - amd64
-  before_script:
-    - docker login -u $env:DOCKER_USER -p "$env:DOCKER_PASSWORD" 
   script:
     - cd windows; .\image_builder.ps1 -push -imagename ${env:CORE_NAME} -test
-  after_script:
-    - docker logout
 
 Windows Upload(no cache):
   stage: Upload Images
@@ -169,9 +165,5 @@ Windows Upload(no cache):
   tags:
     - docker-builder-windows
     - amd64
-  before_script:
-    - docker login -u $env:DOCKER_USER -p "$env:DOCKER_PASSWORD"
   script:
     - cd windows; .\image_builder.ps1 -push -imagename ${env:CORE_NAME} -test -n
-  after_script:
-    - docker logout

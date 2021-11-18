@@ -41,9 +41,8 @@ for FILE in $OS/*.Dockerfile; do
         podman build --pull --layers $NO_CACHE --platform $PLATFORM --file $OS/$FILE --manifest localhost/$TAG:${FILE%.*} --tag localhost/$TAG:${FILE%.*}-$(cut -d '/' -f2 <<<$PLATFORM) .
     done
 
-    # If selected, login and push the manifest tag and associated images
+    # If selected, push the manifest tag and associated images
     if [ ! -z $PUSH ]; then
-        podman login -u $DOCKER_USER -p $DOCKER_PASSWORD docker.io
         # Using the v2s2 format to 
         echo "> Running: podman manifest push --all --format v2s2 localhost/${TAG}:${FILE%.*} docker://$TAG:${FILE%.*}"
         podman manifest push --all -f v2s2 localhost/$TAG:${FILE%.*} docker://$TAG:${FILE%.*}
