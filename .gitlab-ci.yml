@@ -26,7 +26,7 @@ variables:
   except:
     - main
   script:
-    - ./linux-build.sh $NO_CACHE --tag test
+    - ./linux-build.sh $NO_CACHE --tag test --rm
 
 Arch/SteamOS Build:
   variables:

@@ -4,6 +4,7 @@ set -e
 NO_CACHE=
 TAG=
 PUSH=
+RM=
 
 while [[ $# -gt 0 ]]; do
     key="$1"
@@ -21,6 +22,10 @@ while [[ $# -gt 0 ]]; do
     -p | --push)
         PUSH="--push"
         shift # past argument
+        ;;
+    -r | --rm)
+        RM=1
+        shift
         ;;
     esac
 done
@@ -52,3 +57,14 @@ for FILE in $OS/*.Dockerfile; do
     echo "> Remove image localhost/$TAG:${FILE%.*}"
     podman manifest rm localhost/$TAG:${FILE%.*}
 done
+
+
+if [ ! -z $RM ]; then
+    for FILE in $OS/*.Dockerfile; do
+        FILE="$(basename -- $FILE)"
+        IFS=','
+        for PLATFORM in $(cat $OS/${FILE%.*}.cfg); do
+           podman rmi localhost/$TAG:${FILE%.*}-$(cut -d '/' -f2 <<<$PLATFORM)
+        done
+    done
+fi
