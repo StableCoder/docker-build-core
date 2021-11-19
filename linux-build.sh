@@ -64,7 +64,7 @@ if [ ! -z $RM ]; then
         FILE="$(basename -- $FILE)"
         IFS=','
         for PLATFORM in $(cat $OS/${FILE%.*}.cfg); do
-           podman rmi localhost/$TAG:${FILE%.*}-$(cut -d '/' -f2 <<<$PLATFORM)
+           podman untag localhost/$TAG:${FILE%.*}-$(cut -d '/' -f2 <<<$PLATFORM)
         done
     done
 fi
