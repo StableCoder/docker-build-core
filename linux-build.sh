@@ -36,7 +36,7 @@ for FILE in $OS/*.Dockerfile; do
     # Remove any previous manifest
     echo "> Attempting to remove any previous manifest for localhost/$TAG:${FILE%.*}"
     if podman manifest rm localhost/$TAG:${FILE%.*}; then
-        echo "> Removed old manifest for localhost/$TAG:${FILE%.*}"
+        echo "> Removed manifest: localhost/$TAG:${FILE%.*}"
     fi
 
     # Go through each platform and build the image for it, adding to the common manifest tag
@@ -54,7 +54,7 @@ for FILE in $OS/*.Dockerfile; do
     fi
 
     # Cleanup any manifest
-    echo "> Remove image localhost/$TAG:${FILE%.*}"
+    echo "> Remove manifest: localhost/$TAG:${FILE%.*}"
     podman manifest rm localhost/$TAG:${FILE%.*}
 done
 
@@ -64,7 +64,9 @@ if [ ! -z $RM ]; then
         FILE="$(basename -- $FILE)"
         IFS=','
         for PLATFORM in $(cat $OS/${FILE%.*}.cfg); do
-           podman untag localhost/$TAG:${FILE%.*}-$(cut -d '/' -f2 <<<$PLATFORM)
+           if podman untag localhost/$TAG:${FILE%.*}-$(cut -d '/' -f2 <<<$PLATFORM); then
+                echo "> Untagged image: localhost/$TAG:${FILE%.*}-$(cut -d '/' -f2 <<<$PLATFORM)"
+           fi
         done
     done
 fi
