@@ -15,7 +15,7 @@ These images are used to target platforms/distributions, not specific tools or c
 - [`centos-7` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/centos/centos-7.Dockerfile)
 - [`centos`, `centos-8` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/centos/centos.Dockerfile)
 - [`rocky`, `rocky-8` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/rocky/rocky.Dockerfile)
-- [`debian`, `debian-9`, `debian-10`, `debian-11` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/debian/debian.Dockerfile)
+- [`debian`, `debian-10`, `debian-11` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/debian/debian.Dockerfile)
 - [`fedora`, `fedora34`, `fedora35` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/fedora/fedora.Dockerfile)
 - [`opensuse`, `opensuse-15` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/opensuse/opensuse.Dockerfile)
 - [`ubuntu`, `ubuntu-18.04`, `ubuntu-20.04`, `ubuntu-22.04` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/ubuntu/ubuntu.Dockerfile)
