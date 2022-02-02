@@ -13,7 +13,6 @@ These images are used to target platforms/distributions, not specific tools or c
 
 - [`arch` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/arch/arch.Dockerfile)
 - [`centos-7` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/centos/centos-7.Dockerfile)
-- [`centos`, `centos-8` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/centos/centos.Dockerfile)
 - [`rocky`, `rocky-8` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/rocky/rocky.Dockerfile)
 - [`debian`, `debian-10`, `debian-11` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/debian/debian.Dockerfile)
 - [`fedora`, `fedora34`, `fedora35` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/fedora/fedora.Dockerfile)
