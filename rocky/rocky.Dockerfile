@@ -1,9 +1,12 @@
 FROM docker.io/rockylinux:latest
 
-RUN yum update -y \
-    && yum install -y epel-release \
-    && curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.rpm.sh | bash \
-    && yum install -y \
+RUN dnf update -y \
+    && dnf install -y epel-release dnf-plugins-core \
+    && dnf update -y \
+    && /usr/bin/crb enable \
+    && dnf clean all
+RUN dnf update -y \
+    && dnf install -y \
     # Common
     wget \
     python3-pip \
@@ -19,12 +22,13 @@ RUN yum update -y \
     readline-devel \
     ncurses-devel \
     cmake \
+    ninja-build \
     # Compilers
     gcc \
     gcc-c++ \
     clang \
     llvm-libs \
-    && yum clean all
+    && dnf clean all
 
 # Ninja
 ENV NINJA_VER=1.10.2
