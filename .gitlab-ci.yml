@@ -28,6 +28,11 @@ variables:
   script:
     - ./linux-build.sh $NO_CACHE --tag test --rm
 
+Alma Build:
+  variables:
+    OS: alma
+  <<: *build_template
+
 Arch/SteamOS Build:
   variables:
     OS: arch
@@ -105,6 +110,11 @@ Windows Build(no cache):
     - main
   script:
     - ./linux-build.sh $NO_CACHE --tag ${CORE_NAME} --push
+
+Alma Upload:
+  variables:
+    OS: arch
+  <<: *upload_template
 
 Arch/SteamOS Upload:
   variables:

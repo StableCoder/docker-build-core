@@ -11,6 +11,7 @@ These images are used to target platforms/distributions, not specific tools or c
 
 ## Supported tags and respective `Dockerfile` links
 
+- [`alma` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/alma/alma.Dockerfile)
 - [`arch` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/arch/arch.Dockerfile)
 - [`centos-7` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/centos/centos-7.Dockerfile)
 - [`rocky`, `rocky-8` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/rocky/rocky.Dockerfile)
@@ -24,6 +25,7 @@ These images are used to target platforms/distributions, not specific tools or c
 
 | OS             | amd64 | arm64 | arm32v7 | ppc64le | riscv64 |
 | -------------- | ----- | ----- | ------- | ------- | ------- |
+| Alma           | X     | X     |         |         |         |
 | Arch (SteamOS) | X     |       |         |         |         |
 | Centos         | X     | X     |         |         |         |
 | Rocky          | X     | X     |         |         |         |
