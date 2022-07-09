@@ -25,7 +25,7 @@ These images are used to target platforms/distributions, not specific tools or c
 
 | OS             | amd64 | arm64 | arm32v7 | ppc64le | riscv64 |
 | -------------- | ----- | ----- | ------- | ------- | ------- |
-| Alma           | X     | X     |         |         |         |
+| Alma           | X     | X     |         | X       |         |
 | Arch (SteamOS) | X     |       |         |         |         |
 | Centos         | X     | X     |         |         |         |
 | Rocky          | X     | X     |         |         |         |
