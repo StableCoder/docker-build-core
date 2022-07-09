@@ -1,4 +1,4 @@
-FROM docker.io/rockylinux/rockylinux:latest
+FROM docker.io/rockylinux:latest
 
 RUN yum update -y \
     && yum install -y epel-release \
