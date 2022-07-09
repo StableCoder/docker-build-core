@@ -34,16 +34,24 @@ for FILE in $OS/*.Dockerfile; do
     FILE="$(basename -- $FILE)"
 
     # Remove any previous manifest
-    echo "> Attempting to remove any previous manifest for localhost/$TAG:${FILE%.*}"
-    if podman manifest rm localhost/$TAG:${FILE%.*}; then
-        echo "> Removed manifest: localhost/$TAG:${FILE%.*}"
+    if podman manifest exists localhost/$TAG:${FILE%.*}; then
+        echo "> Removing manifest: localhost/$TAG:${FILE%.*}"
+        podman manifest rm localhost/$TAG:${FILE%.*}
     fi
 
     # Go through each platform and build the image for it, adding to the common manifest tag
     IFS=','
     for PLATFORM in $(cat $OS/${FILE%.*}.cfg); do
-        echo "> Running: podman build --pull --layers $NO_CACHE --platform $PLATFORM --file $OS/$FILE --manifest localhost/$TAG:${FILE%.*} --tag localhost/$TAG:${FILE%.*}-$(cut -d '/' -f2 <<<$PLATFORM) ."
-        podman build --pull --layers $NO_CACHE --platform $PLATFORM --file $OS/$FILE --manifest localhost/$TAG:${FILE%.*} --tag localhost/$TAG:${FILE%.*}-$(cut -d '/' -f2 <<<$PLATFORM) .
+        if [[ "${FILE%.*}" == *"-"* ]]; then
+            echo "> Running: podman build --pull --layers $NO_CACHE --platform $PLATFORM --file $OS/$FILE --manifest localhost/$TAG:${FILE%.*} --tag localhost/$TAG:${FILE%.*}-$(cut -d '/' -f2 <<<$PLATFORM) ."
+            podman build --pull --layers $NO_CACHE --platform $PLATFORM --file $OS/$FILE --manifest localhost/$TAG:${FILE%.*} --tag localhost/$TAG:${FILE%.*}-$(cut -d '/' -f2 <<<$PLATFORM) .
+        else
+            if podman image exists localhost/$TAG:${FILE%.*}-$(cut -d '/' -f2 <<<$PLATFORM); then
+                podman rmi localhost/$TAG:${FILE%.*}-$(cut -d '/' -f2 <<<$PLATFORM)
+            fi
+            echo "> Running: podman build --pull --layers --platform $PLATFORM --file $OS/$FILE --manifest localhost/$TAG:${FILE%.*} --tag localhost/$TAG:${FILE%.*}-$(cut -d '/' -f2 <<<$PLATFORM) ."
+            podman build --pull --layers --platform $PLATFORM --file $OS/$FILE --manifest localhost/$TAG:${FILE%.*} --tag localhost/$TAG:${FILE%.*}-$(cut -d '/' -f2 <<<$PLATFORM) .
+        fi
     done
 
     # If selected, push the manifest tag and associated images
@@ -54,7 +62,7 @@ for FILE in $OS/*.Dockerfile; do
     fi
 
     # Cleanup any manifest
-    echo "> Remove manifest: localhost/$TAG:${FILE%.*}"
+    echo "> Removing manifest: localhost/$TAG:${FILE%.*}"
     podman manifest rm localhost/$TAG:${FILE%.*}
 done
 
