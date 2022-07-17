@@ -1,4 +1,4 @@
-FROM docker.io/rockylinux:latest
+FROM docker.io/rockylinux:9
 
 RUN dnf update -y \
     && dnf install -y epel-release dnf-plugins-core \
@@ -29,17 +29,6 @@ RUN dnf update -y \
     clang \
     llvm-libs \
     && dnf clean all
-
-# Ninja
-ENV NINJA_VER=1.10.2
-RUN wget -q https://github.com/ninja-build/ninja/archive/refs/tags/v${NINJA_VER}.tar.gz \
-    && tar -zxf v${NINJA_VER}.tar.gz \
-    && cd ninja-${NINJA_VER} \
-    && cmake -Bbuild-cmake -H. \
-    && cmake --build build-cmake \
-    && cmake --install build-cmake \
-    && cd .. \
-    && rm -rf ninja-${NINJA_VER} v${NINJA_VER}.tar.gz
 
 # Entrypoint
 COPY entrypoint.sh /entrypoint.sh

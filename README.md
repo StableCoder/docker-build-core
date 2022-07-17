@@ -11,15 +11,15 @@ These images are used to target platforms/distributions, not specific tools or c
 
 ## Supported tags and respective `Dockerfile` links
 
-- [`alma` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/alma/alma.Dockerfile)
-- [`arch` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/arch/arch.Dockerfile)
-- [`centos-7` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/centos/centos-7.Dockerfile)
-- [`rocky`, `rocky-8` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/rocky/rocky.Dockerfile)
-- [`debian`, `debian-10`, `debian-11` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/debian/debian.Dockerfile)
-- [`fedora`, `fedora34`, `fedora35` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/fedora/fedora.Dockerfile)
-- [`opensuse`, `opensuse-15` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/opensuse/opensuse.Dockerfile)
-- [`ubuntu`, `ubuntu-18.04`, `ubuntu-20.04`, `ubuntu-22.04` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/ubuntu/ubuntu.Dockerfile)
-- [`windows` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/windows/Dockerfile)
+- [`alma` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/alma/)
+- [`arch` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/arch/)
+- [`centos-7` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/centos/)
+- [`rocky-8`, `rocky-9` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/rocky/)
+- [`debian`, `debian-10`, `debian-11` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/debian/)
+- [`fedora`, `fedora34`, `fedora35` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/fedora/)
+- [`opensuse`, `opensuse-15` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/opensuse/)
+- [`ubuntu`, `ubuntu-18.04`, `ubuntu-20.04`, `ubuntu-22.04` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/ubuntu/)
+- [`windows` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/windows/)
 
 ## Architecture Support
 
