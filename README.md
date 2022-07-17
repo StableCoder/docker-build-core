@@ -23,17 +23,17 @@ These images are used to target platforms/distributions, not specific tools or c
 
 ## Architecture Support
 
-| OS             | amd64 | arm64 | arm32v7 | ppc64le | riscv64 |
-| -------------- | ----- | ----- | ------- | ------- | ------- |
-| Alma           | X     | X     |         | X       |         |
-| Arch (SteamOS) | X     |       |         |         |         |
-| Centos         | X     | X     |         |         |         |
-| Rocky          | X     | X     |         |         |         |
-| Debian         | X     | X     | X       | X       |         |
-| Fedora         | X     | X     |         | X       |         |
-| openSUSE       | X     | X     | X       | X       |         |
-| Ubtuntu        | X     | X     | X       | X       | X       |
-| Windows        | X     |       |         |         |         |
+| OS             | amd64 | arm64 | ppc64le | riscv64 |
+| -------------- | ----- | ----- | ------- | ------- |
+| Alma           | X     | X     | X       |         |
+| Arch (SteamOS) | X     |       |         |         |
+| Centos         | X     | X     |         |         |
+| Rocky          | X     | X     |         |         |
+| Debian         | X     | X     | X       |         |
+| Fedora         | X     | X     | X       |         |
+| openSUSE       | X     | X     | X       |         |
+| Ubtuntu        | X     | X     | X       | X       |
+| Windows        | X     |       |         |         |
 
 Images *without* an OS_VERSION, ex. `debian` or `centos`, are based off the 'latest' tag of the OS, which often means it also shares the same image layers as the OS_VERSION's as well. Ex. `debian` uses the same layers as `debian-11` and `rocky` shares the same layers as `rocky-8`.
 
