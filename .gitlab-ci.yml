@@ -108,6 +108,7 @@ Windows Build(no cache):
     - qemu
   only:
     - main
+  retry: 3
   script:
     - ./linux-build.sh $NO_CACHE --tag ${CORE_NAME} --push
 
@@ -162,6 +163,7 @@ Windows Upload:
   tags:
     - docker-builder-windows
     - amd64
+  retry: 3
   script:
     - cd windows; .\image_builder.ps1 -push -imagename ${env:CORE_NAME} -test
 
@@ -175,5 +177,6 @@ Windows Upload(no cache):
   tags:
     - docker-builder-windows
     - amd64
+  retry: 3
   script:
     - cd windows; .\image_builder.ps1 -push -imagename ${env:CORE_NAME} -test -n
