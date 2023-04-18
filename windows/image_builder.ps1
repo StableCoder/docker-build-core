@@ -1,47 +1,48 @@
 Param(
-    [string] $imagename, # Core name of the image
-    [string] $suffix, # suffix for the tag
+    [string] $imagename="stabletec/build-core", # Core name of the image
     [switch] $n, # --no-cache mode
     [switch] $test, # Test the image
     [switch] $push, # Pushes the image (must be logged in previously)
     [switch] $rm # Removes/untags image after (for testing purposes)
 )
 
+if($n) {
+    $NO_CACHE="--no-cache"
+} else {
+    $NO_CACHE=""
+}
+
 try {
-    # Blank
-    Write-Host "`n >> Base Image" -ForegroundColor Yellow
+    # Determine variants
+    $VARIANTS=$(ls *.Dockerfile)
 
-    if($n) {
-        Write-Host "docker build --pull --no-cache -t ${imagename}:windows${suffix} ." -ForegroundColor Yellow
-        docker build --pull --no-cache -t ${imagename}:windows${suffix} .
-    } else {
-        Write-Host "docker build --pull -t ${imagename}:windows${suffix} ." -ForegroundColor Yellow
-        docker build --pull -t ${imagename}:windows${suffix} .
-    }
+    foreach($VARIANT in $VARIANTS) {
+        $TAG=(Get-Item $VARIANT).BaseName
+        $FILE="$TAG.Dockerfile"
 
-    if($test) {
-        Write-Host "docker run --rm ${imagename}:windows${suffix}" -ForegroundColor Yellow
-        docker run --rm ${imagename}:windows${suffix}
-    }
+        Write-Host ">> Working on ${imagename}:${TAG} <<"
 
-    if($push) {
-        Write-Host "docker push ${imagename}:windows${suffix}" -ForegroundColor Yellow
-        docker push ${imagename}:windows${suffix}
-    }
+        Write-Host "docker build --pull $NO_CACHE -t ${imagename}:${TAG} -f ${FILE} ." -ForegroundColor Yellow
+        docker build --pull $NO_CACHE -t ${imagename}:${TAG} -f ${FILE} .
 
-    if($rm) {
-        Write-Host "docker rmi ${imagename}:windows${suffix}" -ForegroundColor Yellow
-        docker rmi ${imagename}:windows${suffix}
+        if($test) {
+            Write-Host "docker run --rm ${imagename}:${TAG}" -ForegroundColor Yellow
+            docker run --rm ${imagename}:${TAG}
+        }
+
+        if($push) {
+            Write-Host "docker push ${imagename}:${TAG}" -ForegroundColor Yellow
+            docker push ${imagename}:${TAG}
+        }
+
+        if($rm) {
+            Write-Host "docker rmi ${imagename}:${TAG}" -ForegroundColor Yellow
+            docker rmi ${imagename}:${TAG}
+        }
     }
 }
 catch
 {
     Write-Host " >> Script Failed" -ForegroundColor Red
-
-    # Reset
-    $file = '.\Dockerfile'
-    $regex = 'ENTRYPOINT\s.*'
-    (Get-Content $file) -replace $regex, 'ENTRYPOINT C:\ps-scripts\entrypoint.ps1 version;' | Set-Content $file
-    
     exit 1
 }
