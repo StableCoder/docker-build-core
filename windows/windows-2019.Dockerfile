@@ -17,7 +17,7 @@ RUN "[Environment]::SetEnvironmentVariable(\"Path\", [System.Environment]::GetEn
 RUN "& { iwr https://aka.ms/vs/16/release/vs_buildtools.exe -OutFile vs_installer.exe }"; \
     .\vs_installer.exe --quiet --wait --norestart --nocache \
         --add Microsoft.VisualStudio.Workload.VCTools \
-        --add Microsoft.VisualStudio.Component.Windows10SDK.20348 \
+        --add Microsoft.VisualStudio.Component.Windows10SDK.19041 \
         --add Microsoft.VisualStudio.Component.VC.CoreBuildTools \
         --add Microsoft.VisualStudio.Component.VC.Redist.14.Latest \
         --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 | Out-Null; \
