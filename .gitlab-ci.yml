@@ -1,16 +1,12 @@
-# Required Environment Variables (For Upload):
-# DOCKER_USER - The username for logging into the Docker registry
-# DOCKER_PASSWORD - The password for logging into the Docker registry
-
 # Optional Environment Variables
-# CORE_NAME - The main name of the image, to override the original name.
+# IMAGE_NAME - The main name of the image, to override the original name.
 
 stages:
   - Build Images
   - Upload Images
 
 variables:
-  CORE_NAME: 'stabletec/build-core'
+  IMAGE_NAME: 'stabletec/build-core'
 
 #############################
 # Image Build/Testing Stage #
@@ -79,7 +75,7 @@ Windows Build:
     - docker-builder-windows
     - amd64
   script:
-    - cd windows; .\image_builder.ps1 -imagename test -test
+    - cd windows; .\image_builder.ps1 -ImageName test -Test
 
 Windows Build(no cache):
   stage: Build Images
@@ -93,7 +89,7 @@ Windows Build(no cache):
     - docker-builder-windows
     - amd64
   script:
-    - cd windows; .\image_builder.ps1 -imagename test -test -n
+    - cd windows; .\image_builder.ps1 -ImageName test -Test -NoCache
 
 #######################
 # Image Uploads Stage #
@@ -110,7 +106,7 @@ Windows Build(no cache):
     - main
   retry: 2
   script:
-    - ./linux-build.sh $NO_CACHE --tag ${CORE_NAME} --push
+    - ./linux-build.sh $NO_CACHE --tag ${IMAGE_NAME} --push
 
 Alma Upload:
   variables:
@@ -165,7 +161,7 @@ Windows Upload:
     - amd64
   retry: 2
   script:
-    - cd windows; .\image_builder.ps1 -push -imagename ${env:CORE_NAME} -test
+    - cd windows; .\image_builder.ps1 -ImageName ${env:IMAGE_NAME} -Test -Push
 
 Windows Upload(no cache):
   stage: Upload Images
@@ -179,4 +175,4 @@ Windows Upload(no cache):
     - amd64
   retry: 2
   script:
-    - cd windows; .\image_builder.ps1 -push -imagename ${env:CORE_NAME} -test -n
+    - cd windows; .\image_builder.ps1 -ImageName ${env:IMAGE_NAME} -Test -Push -NoCache

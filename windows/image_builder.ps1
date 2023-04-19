@@ -1,12 +1,12 @@
 Param(
-    [string] $imagename="stabletec/build-core", # Core name of the image
-    [switch] $n, # --no-cache mode
-    [switch] $test, # Test the image
-    [switch] $push, # Pushes the image (must be logged in previously)
-    [switch] $rm # Removes/untags image after (for testing purposes)
+    [string] $ImageName, # Core name of the image
+    [switch] $NoCache, # --no-cache mode
+    [switch] $Test, # Test the image
+    [switch] $Push, # Pushes the image (must be logged in previously)
+    [switch] $Remove # Removes/untags image after (for testing purposes)
 )
 
-if($n) {
+if($NoCache) {
     $NO_CACHE="--no-cache"
 } else {
     $NO_CACHE=""
@@ -20,24 +20,24 @@ try {
         $TAG=(Get-Item $VARIANT).BaseName
         $FILE="$TAG.Dockerfile"
 
-        Write-Host ">> Working on ${imagename}:${TAG} <<"
+        Write-Host ">> Working on ${ImageName}:${TAG} <<"
 
-        Write-Host "docker build --pull $NO_CACHE -t ${imagename}:${TAG} -f ${FILE} ." -ForegroundColor Yellow
-        docker build --pull $NO_CACHE -t ${imagename}:${TAG} -f ${FILE} .
+        Write-Host "docker build --pull $NO_CACHE -t ${ImageName}:${TAG} -f ${FILE} ." -ForegroundColor Yellow
+        docker build --pull $NO_CACHE -t ${ImageName}:${TAG} -f ${FILE} .
 
-        if($test) {
-            Write-Host "docker run --rm ${imagename}:${TAG}" -ForegroundColor Yellow
-            docker run --rm ${imagename}:${TAG}
+        if($Test) {
+            Write-Host "docker run --rm ${ImageName}:${TAG}" -ForegroundColor Yellow
+            docker run --rm ${ImageName}:${TAG}
         }
 
-        if($push) {
-            Write-Host "docker push ${imagename}:${TAG}" -ForegroundColor Yellow
-            docker push ${imagename}:${TAG}
+        if($Push) {
+            Write-Host "docker push ${ImageName}:${TAG}" -ForegroundColor Yellow
+            docker push ${ImageName}:${TAG}
         }
 
-        if($rm) {
-            Write-Host "docker rmi ${imagename}:${TAG}" -ForegroundColor Yellow
-            docker rmi ${imagename}:${TAG}
+        if($Remove) {
+            Write-Host "docker rmi ${ImageName}:${TAG}" -ForegroundColor Yellow
+            docker rmi ${ImageName}:${TAG}
         }
     }
 }
