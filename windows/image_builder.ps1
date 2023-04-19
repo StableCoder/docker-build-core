@@ -24,25 +24,29 @@ try {
 
         Write-Host "docker build --pull $NO_CACHE -t ${ImageName}:${TAG} -f ${FILE} ." -ForegroundColor Yellow
         docker build --pull $NO_CACHE -t ${ImageName}:${TAG} -f ${FILE} .
+        if ($LastExitCode -ne 0) { throw }
 
         if($Test) {
             Write-Host "docker run --rm ${ImageName}:${TAG}" -ForegroundColor Yellow
             docker run --rm ${ImageName}:${TAG}
+            if ($LastExitCode -ne 0) { throw }
         }
 
         if($Push) {
             Write-Host "docker push ${ImageName}:${TAG}" -ForegroundColor Yellow
             docker push ${ImageName}:${TAG}
+            if ($LastExitCode -ne 0) { throw }
         }
 
         if($Remove) {
             Write-Host "docker rmi ${ImageName}:${TAG}" -ForegroundColor Yellow
             docker rmi ${ImageName}:${TAG}
+            if ($LastExitCode -ne 0) { throw }
         }
     }
 }
 catch
 {
-    Write-Host " >> Script Failed" -ForegroundColor Red
+    Write-Host " >> Failed <<" -ForegroundColor Red
     exit 1
 }
