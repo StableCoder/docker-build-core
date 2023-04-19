@@ -25,9 +25,3 @@ RUN yum update -y \
     clang \
     llvm-libs \
     && yum clean all
-
-# Entrypoint
-COPY entrypoint.sh /entrypoint.sh
-
-ENTRYPOINT [ "/entrypoint.sh", "--" ]
-CMD [ "bash" ]

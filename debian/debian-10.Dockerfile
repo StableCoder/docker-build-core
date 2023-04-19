@@ -27,9 +27,3 @@ RUN wget -q https://github.com/Kitware/CMake/releases/download/v${CMAKE_VER}/cma
     && make install \
     && cd .. \
     && rm -rf cmake-*
-
-# Entrypoint
-COPY entrypoint.sh /entrypoint.sh
-
-ENTRYPOINT [ "/entrypoint.sh", "--" ]
-CMD [ "bash" ]

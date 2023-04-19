@@ -17,9 +17,3 @@ RUN apt-get update \
     g++ \
     clang \
     && apt-get clean
-
-# Entrypoint
-COPY entrypoint.sh /entrypoint.sh
-
-ENTRYPOINT [ "/entrypoint.sh", "--" ]
-CMD [ "bash" ]

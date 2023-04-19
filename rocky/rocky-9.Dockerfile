@@ -29,9 +29,3 @@ RUN dnf update -y \
     clang \
     llvm-libs \
     && dnf clean all
-
-# Entrypoint
-COPY entrypoint.sh /entrypoint.sh
-
-ENTRYPOINT [ "/entrypoint.sh", "--" ]
-CMD [ "bash" ]

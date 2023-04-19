@@ -25,9 +25,3 @@ RUN dnf update -y --refresh && \
     cppcheck \
     lcov && \
     dnf clean all
-
-# Entrypoint
-COPY entrypoint.sh /entrypoint.sh
-
-ENTRYPOINT [ "/entrypoint.sh", "--" ]
-CMD [ "bash" ]
