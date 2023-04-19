@@ -16,15 +16,15 @@ RUN "[Environment]::SetEnvironmentVariable(\"Path\", [System.Environment]::GetEn
 # Visual Studio Build Tools
 RUN "& { iwr https://aka.ms/vs/17/release/vs_buildtools.exe -OutFile vs_installer.exe }"; \
     .\vs_installer.exe --quiet --wait --norestart --nocache \
-            --add Microsoft.VisualStudio.Workload.VCTools \
-            --add Microsoft.VisualStudio.Component.VC.CoreBuildTools \
-            --add Microsoft.VisualStudio.Component.VC.Redist.14.Latest \
-            --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 \
-            --add Microsoft.VisualStudio.Component.Windows11SDK.22000 | Out-Null; \
+        --add Microsoft.VisualStudio.Workload.VCTools \
+        --add Microsoft.VisualStudio.Component.VC.CoreBuildTools \
+        --add Microsoft.VisualStudio.Component.VC.Redist.14.Latest \
+        --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 \
+        --add Microsoft.VisualStudio.Component.Windows11SDK.22000 | Out-Null; \
     Remove-Item -path .\vs_installer.exe
 
 # Clang/LLVM
-RUN choco install -y llvm
+RUN choco install --no-progress -yes llvm
 
 # Start developer command prompt with any other commands specified.
 COPY entrypoint.ps1 C:\\ps-scripts\\entrypoint.ps1

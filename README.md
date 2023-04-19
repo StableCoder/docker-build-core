@@ -65,9 +65,11 @@ The SDK based images contain two compilers with three options available, and the
 - Subversion
 - Ninja Build
 - CMake
-- MSVC
+- Visual Studio Build Tools (MSVC)
 - Clang/Clang-cl
 - Python 3
+
+The build tools installed matches the year of the Windows image version.
 
 The Windows images default to the MSVC compiler. To use the clang/clang-cl compilers, simply define the CC/CXX environment variables when starting the container, for example:
 ```powershell
