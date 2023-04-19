@@ -28,4 +28,4 @@ RUN choco install --no-progress -yes llvm
 
 # Start developer command prompt with any other commands specified.
 COPY entrypoint.ps1 C:\\ps-scripts\\entrypoint.ps1
-ENTRYPOINT C:\ps-scripts\entrypoint.ps1;
+ENTRYPOINT C:\ps-scripts\entrypoint.ps1 -Quiet;
