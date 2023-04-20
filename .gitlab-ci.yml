@@ -22,7 +22,7 @@ variables:
   except:
     - main
   script:
-    - ./linux-build.sh $NO_CACHE --tag test --rm
+    - ./linux-build.sh $NO_CACHE --tag build-core-test --rm
 
 Alma Build:
   variables:
@@ -75,7 +75,7 @@ Windows Build:
     - docker-builder-windows
     - amd64
   script:
-    - cd windows; .\image_builder.ps1 -ImageName test -Test
+    - cd windows; .\image_builder.ps1 -ImageName build-core-test -Test
 
 Windows Build(no cache):
   stage: Build Images
@@ -89,7 +89,7 @@ Windows Build(no cache):
     - docker-builder-windows
     - amd64
   script:
-    - cd windows; .\image_builder.ps1 -ImageName test -Test -NoCache
+    - cd windows; .\image_builder.ps1 -ImageName build-core-test -Test -NoCache
 
 #######################
 # Image Uploads Stage #
