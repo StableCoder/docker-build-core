@@ -72,7 +72,8 @@ Windows Build:
     variables:
       - $NO_CACHE
   tags:
-    - docker-builder-windows
+    - container-builder
+    - windows
     - amd64
   script:
     - cd windows; .\image_builder.ps1 -ImageName build-core-test -Test
@@ -86,7 +87,8 @@ Windows Build(no cache):
     variables:
       - $NO_CACHE  
   tags:
-    - docker-builder-windows
+    - container-builder
+    - windows
     - amd64
   script:
     - cd windows; .\image_builder.ps1 -ImageName build-core-test -Test -NoCache
@@ -157,7 +159,8 @@ Windows Upload:
     variables:
       - $NO_CACHE
   tags:
-    - docker-builder-windows
+    - container-builder
+    - windows
     - amd64
   retry: 2
   script:
@@ -171,7 +174,8 @@ Windows Upload(no cache):
     variables:
       - $NO_CACHE
   tags:
-    - docker-builder-windows
+    - container-builder
+    - windows
     - amd64
   retry: 2
   script:
