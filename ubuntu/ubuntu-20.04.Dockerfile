@@ -15,6 +15,7 @@ RUN apt update \
     git-lfs \
     cmake \
     cmake-curses-gui \
+    pkgconf \
     subversion \
     # Compilers
     gcc \

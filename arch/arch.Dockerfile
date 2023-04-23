@@ -5,7 +5,7 @@ RUN pacman -Syu --noconfirm && \
     # Compilers
     gcc clang llvm python \
     # Dev Tools
-    doxygen cppcheck git git-lfs subversion cmake make ninja python-pip && \
+    doxygen cppcheck git git-lfs subversion cmake make ninja pkgconf python-pip && \
     # Cleanup
     pacman -Scc --noconfirm
 

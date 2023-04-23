@@ -47,6 +47,7 @@ These images form the core of other images used for building an assortment of C/
 - Make
 - Ninja Build
 - CMake
+- pkgconf
 - Python 3
 - GCC
 - Clang

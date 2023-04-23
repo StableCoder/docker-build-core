@@ -6,6 +6,7 @@ RUN apt-get update \
     # Common
     libssl-dev \
     wget \
+    pkgconf \
     python-pip \
     ninja-build \
     make \

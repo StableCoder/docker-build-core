@@ -5,6 +5,7 @@ RUN apt-get update \
     && apt install -y \
     # Common
     wget \
+    pkgconf \
     python3 \
     python3-pip \
     cmake \
