@@ -92,3 +92,4 @@ The Arch, Fedora and openSUSE images also have analysis tools used for code anal
 - clang-format
 - cppcheck
 - llvm
+- include-what-you-use (iwyu)

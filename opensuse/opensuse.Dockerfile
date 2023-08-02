@@ -20,5 +20,6 @@ RUN zypper update -y \
     # Analysis
     llvm \
     cppcheck \
+    include-what-you-use \
     lcov \
     && zypper clean --all
