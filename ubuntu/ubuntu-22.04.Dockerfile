@@ -16,7 +16,7 @@ RUN apt update \
     make \
     ninja-build \
     pkgconf \
-    python3-pip \
+    python3 \
     subversion \
     # Compilers
     clang \

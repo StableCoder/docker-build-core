@@ -19,7 +19,7 @@ RUN dnf update -y \
     ncurses-devel \
     ninja-build \
     openssl-devel \
-    python3-pip \
+    python3 \
     readline-devel \
     sqlite-devel \
     subversion \

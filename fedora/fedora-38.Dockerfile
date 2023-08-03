@@ -8,7 +8,7 @@ RUN dnf update -y --refresh && \
     git-lfs \
     make \
     ninja-build \
-    python3-pip \
+    python3 \
     subversion \
     # Compilers
     clang \

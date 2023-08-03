@@ -10,7 +10,6 @@ RUN apt-get update \
     ninja-build \
     pkgconf \
     python3 \
-    python3-pip \
     subversion \
     wget \
     # Compilers

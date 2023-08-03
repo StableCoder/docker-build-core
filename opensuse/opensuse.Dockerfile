@@ -11,7 +11,6 @@ RUN zypper update -y \
     make \
     ninja \
     python3 \
-    python3-pip \
     subversion \
     # Compilers
     clang \

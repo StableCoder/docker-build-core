@@ -9,7 +9,7 @@ RUN apt-get update \
     make \
     ninja-build \
     pkgconf \
-    python-pip \
+    python \
     subversion \
     wget \
     # Compilers
