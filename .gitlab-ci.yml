@@ -108,7 +108,7 @@ Windows Build(no cache):
     - main
   retry: 2
   script:
-    - ./linux-build.sh $NO_CACHE --tag ${IMAGE_NAME} --push
+    - ./linux-build.sh $NO_CACHE --tag ${IMAGE_NAME} --push --no-layers
 
 Alma Upload:
   variables:

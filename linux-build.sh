@@ -5,6 +5,7 @@ NO_CACHE=
 TAG=
 PUSH=
 RM=
+LAYERS="--layers"
 
 while [[ $# -gt 0 ]]; do
     key="$1"
@@ -27,6 +28,10 @@ while [[ $# -gt 0 ]]; do
         RM=1
         shift
         ;;
+    --no-layers)
+        LAYERS=
+        shift
+        ;;
     esac
 done
 
@@ -43,14 +48,14 @@ for FILE in $OS/*.Dockerfile; do
     IFS=','
     for PLATFORM in $(cat $OS/${FILE%.*}.cfg); do
         if [[ "${FILE%.*}" == *"-"* ]]; then
-            echo "> Running: podman build --pull --layers $NO_CACHE --platform $PLATFORM --file $OS/$FILE --manifest localhost/$TAG:${FILE%.*} --tag localhost/$TAG:${FILE%.*}-$(cut -d '/' -f2 <<<$PLATFORM) ."
-            podman build --pull --layers $NO_CACHE --platform $PLATFORM --file $OS/$FILE --manifest localhost/$TAG:${FILE%.*} --tag localhost/$TAG:${FILE%.*}-$(cut -d '/' -f2 <<<$PLATFORM) .
+            echo "> Running: podman build --pull $LAYERS $NO_CACHE --platform $PLATFORM --file $OS/$FILE --manifest localhost/$TAG:${FILE%.*} --tag localhost/$TAG:${FILE%.*}-$(cut -d '/' -f2 <<<$PLATFORM) ."
+            BUILDAH_LAYERS=false podman build --pull $LAYERS $NO_CACHE --platform $PLATFORM --file $OS/$FILE --manifest localhost/$TAG:${FILE%.*} --tag localhost/$TAG:${FILE%.*}-$(cut -d '/' -f2 <<<$PLATFORM) .
         else
             if podman image exists localhost/$TAG:${FILE%.*}-$(cut -d '/' -f2 <<<$PLATFORM); then
                 podman rmi localhost/$TAG:${FILE%.*}-$(cut -d '/' -f2 <<<$PLATFORM)
             fi
-            echo "> Running: podman build --pull --layers --platform $PLATFORM --file $OS/$FILE --manifest localhost/$TAG:${FILE%.*} --tag localhost/$TAG:${FILE%.*}-$(cut -d '/' -f2 <<<$PLATFORM) ."
-            podman build --pull --layers --platform $PLATFORM --file $OS/$FILE --manifest localhost/$TAG:${FILE%.*} --tag localhost/$TAG:${FILE%.*}-$(cut -d '/' -f2 <<<$PLATFORM) .
+            echo "> Running: podman build --pull $LAYERS --platform $PLATFORM --file $OS/$FILE --manifest localhost/$TAG:${FILE%.*} --tag localhost/$TAG:${FILE%.*}-$(cut -d '/' -f2 <<<$PLATFORM) ."
+            BUILDAH_LAYERS=false podman build --pull $LAYERS --platform $PLATFORM --file $OS/$FILE --manifest localhost/$TAG:${FILE%.*} --tag localhost/$TAG:${FILE%.*}-$(cut -d '/' -f2 <<<$PLATFORM) .
         fi
     done
 
