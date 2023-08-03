@@ -5,16 +5,16 @@ RUN zypper al permissions
 
 RUN zypper update -y \
     && zypper install -y \
-    # Common
+    # Dev Tools
+    cmake \
     git \
-    subversion \
     make \
     ninja \
-    cmake \
     python3 \
     python3-pip \
+    subversion \
     # Compilers
+    clang \
     gcc \
     gcc-c++ \
-    clang \
     && zypper clean --all

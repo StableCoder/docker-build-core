@@ -1,31 +1,34 @@
 FROM docker.io/almalinux:9
 
+# Enable EPEL/CRB repositories
 RUN dnf update -y \
-    && dnf install -y epel-release dnf-plugins-core \
+    && dnf install -y dnf-plugins-core epel-release \
     && dnf update -y \
     && /usr/bin/crb enable \
     && dnf clean all
+
+# Install Packages
 RUN dnf update -y \
     && dnf install -y \
     # Common
-    wget \
-    python3-pip \
-    make \
+    cmake \
     git \
     git-lfs \
+    libffi-devel \
+    make \
+    ncurses-devel \
+    ninja-build \
+    openssl-devel \
+    python3-pip \
+    readline-devel \
+    sqlite-devel \
     subversion \
     unzip \
+    wget \
     zlib-devel \
-    openssl-devel \
-    sqlite-devel \
-    libffi-devel \
-    readline-devel \
-    ncurses-devel \
-    cmake \
-    ninja-build \
     # Compilers
+    clang \
     gcc \
     gcc-c++ \
-    clang \
     llvm-libs \
     && dnf clean all

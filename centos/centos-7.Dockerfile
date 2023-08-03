@@ -4,24 +4,24 @@ RUN yum update -y \
     && yum install -y epel-release \
     && yum install -y \
     # Common
-    wget \
-    python3-pip \
     make \
     cmake3 \
-    ninja-build \
     git \
     git-lfs \
+    libffi-devel \
+    ncurses-devel \
+    ninja-build \
+    openssl-devel \
+    python3-pip \
+    readline-devel \
+    sqlite-devel \
     subversion \
     unzip \
+    wget \
     zlib-devel \
-    openssl-devel \
-    sqlite-devel \
-    libffi-devel \
-    readline-devel \
-    ncurses-devel \
     # Compilers
+    clang \
     gcc \
     gcc-c++ \
-    clang \
     llvm-libs \
     && yum clean all

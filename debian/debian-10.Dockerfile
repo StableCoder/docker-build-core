@@ -4,18 +4,18 @@ RUN apt-get update \
     && apt-get upgrade -y \
     && apt install -y \
     # Common
+    git \
     libssl-dev \
-    wget \
+    make \
+    ninja-build \
     pkgconf \
     python-pip \
-    ninja-build \
-    make \
-    git \
     subversion \
+    wget \
     # Compilers
+    clang \
     gcc \
     g++ \
-    clang \
     && apt-get clean
 
 # CMake

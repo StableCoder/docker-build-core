@@ -4,21 +4,22 @@ FROM docker.io/ubuntu:latest
 RUN ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime
 ENV DEBIAN_FRONTEND=noninteractive
 
+# Install packages
 RUN apt update \
     && apt upgrade -y \
     && apt install -y \
-    # Common
-    python3-pip \
-    ninja-build \
-    make \
-    git \
-    git-lfs \
+    # Dev Tools
     cmake \
     cmake-curses-gui \
+    git \
+    git-lfs \
+    make \
+    ninja-build \
     pkgconf \
+    python3-pip \
     subversion \
     # Compilers
+    clang \
     gcc \
     g++ \
-    clang \
     && apt clean all

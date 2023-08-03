@@ -4,17 +4,17 @@ RUN apt-get update \
     && apt-get upgrade -y \
     && apt install -y \
     # Common
-    wget \
+    cmake \
+    git \
+    make \
+    ninja-build \
     pkgconf \
     python3 \
     python3-pip \
-    cmake \
-    ninja-build \
-    make \
-    git \
     subversion \
+    wget \
     # Compilers
+    clang \
     gcc \
     g++ \
-    clang \
     && apt-get clean

@@ -2,27 +2,27 @@ FROM docker.io/fedora:latest
 
 RUN dnf update -y --refresh && \
     dnf install -y \
-    # Common
-    python3-pip \
+    # Dev Tools
+    cmake \
     git \
     git-lfs \
-    subversion \
     make \
     ninja-build \
-    cmake \
+    python3-pip \
+    subversion \
     # Compilers
+    clang \
     gcc \
     gcc-c++ \
-    clang \
     # Analysis
+    clang-tools-extra \
+    cppcheck \
+    lcov \
     libasan \
     liblsan \
     libtsan \
     libubsan \
-    clang-tools-extra \
     llvm \
     llvm-libs \
-    iwyu \
-    cppcheck \
-    lcov && \
+    iwyu && \
     dnf clean all

@@ -6,9 +6,11 @@ RUN pacman -Syu --noconfirm
 # Install main packages
 RUN pacman -S --noconfirm \
     # Compilers
-    gcc clang llvm python \
+    clang gcc llvm python \
     # Dev Tools
-    doxygen cppcheck git git-lfs subversion cmake make ninja pkgconf python-yaml
+    cmake doxygen git git-lfs make ninja pkgconf python-yaml subversion \
+    # Analysis
+    cppcheck
 
 # AUR
 RUN pacman -S --noconfirm devtools

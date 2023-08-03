@@ -14,12 +14,12 @@ These images are used to target platforms/distributions, not specific tools or c
 - [`alma`, `alma-8`, `alma-9` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/alma/)
 - [`arch` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/arch/)
 - [`centos-7` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/centos/)
-- [`rocky-8`, `rocky-9` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/rocky/)
 - [`debian`, `debian-10`, `debian-11`, `debian-12` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/debian/)
 - [`fedora`, `fedora-37`, `fedora-38` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/fedora/)
 - [`opensuse`, `opensuse-15` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/opensuse/)
+- [`rocky-8`, `rocky-9` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/rocky/)
 - [`ubuntu`, `ubuntu-18.04`, `ubuntu-20.04`, `ubuntu-22.04` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/ubuntu/)
-- [`windows-2019`, `windows-2022`, `windows` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/windows/)
+- [`windows`, `windows-2019`, `windows-2022` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/windows/)
 
 ## Architecture Support
 
@@ -28,10 +28,10 @@ These images are used to target platforms/distributions, not specific tools or c
 | Alma           | X     | X     | X       |         |
 | Arch (SteamOS) | X     |       |         |         |
 | Centos         | X     | X     |         |         |
-| Rocky          | X     | X     |         |         |
 | Debian         | X     | X     | X       |         |
 | Fedora         | X     | X     | X       |         |
 | openSUSE       | X     | X     | X       |         |
+| Rocky          | X     | X     |         |         |
 | Ubtuntu        | X     | X     | X       |         |
 | Windows        | X     |       |         |         |
 
@@ -42,15 +42,15 @@ Images *without* an OS_VERSION, ex. `debian` or `centos`, are based off the 'lat
 ### Linux
 
 These images form the core of other images used for building an assortment of C/C++ projects, and as such include this core software:
+- CMake
+- Clang
+- GCC
 - Git
-- Subversion
 - Make
 - Ninja Build
-- CMake
 - pkgconf
 - Python 3
-- GCC
-- Clang
+- Subversion
 
 The Linux images default to gcc/g++ compiler. To use the clang/clang++ compilers, simply define the CC/CXX environment variables when starting the container, for example:
 ```sh
@@ -62,13 +62,13 @@ docker run -e CC=clang -e CXX=clang++ stabletec/build-core:fedora
 
 The SDK based images contain two compilers with three options available, and the basic toolset:
 - Chocolatey
-- Git
-- Subversion
-- Ninja Build
-- CMake
-- Visual Studio Build Tools (MSVC)
 - Clang/Clang-cl
+- CMake
+- Git
+- Ninja Build
 - Python 3
+- Subversion
+- Visual Studio Build Tools (MSVC)
 
 The build tools installed matches the year of the Windows image version.
 
