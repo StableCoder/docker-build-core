@@ -17,9 +17,4 @@ RUN zypper update -y \
     gcc \
     gcc-c++ \
     clang \
-    # Analysis
-    llvm \
-    cppcheck \
-    include-what-you-use \
-    lcov \
     && zypper clean --all
