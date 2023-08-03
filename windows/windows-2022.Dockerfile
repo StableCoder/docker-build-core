@@ -6,6 +6,7 @@ SHELL ["powershell.exe", "-ExecutionPolicy", "Bypass", "-Command"]
 
 # Chocolatey
 ENV chocolateyUseWindowsCompression=false
+ENV chocolateyVersion='1.4.0'
 RUN iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 
 # Applications and setting of path
