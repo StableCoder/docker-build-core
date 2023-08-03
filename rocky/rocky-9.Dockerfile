@@ -1,16 +1,12 @@
 FROM docker.io/rockylinux:9
 
-# Enable EPEL/CRB repositories
 RUN dnf update -y \
+    # Enable EPEL/CRB repositories
     && dnf install -y dnf-plugins-core epel-release \
-    && dnf update -y \
-    && /usr/bin/crb enable \
-    && dnf clean all
-
-# Install Packages
-RUN dnf update -y \
+    && crb enable \
+    # Install packages
     && dnf install -y \
-    # Common
+    # Dev Tools
     cmake \
     git \
     git-lfs \

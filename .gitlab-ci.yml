@@ -6,7 +6,7 @@ stages:
   - Upload Images
 
 variables:
-  IMAGE_NAME: 'stabletec/build-core'
+  IMAGE_NAME: "stabletec/build-core"
 
 #############################
 # Image Build/Testing Stage #
@@ -85,7 +85,7 @@ Windows Build(no cache):
       - main
   only:
     variables:
-      - $NO_CACHE  
+      - $NO_CACHE
   tags:
     - container-builder
     - windows
@@ -108,7 +108,7 @@ Windows Build(no cache):
     - main
   retry: 2
   script:
-    - ./linux-build.sh $NO_CACHE --tag ${IMAGE_NAME} --push --no-layers
+    - ./linux-build.sh $NO_CACHE --tag ${IMAGE_NAME} --push
 
 Alma Upload:
   variables:

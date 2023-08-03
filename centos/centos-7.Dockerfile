@@ -1,14 +1,16 @@
 FROM docker.io/centos:7
 
 RUN yum update -y \
+    # Enable EPEL repository
     && yum install -y epel-release \
+    # Install packages
     && yum install -y \
-    # Common
-    make \
+    # Dev Tools
     cmake3 \
     git \
     git-lfs \
     libffi-devel \
+    make \
     ncurses-devel \
     ninja-build \
     openssl-devel \

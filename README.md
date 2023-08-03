@@ -83,7 +83,7 @@ docker run -e CC=clang -e CXX=clang stabletec/build-core:windows
 
 ## Analysis Tools
 
-The Arch and Fedora images also have analysis tools used for code analysis available:
+Fedora images also have analysis tools useful for code analysis:
 - AddressSanitizer
 - LeakSanitizer
 - ThreadSanitizer

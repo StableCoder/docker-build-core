@@ -3,7 +3,7 @@ FROM docker.io/debian:12
 RUN apt-get update \
     && apt-get upgrade -y \
     && apt install -y \
-    # Common
+    # Dev Tools
     cmake \
     git \
     make \
