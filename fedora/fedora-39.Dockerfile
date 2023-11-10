@@ -1,8 +1,8 @@
-FROM docker.io/fedora:37
+FROM docker.io/fedora:39
 
 RUN dnf update -y --refresh && \
     dnf install -y \
-    # Dev tools
+    # Dev Tools
     cmake \
     git \
     git-lfs \
