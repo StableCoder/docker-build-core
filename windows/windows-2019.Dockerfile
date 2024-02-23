@@ -1,12 +1,11 @@
 # Use the latest Windows Server Core image.
-FROM mcr.microsoft.com/windows/servercore:ltsc2019
+FROM mcr.microsoft.com/dotnet/framework/runtime:4.8-windowsservercore-ltsc2019
 
 # Use powershell by default
 SHELL ["powershell.exe", "-ExecutionPolicy", "Bypass", "-Command"]
 
 # Chocolatey
 ENV chocolateyUseWindowsCompression=false
-ENV chocolateyVersion='1.4.0'
 RUN iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 
 # Applications and setting of path
