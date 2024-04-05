@@ -17,25 +17,27 @@ These images are used to target platforms/distributions, not specific tools or c
 - [`debian`, `debian-10`, `debian-11`, `debian-12` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/debian/)
 - [`fedora`, `fedora-38`, `fedora-39` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/fedora/)
 - [`opensuse`, `opensuse-15` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/opensuse/)
-- [`rocky-8`, `rocky-9` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/rocky/)
+- [`rocky`, `rocky-8`, `rocky-9` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/rocky/)
 - [`ubuntu`, `ubuntu-18.04`, `ubuntu-20.04`, `ubuntu-22.04`, `ubuntu-24.04` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/ubuntu/)
 - [`windows`, `windows-2019`, `windows-2022` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/windows/)
 
 ## Architecture Support
 
-| OS             | amd64 | arm64 | ppc64le | riscv64 |
-| -------------- | ----- | ----- | ------- | ------- |
-| Alma           | X     | X     | X       |         |
-| Arch (SteamOS) | X     |       |         |         |
-| Centos         | X     | X     |         |         |
-| Debian         | X     | X     | X       |         |
-| Fedora         | X     | X     | X       |         |
-| openSUSE       | X     | X     | X       |         |
-| Rocky          | X     | X     |         |         |
-| Ubtuntu        | X     | X     | X       |         |
-| Windows        | X     |       |         |         |
+| OS                  | amd64 | arm64 | ppc64le | s390x | riscv64 |
+| ------------------- | ----- | ----- | ------- | ----- | ------- |
+| Alma                | X     | X     | X       | X     |         |
+| Arch (SteamOS)      | X     |       |         |       |         |
+| CentOS 7            | X     | X     |         |       |         |
+| Debian 10           | X     | X     |         |       |         |
+| Debian 11/12/Latest | X     | X     | X       | X     |         |
+| Fedora              | X     | X     | X       | X     |         |
+| openSUSE            | X     | X     | X       | X     |         |
+| Rocky 8             | X     | X     |         |       |         |
+| Rocky 9/Latest      | X     | X     | X       | X     |         |
+| Ubtuntu             | X     | X     | X       | X     |         |
+| Windows             | X     |       |         |       |         |
 
-Images *without* an OS_VERSION, ex. `debian` or `centos`, are based off the 'latest' tag of the OS, which often means it also shares the same image layers as the OS_VERSION's as well. Ex. `debian` uses the same layers as `debian-11` and `rocky` shares the same layers as `rocky-8`.
+Images *without* an OS_VERSION, ex. `debian` or `rocky`, are based off the 'latest' tag of the base image, which often means it also shares the same image layers as the OS_VERSION's as well. Ex. `debian` uses the same layers as `debian-12` and `rocky` shares the same layers as `rocky-9`.
 
 ## Tooling Available
 
