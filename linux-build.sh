@@ -32,6 +32,9 @@ while [[ $# -gt 0 ]]; do
         LAYERS=
         shift
         ;;
+    *)
+        echo "ERROR: Unknown option '$1'"
+        exit 1
     esac
 done
 
