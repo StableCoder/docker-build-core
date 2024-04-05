@@ -18,7 +18,7 @@ These images are used to target platforms/distributions, not specific tools or c
 - [`fedora`, `fedora-38`, `fedora-39` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/fedora/)
 - [`opensuse`, `opensuse-15` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/opensuse/)
 - [`rocky`, `rocky-8`, `rocky-9` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/rocky/)
-- [`ubuntu`, `ubuntu-18.04`, `ubuntu-20.04`, `ubuntu-22.04`, `ubuntu-24.04` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/ubuntu/)
+- [`ubuntu`, `ubuntu-18.04`, `ubuntu-20.04`, `ubuntu-22.04` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/ubuntu/)
 - [`windows`, `windows-2019`, `windows-2022` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/windows/)
 
 ## Architecture Support
