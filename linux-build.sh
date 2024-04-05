@@ -15,6 +15,11 @@ while [[ $# -gt 0 ]]; do
         NO_CACHE="--no-cache"
         shift
         ;;
+    -o | --os)
+        OS="$2"
+        shift
+        shift
+        ;;
     -t | --tag)
         TAG="$2"
         shift # past argument
@@ -37,6 +42,18 @@ while [[ $# -gt 0 ]]; do
         exit 1
     esac
 done
+
+if [[ -z "$OS" ]]; then
+    echo "ERROR: OS not specified"
+    ERROR=1
+fi
+if [[ -z "$TAG" ]]; then
+    echo "ERROR: TAG not specified"
+    ERROR=1
+fi
+if [[ ! -z $ERROR ]]; then
+    exit 1
+fi
 
 for FILE in $OS/*.Dockerfile; do
     # Get platforms for the image
