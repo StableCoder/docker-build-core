@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 set -e
 
 NO_CACHE=
@@ -36,6 +36,15 @@ while [[ $# -gt 0 ]]; do
 done
 
 for FILE in $OS/*.Dockerfile; do
+    # Get platforms for the image
+    PLATFORMS=$(grep -e '^# PLATFORMS: ' $FILE | head -n 1)
+    PLATFORMS=${PLATFORMS:13}
+
+    if [[ -z $PLATFORMS ]]; then
+        echo "ERROR: No platforms specified for: $FILE"
+        exit 1
+    fi
+
     FILE="$(basename -- $FILE)"
 
     # Remove any previous manifest
@@ -45,8 +54,7 @@ for FILE in $OS/*.Dockerfile; do
     fi
 
     # Go through each platform and build the image for it, adding to the common manifest tag
-    IFS=','
-    for PLATFORM in $(cat $OS/${FILE%.*}.cfg); do
+    for PLATFORM in $PLATFORMS; do
         if [[ "${FILE%.*}" == *"-"* ]]; then
             echo "> Running: podman build --pull $LAYERS $NO_CACHE --platform $PLATFORM --file $OS/$FILE --manifest localhost/$TAG:${FILE%.*} --tag localhost/$TAG:${FILE%.*}-$(cut -d '/' -f2 <<<$PLATFORM) ."
             BUILDAH_LAYERS=false podman build --pull $LAYERS $NO_CACHE --platform $PLATFORM --file $OS/$FILE --manifest localhost/$TAG:${FILE%.*} --tag localhost/$TAG:${FILE%.*}-$(cut -d '/' -f2 <<<$PLATFORM) .

@@ -1,3 +1,4 @@
+# PLATFORMS: linux/amd64 linux/arm64
 FROM docker.io/debian:10
 
 RUN apt-get update \

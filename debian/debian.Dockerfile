@@ -1,3 +1,4 @@
+# PLATFORMS: linux/amd64 linux/arm64 linux/ppc64le linux/s390x
 FROM docker.io/debian:latest
 
 RUN apt-get update \

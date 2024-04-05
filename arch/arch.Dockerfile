@@ -1,3 +1,4 @@
+# PLATFORMS: linux/amd64
 FROM docker.io/archlinux:latest
 
 # Update default packages

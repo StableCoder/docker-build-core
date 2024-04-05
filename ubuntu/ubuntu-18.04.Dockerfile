@@ -1,3 +1,4 @@
+# PLATFORMS: linux/amd64 linux/arm64 linux/ppc64le linux/s390x
 FROM docker.io/ubuntu:18.04
 
 # Set for tzdata to noninteractive mode

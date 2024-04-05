@@ -27,7 +27,7 @@ These images are used to target platforms/distributions, not specific tools or c
 | ------------------- | ----- | ----- | ------- | ----- | ------- |
 | Alma                | X     | X     | X       | X     |         |
 | Arch (SteamOS)      | X     |       |         |       |         |
-| CentOS 7            | X     | X     |         |       |         |
+| CentOS 7            | X     | X     | X       |       |         |
 | Debian 10           | X     | X     |         |       |         |
 | Debian 11/12/Latest | X     | X     | X       | X     |         |
 | Fedora              | X     | X     | X       | X     |         |

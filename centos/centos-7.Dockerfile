@@ -1,3 +1,4 @@
+# PLATFORMS: linux/amd64 linux/arm64 linux/ppc64le
 FROM docker.io/centos:7
 
 RUN yum update -y \

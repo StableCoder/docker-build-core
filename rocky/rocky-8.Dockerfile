@@ -1,3 +1,4 @@
+# PLATFORMS: linux/amd64 linux/arm64
 FROM docker.io/rockylinux:8
 
 RUN dnf update -y \
