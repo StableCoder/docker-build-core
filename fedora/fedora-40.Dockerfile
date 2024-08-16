@@ -1,5 +1,5 @@
 # PLATFORMS: linux/amd64 linux/arm64 linux/ppc64le linux/s390x
-FROM docker.io/fedora:38
+FROM docker.io/fedora:40
 
 RUN dnf update -y --refresh && \
     dnf install -y \

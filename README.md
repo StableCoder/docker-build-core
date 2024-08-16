@@ -14,7 +14,7 @@ These images are used to target platforms/distributions, not specific tools or c
 - [`alma`, `alma-8`, `alma-9` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/alma/)
 - [`arch` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/arch/)
 - [`debian`, `debian-10`, `debian-11`, `debian-12` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/debian/)
-- [`fedora`, `fedora-38`, `fedora-39` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/fedora/)
+- [`fedora`, `fedora-39`, `fedora-40` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/fedora/)
 - [`opensuse`, `opensuse-15` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/opensuse/)
 - [`rocky`, `rocky-8`, `rocky-9` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/rocky/)
 - [`ubuntu`, `ubuntu-20.04`, `ubuntu-22.04`, `ubuntu-24.04` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/ubuntu/)
