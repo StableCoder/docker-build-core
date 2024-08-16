@@ -39,11 +39,6 @@ Fedora Build:
     OS: fedora
   <<: *build_template
 
-CentOS Build:
-  variables:
-    OS: centos
-  <<: *build_template
-
 Rocky Build:
   variables:
     OS: rocky
@@ -123,11 +118,6 @@ Arch/SteamOS Upload:
 Fedora Upload:
   variables:
     OS: fedora
-  <<: *upload_template
-
-CentOS Upload:
-  variables:
-    OS: centos
   <<: *upload_template
 
 Rocky Upload:
