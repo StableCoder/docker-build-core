@@ -20,6 +20,7 @@ RUN "& { iwr https://aka.ms/vs/17/release/vs_buildtools.exe -OutFile vs_installe
         --add Microsoft.VisualStudio.Component.VC.CoreBuildTools \
         --add Microsoft.VisualStudio.Component.VC.Redist.14.Latest \
         --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 \
+        --add Microsoft.VisualStudio.Component.VC.ASAN \
         --add Microsoft.VisualStudio.Component.Windows11SDK.22000 | Out-Null; \
     Remove-Item -path .\vs_installer.exe
 

@@ -17,10 +17,11 @@ RUN "[Environment]::SetEnvironmentVariable(\"Path\", [System.Environment]::GetEn
 RUN "& { iwr https://aka.ms/vs/16/release/vs_buildtools.exe -OutFile vs_installer.exe }"; \
     .\vs_installer.exe --quiet --wait --norestart --nocache \
         --add Microsoft.VisualStudio.Workload.VCTools \
-        --add Microsoft.VisualStudio.Component.Windows10SDK.19041 \
         --add Microsoft.VisualStudio.Component.VC.CoreBuildTools \
         --add Microsoft.VisualStudio.Component.VC.Redist.14.Latest \
-        --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 | Out-Null; \
+        --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 \
+        --add Microsoft.VisualStudio.Component.VC.ASAN \
+        --add Microsoft.VisualStudio.Component.Windows10SDK.19041 | Out-Null; \
     Remove-Item -path .\vs_installer.exe
 
 # Clang/LLVM

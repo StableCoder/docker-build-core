@@ -68,7 +68,7 @@ The SDK based images contain two compilers with three options available, and the
 - Ninja Build
 - Python 3
 - Subversion
-- Visual Studio Build Tools (MSVC)
+- Visual Studio Build Tools (MSVC) (with Address Sanitizer)
 
 The build tools installed matches the year of the Windows image version.
 
@@ -83,7 +83,7 @@ docker run -e CC=clang -e CXX=clang stabletec/build-core:windows
 
 ## Analysis Tools
 
-Fedora images also have analysis tools useful for code analysis:
+Fedora images also have analysis tools useful for code instrumentation and analysis:
 - AddressSanitizer
 - LeakSanitizer
 - ThreadSanitizer
