@@ -15,6 +15,8 @@ These images are used to target platforms/distributions, not specific tools or c
 - [`arch` (Dockerfile)](arch/)
 - [`debian`, `debian-10`, `debian-11`, `debian-12` (Dockerfile)](debian/)
 - [`fedora`, `fedora-39`, `fedora-40` (Dockerfile)](fedora/)
+- [`msys-ltsc2019-clang64`, `msys-ltsc2019-mingw64`, `msys-ltsc2019-ucrt64` (Dockerfile)](msys-ltsc2019/)
+- [`msys-ltsc2022-clang64`, `msys-ltsc2022-mingw64`, `msys-ltsc2022-ucrt64` (Dockerfile)](msys-ltsc2022/)
 - [`opensuse`, `opensuse-15` (Dockerfile)](opensuse/)
 - [`rocky`, `rocky-8`, `rocky-9` (Dockerfile)](rocky/)
 - [`ubuntu`, `ubuntu-20.04`, `ubuntu-22.04`, `ubuntu-24.04` (Dockerfile)](ubuntu/)
@@ -35,6 +37,7 @@ These images are used to target platforms/distributions, not specific tools or c
 | Rocky 9+       | X     | X     | X       | X     |         |
 | Ubtuntu        | X     | X     | X       | X     |         |
 | Windows        | X     |       |         |       |         |
+| MSYS/MinGW     | X     |       |         |       |         |
 
 Images *without* an OS_VERSION, ex. `debian` or `rocky`, are based off the 'latest' tag of the base image, which often means it also shares the same image layers as the OS_VERSION's as well. Ex. `debian` uses the same layers as `debian-12` and `rocky` shares the same layers as `rocky-9`.
 
@@ -81,6 +84,28 @@ docker run -e CC=clang-cl -e CXX=clang-cl stabletec/build-core:windows-ltsc2022
 # Starts the Windows container, setting up with the clang compiler
 docker run -e CC=clang -e CXX=clang stabletec/build-core:windows-ltsc2022
 ```
+
+### MSYS/MinGW
+
+These images form the core of other images used for building an assortment of C/C++ projects, and as such include this core software:
+- CMake
+- Clang
+- GCC
+- Git
+- Make
+- Ninja Build
+- pkgconf
+- Python 3
+- Subversion
+
+There are several variants on MinGW environments available, as described [here](https://www.msys2.org/docs/environments/).
+
+Currently, only the amd64 based environments are available:
+- ucrt64
+- mingw64
+- clang64
+
+Due to lack of forward-compatability for Windows images, they are split based on the Long-Term-Server-Core (LTSC) version, and again on the MinGW environments.
 
 ## Analysis Tools
 
