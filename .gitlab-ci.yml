@@ -104,7 +104,7 @@ Windows Build (2022):
     - ./build-linux.sh $NO_CACHE --image-dir ${IMAGE_DIR} --tag ${IMAGE_NAME} --push
 
 .windows_upload_template: &windows_upload_template
-  stage: Build Images
+  stage: Upload Images
   tags:
     - container-builder
     - windows
