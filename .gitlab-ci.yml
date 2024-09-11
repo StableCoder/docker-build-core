@@ -24,6 +24,19 @@ variables:
   script:
     - ./build-linux.sh $NO_CACHE --image-dir ${IMAGE_DIR} --tag build-core-test --rm
 
+.windows_build_template: &windows_build_template
+  stage: Build Images
+  tags:
+    - container-builder
+    - windows
+    - amd64
+    - ${WINDOWS_CONTAINER_BASE_VERSION}
+  except:
+    - main
+  script:
+    - if ($env:NO_CACHE) { $env:NO_CACHE = "-NoCache" }
+    - ./build-windows.ps1 $env:NO_CACHE -ImageName build-core-test -ImageDir $env:IMAGE_DIR -Test
+
 Alma Build:
   variables:
     IMAGE_DIR: alma
@@ -59,38 +72,17 @@ openSUSE Build:
     IMAGE_DIR: opensuse
   <<: *linux_build_template
 
-Windows Build:
-  stage: Build Images
-  except:
-    refs:
-      - main
-    variables:
-      - $NO_CACHE
-  tags:
-    - container-builder
-    - windows
-    - amd64
+Windows Build (2019):
   variables:
-    OS: windows
-  script:
-    - ./build-windows.ps1 -ImageName build-core-test -Test
+    WINDOWS_CONTAINER_BASE_VERSION: ltsc2019
+    IMAGE_DIR: windows-ltsc2019
+  <<: *windows_build_template
 
-Windows Build(no cache):
-  stage: Build Images
-  except:
-    refs:
-      - main
-  only:
-    variables:
-      - $NO_CACHE
-  tags:
-    - container-builder
-    - windows
-    - amd64
+Windows Build (2022):
   variables:
-    OS: windows
-  script:
-    - ./build-windows.ps1 -ImageName build-core-test -Test -NoCache
+    WINDOWS_CONTAINER_BASE_VERSION: ltsc2022
+    IMAGE_DIR: windows-ltsc2022
+  <<: *windows_build_template
 
 #######################
 # Image Uploads Stage #
@@ -107,6 +99,19 @@ Windows Build(no cache):
     - main
   script:
     - ./build-linux.sh $NO_CACHE --image-dir ${IMAGE_DIR} --tag ${IMAGE_NAME} --push
+
+.windows_upload_template: &windows_upload_template
+  stage: Build Images
+  tags:
+    - container-builder
+    - windows
+    - amd64
+    - ${WINDOWS_CONTAINER_BASE_VERSION}
+  only:
+    - main
+  script:
+    - if ($env:NO_CACHE) { $env:NO_CACHE = "-NoCache" }
+    - ./build-windows.ps1 $env:NO_CACHE -ImageDir $env:IMAGE_DIR -ImageName $env:IMAGE_NAME -Test -Push
 
 Alma Upload:
   variables:
@@ -143,37 +148,14 @@ openSUSE Upload:
     IMAGE_DIR: opensuse
   <<: *linux_upload_template
 
-Windows Upload:
-  stage: Upload Images
-  only:
-    refs:
-      - main
-  except:
-    variables:
-      - $NO_CACHE
-  tags:
-    - container-builder
-    - windows
-    - amd64
+Windows Upload (2019):
   variables:
-    OS: windows
-  retry: 2
-  script:
-    - ./build-windows.ps1 -ImageName ${env:IMAGE_NAME} -Test -Push
+    WINDOWS_CONTAINER_BASE_VERSION: ltsc2019
+    IMAGE_DIR: windows-ltsc2019
+  <<: *windows_upload_template
 
-Windows Upload(no cache):
-  stage: Upload Images
-  only:
-    refs:
-      - main
-    variables:
-      - $NO_CACHE
-  tags:
-    - container-builder
-    - windows
-    - amd64
+Windows Upload (2022):
   variables:
-    OS: windows
-  retry: 2
-  script:
-    - ./build-windows.ps1 -ImageName ${env:IMAGE_NAME} -Test -Push -NoCache
+    WINDOWS_CONTAINER_BASE_VERSION: ltsc2022
+    IMAGE_DIR: windows-ltsc2022
+  <<: *windows_upload_template

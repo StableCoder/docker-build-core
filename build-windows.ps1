@@ -1,10 +1,15 @@
 Param(
     [string] $ImageName, # Core name of the image
+    [string] $ImageDir, # Name of the directory with the dockerfiles
     [switch] $NoCache, # --no-cache mode
     [switch] $Test, # Test the image
     [switch] $Push, # Pushes the image (must be logged in previously)
     [switch] $Remove # Removes/untags image after (for testing purposes)
 )
+
+if($ImageDir) {
+    cd "$ImageDir"
+}
 
 if($NoCache) {
     $NO_CACHE="--no-cache"
@@ -13,10 +18,6 @@ if($NoCache) {
 }
 
 try {
-    if ($env:OS) {
-        cd $env:OS
-    }
-
     # Determine variants
     $VARIANTS=$(ls *.Dockerfile)
 
