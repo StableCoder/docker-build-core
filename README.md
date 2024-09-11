@@ -1,7 +1,7 @@
 # Build Core Images
 
 [![pipeline status](https://git.stabletec.com/docker/build-core/badges/main/pipeline.svg)](https://git.stabletec.com/docker/build-core/commits/main)
-[![license](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://git.stabletec.com/docker/build-core/blob/main/LICENSE)
+[![license](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 [![docker pulls](https://img.shields.io/docker/pulls/stabletec/build-core.svg)](https://hub.docker.com/r/stabletec/build-core/)
 [![docker stars](https://img.shields.io/docker/stars/stabletec/build-core.svg)](https://hub.docker.com/r/stabletec/build-core/)
 
@@ -11,14 +11,15 @@ These images are used to target platforms/distributions, not specific tools or c
 
 ## Supported tags and respective `Dockerfile` links
 
-- [`alma`, `alma-8`, `alma-9` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/alma/)
-- [`arch` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/arch/)
-- [`debian`, `debian-10`, `debian-11`, `debian-12` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/debian/)
-- [`fedora`, `fedora-39`, `fedora-40` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/fedora/)
-- [`opensuse`, `opensuse-15` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/opensuse/)
-- [`rocky`, `rocky-8`, `rocky-9` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/rocky/)
-- [`ubuntu`, `ubuntu-20.04`, `ubuntu-22.04`, `ubuntu-24.04` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/ubuntu/)
-- [`windows`, `windows-2019`, `windows-2022` (Dockerfile)](https://git.stabletec.com/docker/build-core/blob/main/windows/)
+- [`alma`, `alma-8`, `alma-9` (Dockerfile)](alma/)
+- [`arch` (Dockerfile)](arch/)
+- [`debian`, `debian-10`, `debian-11`, `debian-12` (Dockerfile)](debian/)
+- [`fedora`, `fedora-39`, `fedora-40` (Dockerfile)](fedora/)
+- [`opensuse`, `opensuse-15` (Dockerfile)](opensuse/)
+- [`rocky`, `rocky-8`, `rocky-9` (Dockerfile)](rocky/)
+- [`ubuntu`, `ubuntu-20.04`, `ubuntu-22.04`, `ubuntu-24.04` (Dockerfile)](ubuntu/)
+- [`windows-ltsc2019`, `windows-ltsc2019-vs2019`, `windows-ltsc2019-vs2022` (Dockerfile)](windows-ltsc2019/)
+- [`windows`, `windows-ltsc2022`, `windows-ltsc2022-vs2019`, `windows-ltsc2022-vs2022` (Dockerfile)](windows-ltsc2022/)
 
 ## Architecture Support
 
@@ -62,7 +63,7 @@ docker run -e CC=clang -e CXX=clang++ stabletec/build-core:fedora
 
 The SDK based images contain two compilers with three options available, and the basic toolset:
 - Chocolatey
-- Clang/Clang-cl
+- clang/clang-cl
 - CMake
 - Git
 - Ninja Build
@@ -70,15 +71,15 @@ The SDK based images contain two compilers with three options available, and the
 - Subversion
 - Visual Studio Build Tools (MSVC) (with Address Sanitizer)
 
-The build tools installed matches the year of the Windows image version.
+Due to lack of forward-compatability for Windows images, they are split based on the Long-Term-Server-Core (LTSC) version, and split again on the Visual Studio versions on each base.
 
 The Windows images default to the MSVC compiler. To use the clang/clang-cl compilers, simply define the CC/CXX environment variables when starting the container, for example:
 ```powershell
 # Starts the Windows container, setting up with the clang-cl compiler
-docker run -e CC=clang-cl -e CXX=clang-cl stabletec/build-core:windows
+docker run -e CC=clang-cl -e CXX=clang-cl stabletec/build-core:windows-ltsc2022
 
 # Starts the Windows container, setting up with the clang compiler
-docker run -e CC=clang -e CXX=clang stabletec/build-core:windows
+docker run -e CC=clang -e CXX=clang stabletec/build-core:windows-ltsc2022
 ```
 
 ## Analysis Tools
