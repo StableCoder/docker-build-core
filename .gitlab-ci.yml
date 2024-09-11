@@ -12,7 +12,7 @@ variables:
 # Image Build/Testing Stage #
 #############################
 
-.build_image: &build_template
+.linux_build_template: &linux_build_template
   stage: Build Images
   tags:
     - container-builder
@@ -22,42 +22,42 @@ variables:
   except:
     - main
   script:
-    - ./build-linux.sh $NO_CACHE --tag build-core-test --rm
+    - ./build-linux.sh $NO_CACHE --image-dir ${IMAGE_DIR} --tag build-core-test --rm
 
 Alma Build:
   variables:
-    OS: alma
-  <<: *build_template
+    IMAGE_DIR: alma
+  <<: *linux_build_template
 
 Arch/SteamOS Build:
   variables:
-    OS: arch
-  <<: *build_template
+    IMAGE_DIR: arch
+  <<: *linux_build_template
 
 Fedora Build:
   variables:
-    OS: fedora
-  <<: *build_template
+    IMAGE_DIR: fedora
+  <<: *linux_build_template
 
 Rocky Build:
   variables:
-    OS: rocky
-  <<: *build_template
+    IMAGE_DIR: rocky
+  <<: *linux_build_template
 
 Debian Build:
   variables:
-    OS: debian
-  <<: *build_template
+    IMAGE_DIR: debian
+  <<: *linux_build_template
 
 Ubuntu Build:
   variables:
-    OS: ubuntu
-  <<: *build_template
+    IMAGE_DIR: ubuntu
+  <<: *linux_build_template
 
 openSUSE Build:
   variables:
-    OS: opensuse
-  <<: *build_template
+    IMAGE_DIR: opensuse
+  <<: *linux_build_template
 
 Windows Build:
   stage: Build Images
@@ -96,7 +96,7 @@ Windows Build(no cache):
 # Image Uploads Stage #
 #######################
 
-.upload_image: &upload_template
+.linux_upload_template: &linux_upload_template
   stage: Upload Images
   tags:
     - container-builder
@@ -105,44 +105,43 @@ Windows Build(no cache):
     - qemu
   only:
     - main
-  retry: 2
   script:
-    - ./build-linux.sh $NO_CACHE --tag ${IMAGE_NAME} --push
+    - ./build-linux.sh $NO_CACHE --image-dir ${IMAGE_DIR} --tag ${IMAGE_NAME} --push
 
 Alma Upload:
   variables:
-    OS: alma
-  <<: *upload_template
+    IMAGE_DIR: alma
+  <<: *linux_upload_template
 
 Arch/SteamOS Upload:
   variables:
-    OS: arch
-  <<: *upload_template
+    IMAGE_DIR: arch
+  <<: *linux_upload_template
 
 Fedora Upload:
   variables:
-    OS: fedora
-  <<: *upload_template
+    IMAGE_DIR: fedora
+  <<: *linux_upload_template
 
 Rocky Upload:
   variables:
-    OS: rocky
-  <<: *upload_template
+    IMAGE_DIR: rocky
+  <<: *linux_upload_template
 
 Debian Upload:
   variables:
-    OS: debian
-  <<: *upload_template
+    IMAGE_DIR: debian
+  <<: *linux_upload_template
 
 Ubuntu Upload:
   variables:
-    OS: ubuntu
-  <<: *upload_template
+    IMAGE_DIR: ubuntu
+  <<: *linux_upload_template
 
 openSUSE Upload:
   variables:
-    OS: opensuse
-  <<: *upload_template
+    IMAGE_DIR: opensuse
+  <<: *linux_upload_template
 
 Windows Upload:
   stage: Upload Images
