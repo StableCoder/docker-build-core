@@ -13,6 +13,10 @@ if($NoCache) {
 }
 
 try {
+    if ($env:OS) {
+        cd $env:OS
+    }
+
     # Determine variants
     $VARIANTS=$(ls *.Dockerfile)
 

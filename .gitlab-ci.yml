@@ -70,8 +70,10 @@ Windows Build:
     - container-builder
     - windows
     - amd64
+  variables:
+    OS: windows
   script:
-    - cd windows; .\image_builder.ps1 -ImageName build-core-test -Test
+    - ./build-windows.ps1 -ImageName build-core-test -Test
 
 Windows Build(no cache):
   stage: Build Images
@@ -85,8 +87,10 @@ Windows Build(no cache):
     - container-builder
     - windows
     - amd64
+  variables:
+    OS: windows
   script:
-    - cd windows; .\image_builder.ps1 -ImageName build-core-test -Test -NoCache
+    - ./build-windows.ps1 -ImageName build-core-test -Test -NoCache
 
 #######################
 # Image Uploads Stage #
@@ -152,9 +156,11 @@ Windows Upload:
     - container-builder
     - windows
     - amd64
+  variables:
+    OS: windows
   retry: 2
   script:
-    - cd windows; .\image_builder.ps1 -ImageName ${env:IMAGE_NAME} -Test -Push
+    - ./build-windows.ps1 -ImageName ${env:IMAGE_NAME} -Test -Push
 
 Windows Upload(no cache):
   stage: Upload Images
@@ -167,6 +173,8 @@ Windows Upload(no cache):
     - container-builder
     - windows
     - amd64
+  variables:
+    OS: windows
   retry: 2
   script:
-    - cd windows; .\image_builder.ps1 -ImageName ${env:IMAGE_NAME} -Test -Push -NoCache
+    - ./build-windows.ps1 -ImageName ${env:IMAGE_NAME} -Test -Push -NoCache
