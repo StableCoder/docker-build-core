@@ -30,3 +30,4 @@ RUN "& { iwr https://aka.ms/vs/17/release/vs_buildtools.exe -OutFile vs_installe
 # Start developer command prompt with any other commands specified.
 COPY entrypoint.ps1 C:\\ps-scripts\\entrypoint.ps1
 ENTRYPOINT C:\ps-scripts\entrypoint.ps1 -Quiet;
+CMD powershell
