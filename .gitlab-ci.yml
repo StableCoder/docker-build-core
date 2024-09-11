@@ -20,7 +20,8 @@ variables:
     - podman
     - qemu
   except:
-    - main
+    refs:
+      - main
   script:
     - ./build-linux.sh $NO_CACHE --image-dir ${IMAGE_DIR} --tag build-core-test --rm
 
@@ -32,7 +33,8 @@ variables:
     - amd64
     - ${WINDOWS_CONTAINER_BASE_VERSION}
   except:
-    - main
+    refs:
+      - main
   script:
     - if ($env:NO_CACHE) { $env:NO_CACHE = "-NoCache" }
     - ./build-windows.ps1 $env:NO_CACHE -ImageName build-core-test -ImageDir $env:IMAGE_DIR -Test
@@ -96,7 +98,8 @@ Windows Build (2022):
     - podman
     - qemu
   only:
-    - main
+    refs:
+      - main
   script:
     - ./build-linux.sh $NO_CACHE --image-dir ${IMAGE_DIR} --tag ${IMAGE_NAME} --push
 
@@ -108,7 +111,8 @@ Windows Build (2022):
     - amd64
     - ${WINDOWS_CONTAINER_BASE_VERSION}
   only:
-    - main
+    refs:
+      - main
   script:
     - if ($env:NO_CACHE) { $env:NO_CACHE = "-NoCache" }
     - ./build-windows.ps1 $env:NO_CACHE -ImageDir $env:IMAGE_DIR -ImageName $env:IMAGE_NAME -Test -Push
