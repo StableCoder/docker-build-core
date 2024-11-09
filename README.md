@@ -35,7 +35,7 @@ These images are used to target platforms/distributions, not specific tools or c
 | openSUSE       | X     | X     | X       | X     |         |
 | Rocky 8        | X     | X     |         |       |         |
 | Rocky 9+       | X     | X     | X       | X     |         |
-| Ubtuntu        | X     | X     | X       | X     |         |
+| Ubtuntu        | X     | X     | X       | X     | X       |
 | Windows        | X     |       |         |       |         |
 | MSYS/MinGW     | X     |       |         |       |         |
 
