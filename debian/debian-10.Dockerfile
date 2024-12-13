@@ -22,10 +22,10 @@ RUN apt-get update \
 # CMake
 ENV CMAKE_VER=3.31.2
 RUN wget -q https://github.com/Kitware/CMake/releases/download/v${CMAKE_VER}/cmake-${CMAKE_VER}.tar.gz \
-    && tar -zxf cmake-${CMAKE_VER}.tar.gz \
+    && tar -xf cmake-${CMAKE_VER}.tar.gz \
     && cd cmake-${CMAKE_VER} \
     && ./configure \
     && make -j $(nproc --all) \
     && make install \
     && cd .. \
-    && rm -rf cmake-*
+    && rm -rf cmake-${CMAKE_VER}*
