@@ -86,6 +86,12 @@ Windows Build (2022):
     IMAGE_DIR: windows-ltsc2022
   <<: *windows_build_template
 
+Windows Build (2025):
+  variables:
+    WINDOWS_CONTAINER_BASE_VERSION: ltsc2025
+    IMAGE_DIR: windows-ltsc2025
+  <<: *windows_build_template
+
 MSYS Build (2019):
   variables:
     WINDOWS_CONTAINER_BASE_VERSION: ltsc2019
@@ -96,6 +102,12 @@ MSYS Build (2022):
   variables:
     WINDOWS_CONTAINER_BASE_VERSION: ltsc2022
     IMAGE_DIR: msys-ltsc2022
+  <<: *windows_build_template
+
+MSYS Build (2025):
+  variables:
+    WINDOWS_CONTAINER_BASE_VERSION: ltsc2025
+    IMAGE_DIR: msys-ltsc2025
   <<: *windows_build_template
 
 #######################
@@ -176,6 +188,12 @@ Windows Upload (2022):
     IMAGE_DIR: windows-ltsc2022
   <<: *windows_upload_template
 
+Windows Upload (2025):
+  variables:
+    WINDOWS_CONTAINER_BASE_VERSION: ltsc2025
+    IMAGE_DIR: windows-ltsc2025
+  <<: *windows_upload_template
+
 MSYS Upload (2019):
   variables:
     WINDOWS_CONTAINER_BASE_VERSION: ltsc2019
@@ -186,4 +204,10 @@ MSYS Upload (2022):
   variables:
     WINDOWS_CONTAINER_BASE_VERSION: ltsc2022
     IMAGE_DIR: msys-ltsc2022
+  <<: *windows_upload_template
+
+MSYS Upload (2025):
+  variables:
+    WINDOWS_CONTAINER_BASE_VERSION: ltsc2025
+    IMAGE_DIR: msys-ltsc2025
   <<: *windows_upload_template

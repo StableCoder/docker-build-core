@@ -1,5 +1,5 @@
 # Use the latest Windows Server Core image.
-FROM mcr.microsoft.com/windows/servercore:ltsc2022
+FROM mcr.microsoft.com/windows/servercore:ltsc2025
 
 # Use powershell by default
 SHELL ["powershell.exe", "-ExecutionPolicy", "Bypass", "-Command"]
@@ -17,14 +17,14 @@ RUN "[Environment]::SetEnvironmentVariable(\"Path\", [System.Environment]::GetEn
 RUN choco install --no-progress -yes llvm
 
 # Visual Studio Build Tools
-RUN "& { iwr https://aka.ms/vs/17/release/vs_buildtools.exe -OutFile vs_installer.exe }"; \
+RUN "& { iwr https://aka.ms/vs/16/release/vs_buildtools.exe -OutFile vs_installer.exe }"; \
     .\vs_installer.exe --quiet --wait --norestart --nocache \
         --add Microsoft.VisualStudio.Workload.VCTools \
         --add Microsoft.VisualStudio.Component.VC.CoreBuildTools \
         --add Microsoft.VisualStudio.Component.VC.Redist.14.Latest \
         --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 \
         --add Microsoft.VisualStudio.Component.VC.ASAN \
-        --add Microsoft.VisualStudio.Component.Windows11SDK.22000 | Out-Null; \
+        --add Microsoft.VisualStudio.Component.Windows10SDK.19041 | Out-Null; \
     Remove-Item -path .\vs_installer.exe
 
 # Start developer command prompt with any other commands specified.
