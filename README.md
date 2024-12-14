@@ -17,11 +17,13 @@ These images are used to target platforms/distributions, not specific tools or c
 - [`fedora`, `fedora-39`, `fedora-40`, `fedora-41` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/fedora/)
 - [`msys-ltsc2019-clang64`, `msys-ltsc2019-mingw64`, `msys-ltsc2019-ucrt64` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/msys-ltsc2019/)
 - [`msys-ltsc2022-clang64`, `msys-ltsc2022-mingw64`, `msys-ltsc2022-ucrt64` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/msys-ltsc2022/)
+- [`msys-ltsc2025-clang64`, `msys-ltsc2025-mingw64`, `msys-ltsc2025-ucrt64` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/msys-ltsc2025/)
 - [`opensuse`, `opensuse-15` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/opensuse/)
 - [`rocky`, `rocky-8`, `rocky-9` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/rocky/)
 - [`ubuntu`, `ubuntu-20.04`, `ubuntu-22.04`, `ubuntu-24.04` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/ubuntu/)
 - [`windows-ltsc2019`, `windows-ltsc2019-vs2019`, `windows-ltsc2019-vs2022` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/windows-ltsc2019/)
-- [`windows`, `windows-ltsc2022`, `windows-ltsc2022-vs2019`, `windows-ltsc2022-vs2022` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/windows-ltsc2022/)
+- [`windows-ltsc2022`, `windows-ltsc2022-vs2019`, `windows-ltsc2022-vs2022` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/windows-ltsc2022/)
+- [`windows`, `windows-ltsc2025`, `windows-ltsc2025-vs2019`, `windows-ltsc2025-vs2022` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/windows-ltsc2025/)
 
 ## Architecture Support
 
