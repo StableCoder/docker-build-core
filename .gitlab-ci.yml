@@ -36,8 +36,8 @@ variables:
     refs:
       - main
   script:
-    - if ($env:NO_CACHE) { $env:NO_CACHE = "-NoCache" }
-    - ./build-windows.ps1 $env:NO_CACHE -ImageName build-core-test -ImageDir $env:IMAGE_DIR -Test
+    - if (!$env:NO_CACHE) { ./build-windows.ps1 -ImageName build-core-test -ImageDir $env:IMAGE_DIR -Test }
+    - if ($env:NO_CACHE) { ./build-windows.ps1 -NoCache -ImageName build-core-test -ImageDir $env:IMAGE_DIR -Test }
 
 Alma Build:
   variables:
@@ -138,8 +138,8 @@ MSYS Build (2025):
     refs:
       - main
   script:
-    - if ($env:NO_CACHE) { $env:NO_CACHE = "-NoCache" }
-    - ./build-windows.ps1 $env:NO_CACHE -ImageDir $env:IMAGE_DIR -ImageName $env:IMAGE_NAME -Test -Push
+    - if (!$env:NO_CACHE) { ./build-windows.ps1 -ImageDir $env:IMAGE_DIR -ImageName $env:IMAGE_NAME -Test -Push }
+    - if ($env:NO_CACHE) { ./build-windows.ps1 -NoCache -ImageDir $env:IMAGE_DIR -ImageName $env:IMAGE_NAME -Test -Push }
 
 Alma Upload:
   variables:
