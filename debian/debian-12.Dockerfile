@@ -1,4 +1,5 @@
 # PLATFORMS: linux/amd64 linux/arm64 linux/ppc64le linux/s390x
+# ALTERNATE_TAGS: debian
 FROM docker.io/debian:12
 
 RUN apt-get update \

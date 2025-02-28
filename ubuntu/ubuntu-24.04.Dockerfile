@@ -1,4 +1,5 @@
 # PLATFORMS: linux/amd64 linux/arm64 linux/ppc64le linux/s390x linux/riscv64
+# ALTERNATE_TAGS: ubuntu
 FROM docker.io/ubuntu:24.04
 
 # Set for tzdata to noninteractive mode

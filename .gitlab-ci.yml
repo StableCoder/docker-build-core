@@ -1,16 +1,11 @@
-# Optional Environment Variables
-# IMAGE_NAME - The main name of the image, to override the original name.
-
 stages:
   - Build Images
-  - Upload Images
+  - Push Images
 
 variables:
-  IMAGE_NAME: "stabletec/build-core"
-
-#############################
-# Image Build/Testing Stage #
-#############################
+  BUILD_IMAGE_REPO: "stabletec-lpfs:5000/stabletec/build-core"
+  PUSH_IMAGE_REPO: "docker.io/stabletec/build-core"
+  USE_LAYERS: "--layers"
 
 .linux_build_template: &linux_build_template
   stage: Build Images
@@ -18,196 +13,237 @@ variables:
     - container-builder
     - linux
     - podman
-    - qemu
-  except:
-    refs:
-      - main
+    - ${ARCH}
   script:
-    - ./build-linux.sh $NO_CACHE --image-dir ${IMAGE_DIR} --tag build-core-test --rm
+    - export IMAGE_TAG=$(basename -- $DOCKERFILE)
+    - export IMAGE_TAG=${IMAGE_TAG%.*}
+    - export BUILDAH_LAYERS=false
+    - podman build
+        --pull $USE_LAYERS $NO_CACHE
+        --cache-from $BUILD_IMAGE_REPO
+        --cache-to $BUILD_IMAGE_REPO
+        --platform linux/$ARCH
+        --tag $BUILD_IMAGE_REPO:$IMAGE_TAG-$ARCH
+        --file $DOCKERFILE
+        .
+    - podman push $BUILD_IMAGE_REPO:$IMAGE_TAG-$ARCH
+    - podman rmi $BUILD_IMAGE_REPO:$IMAGE_TAG-$ARCH
 
 .windows_build_template: &windows_build_template
   stage: Build Images
   tags:
     - container-builder
     - windows
-    - amd64
+    - docker
+    - ${ARCH}
     - ${WINDOWS_CONTAINER_BASE_VERSION}
-  except:
-    refs:
-      - main
   script:
-    - if (!$env:NO_CACHE) { ./build-windows.ps1 -ImageName build-core-test -ImageDir $env:IMAGE_DIR -Test }
-    - if ($env:NO_CACHE) { ./build-windows.ps1 -NoCache -ImageName build-core-test -ImageDir $env:IMAGE_DIR -Test }
+    - $env:IMAGE_TAG=$(Get-Item $DOCKERFILE).BaseName
+    - docker build
+        --isolation=process
+        --pull $env:NO_CACHE
+        --platform windows/$ARCH
+        --tag ${env:BUILD_IMAGE_REPO}:${env:IMAGE_TAG}-$ARCH
+        --file $DOCKERFILE
+        .
+    - docker push ${env:BUILD_IMAGE_REPO}:$env:IMAGE_TAG-$ARCH
+    # @TODO - Remove images when remote cache working
+    #- docker rmi ${env:BUILD_IMAGE_REPO}:$env:IMAGE_TAG-$ARCH
 
 Alma Build:
-  variables:
-    IMAGE_DIR: alma
+  parallel:
+    matrix:
+    - ARCH: [amd64, arm64, ppc64le, s390x]
+      DOCKERFILE: [alma/alma-8.Dockerfile, alma/alma-9.Dockerfile]
   <<: *linux_build_template
 
-Arch/SteamOS Build:
-  variables:
-    IMAGE_DIR: arch
-  <<: *linux_build_template
-
-Fedora Build:
-  variables:
-    IMAGE_DIR: fedora
-  <<: *linux_build_template
-
-Rocky Build:
-  variables:
-    IMAGE_DIR: rocky
+Arch Build:
+  parallel:
+    matrix:
+    - ARCH: [amd64]
+      DOCKERFILE: [arch/arch.Dockerfile]
   <<: *linux_build_template
 
 Debian Build:
-  variables:
-    IMAGE_DIR: debian
+  parallel:
+    matrix:
+    - ARCH: [amd64, arm64]
+      DOCKERFILE: [debian/debian-10.Dockerfile, debian/debian-11.Dockerfile]
+    - ARCH: [amd64, arm64, ppc64le, s390x]
+      DOCKERFILE: [debian/debian-12.Dockerfile]
   <<: *linux_build_template
 
-Ubuntu Build:
-  variables:
-    IMAGE_DIR: ubuntu
+Fedora Build:
+  parallel:
+    matrix:
+    - ARCH: [amd64, arm64, ppc64le, s390x]
+      DOCKERFILE: [fedora/fedora-40.Dockerfile, fedora/fedora-41.Dockerfile]
   <<: *linux_build_template
 
 openSUSE Build:
-  variables:
-    IMAGE_DIR: opensuse
+  parallel:
+    matrix:
+    - ARCH: [amd64, arm64, ppc64le, s390x]
+      DOCKERFILE: [opensuse/opensuse-15.Dockerfile]
   <<: *linux_build_template
 
-Windows Build (2019):
-  variables:
-    WINDOWS_CONTAINER_BASE_VERSION: ltsc2019
-    IMAGE_DIR: windows-ltsc2019
+Rocky Build:
+  parallel:
+    matrix:
+    - ARCH: [amd64, arm64]
+      DOCKERFILE: [rocky/rocky-8.Dockerfile]
+    - ARCH: [amd64, arm64, ppc64le, s390x]
+      DOCKERFILE: [rocky/rocky-9.Dockerfile]
+  <<: *linux_build_template
+
+Ubuntu Build:
+  parallel:
+    matrix:
+    - ARCH: [amd64, arm64, ppc64le, s390x, riscv64]
+      DOCKERFILE: [ubuntu/ubuntu-20.04.Dockerfile, ubuntu/ubuntu-22.04.Dockerfile, ubuntu/ubuntu-24.04.Dockerfile]
+  <<: *linux_build_template
+
+Windows Build:
+  parallel:
+    matrix:
+    - ARCH: [amd64]
+      DOCKERFILE: [windows-ltsc2019/windows-ltsc2019-vs2019.Dockerfile, windows-ltsc2019/windows-ltsc2019-vs2022.Dockerfile]
+      WINDOWS_CONTAINER_BASE_VERSION: [ltsc2019]
+    - ARCH: [amd64]
+      DOCKERFILE: [windows-ltsc2022/windows-ltsc2022-vs2019.Dockerfile, windows-ltsc2022/windows-ltsc2022-vs2022.Dockerfile]
+      WINDOWS_CONTAINER_BASE_VERSION: [ltsc2022]
+    - ARCH: [amd64]
+      DOCKERFILE: [windows-ltsc2025/windows-ltsc2025-vs2019.Dockerfile, windows-ltsc2025/windows-ltsc2025-vs2022.Dockerfile]
+      WINDOWS_CONTAINER_BASE_VERSION: [ltsc2025]
   <<: *windows_build_template
 
-Windows Build (2022):
-  variables:
-    WINDOWS_CONTAINER_BASE_VERSION: ltsc2022
-    IMAGE_DIR: windows-ltsc2022
+MSYS Build:
+  parallel:
+    matrix:
+    - ARCH: [amd64]
+      DOCKERFILE: [msys-ltsc2019/msys-ltsc2019-clang64.Dockerfile, msys-ltsc2019/msys-ltsc2019-mingw64.Dockerfile, msys-ltsc2019/msys-ltsc2019-ucrt64.Dockerfile]
+      WINDOWS_CONTAINER_BASE_VERSION: [ltsc2019]
+    - ARCH: [amd64]
+      DOCKERFILE: [msys-ltsc2022/msys-ltsc2022-clang64.Dockerfile, msys-ltsc2022/msys-ltsc2022-mingw64.Dockerfile, msys-ltsc2022/msys-ltsc2022-ucrt64.Dockerfile]
+      WINDOWS_CONTAINER_BASE_VERSION: [ltsc2022]
+    - ARCH: [amd64]
+      DOCKERFILE: [msys-ltsc2025/msys-ltsc2025-clang64.Dockerfile, msys-ltsc2025/msys-ltsc2025-mingw64.Dockerfile, msys-ltsc2025/msys-ltsc2025-ucrt64.Dockerfile]
+      WINDOWS_CONTAINER_BASE_VERSION: [ltsc2025]
   <<: *windows_build_template
 
-Windows Build (2025):
-  variables:
-    WINDOWS_CONTAINER_BASE_VERSION: ltsc2025
-    IMAGE_DIR: windows-ltsc2025
-  <<: *windows_build_template
+# Push Images
 
-MSYS Build (2019):
-  variables:
-    WINDOWS_CONTAINER_BASE_VERSION: ltsc2019
-    IMAGE_DIR: msys-ltsc2019
-  <<: *windows_build_template
-
-MSYS Build (2022):
-  variables:
-    WINDOWS_CONTAINER_BASE_VERSION: ltsc2022
-    IMAGE_DIR: msys-ltsc2022
-  <<: *windows_build_template
-
-MSYS Build (2025):
-  variables:
-    WINDOWS_CONTAINER_BASE_VERSION: ltsc2025
-    IMAGE_DIR: msys-ltsc2025
-  <<: *windows_build_template
-
-#######################
-# Image Uploads Stage #
-#######################
-
-.linux_upload_template: &linux_upload_template
-  stage: Upload Images
+.push_template: &push_template
+  stage: Push Images
+  only:
+    refs:
+      - main
   tags:
     - container-builder
     - linux
     - podman
-    - qemu
-  only:
-    refs:
-      - main
   script:
-    - ./build-linux.sh $NO_CACHE --image-dir ${IMAGE_DIR} --tag ${IMAGE_NAME} --push
+    - export IMAGE_TAG=$(basename -- $DOCKERFILE)
+    - export IMAGE_TAG=${IMAGE_TAG%.*}
+    - if podman manifest exists $BUILD_IMAGE_REPO:$IMAGE_TAG; then
+        echo "podman manifest rm $BUILD_IMAGE_REPO:$IMAGE_TAG" ;
+        podman manifest rm $BUILD_IMAGE_REPO:$IMAGE_TAG ;
+      fi
+    - podman manifest create $BUILD_IMAGE_REPO:$IMAGE_TAG
+    - for ARCH in $ARCHITECTURES; do
+        echo "podman manifest add $BUILD_IMAGE_REPO:$IMAGE_TAG $BUILD_IMAGE_REPO:$IMAGE_TAG-$ARCH" ;
+        podman manifest add $BUILD_IMAGE_REPO:$IMAGE_TAG $BUILD_IMAGE_REPO:$IMAGE_TAG-$ARCH ;
+      done
+    # push default tag
+    - podman manifest push --all -f v2s2 $BUILD_IMAGE_REPO:$IMAGE_TAG $PUSH_IMAGE_REPO:$IMAGE_TAG
+    # push alternate tags
+    - |
+      set +e
+      TAGS=$(grep -e "^# ALTERNATE_TAGS: " $DOCKERFILE | head -n 1)
+      TAGS=${TAGS:17} 
+      for TAG in $TAGS; do
+        echo "podman manifest push --all -f v2s2 $BUILD_IMAGE_REPO:$IMAGE_TAG $PUSH_IMAGE_REPO:$TAG" ;
+        podman manifest push --all -f v2s2 $BUILD_IMAGE_REPO:$IMAGE_TAG $PUSH_IMAGE_REPO:$TAG ;
+      done
+    - podman manifest rm $BUILD_IMAGE_REPO:$IMAGE_TAG
 
-.windows_upload_template: &windows_upload_template
-  stage: Upload Images
-  tags:
-    - container-builder
-    - windows
-    - amd64
-    - ${WINDOWS_CONTAINER_BASE_VERSION}
-  only:
-    refs:
-      - main
-  script:
-    - if (!$env:NO_CACHE) { ./build-windows.ps1 -ImageDir $env:IMAGE_DIR -ImageName $env:IMAGE_NAME -Test -Push }
-    - if ($env:NO_CACHE) { ./build-windows.ps1 -NoCache -ImageDir $env:IMAGE_DIR -ImageName $env:IMAGE_NAME -Test -Push }
+Alma Push:
+  parallel:
+    matrix:
+    - ARCHITECTURES: "amd64 arm64 ppc64le s390x"
+      DOCKERFILE: [alma/alma-8.Dockerfile, alma/alma-9.Dockerfile]
+  <<: *push_template
 
-Alma Upload:
-  variables:
-    IMAGE_DIR: alma
-  <<: *linux_upload_template
+Arch Push:
+  parallel:
+    matrix:
+    - ARCHITECTURES: "amd64"
+      DOCKERFILE: [arch/arch.Dockerfile]
+  <<: *push_template
 
-Arch/SteamOS Upload:
-  variables:
-    IMAGE_DIR: arch
-  <<: *linux_upload_template
+Debian Push:
+  parallel:
+    matrix:
+    - ARCHITECTURES: "amd64 arm64"
+      DOCKERFILE: [debian/debian-10.Dockerfile, debian/debian-11.Dockerfile]
+    - ARCHITECTURES: "amd64 arm64 ppc64le s390x"
+      DOCKERFILE: [debian/debian-12.Dockerfile]
+  <<: *push_template
 
-Fedora Upload:
-  variables:
-    IMAGE_DIR: fedora
-  <<: *linux_upload_template
+Fedora Push:
+  parallel:
+    matrix:
+    - ARCHITECTURES: "amd64 arm64 ppc64le s390x"
+      DOCKERFILE: [fedora/fedora-40.Dockerfile, fedora/fedora-41.Dockerfile]
+  <<: *push_template
 
-Rocky Upload:
-  variables:
-    IMAGE_DIR: rocky
-  <<: *linux_upload_template
+openSUSE Push:
+  parallel:
+    matrix:
+    - ARCHITECTURES: "amd64 arm64 ppc64le s390x"
+      DOCKERFILE: [opensuse/opensuse-15.Dockerfile]
+  <<: *push_template
 
-Debian Upload:
-  variables:
-    IMAGE_DIR: debian
-  <<: *linux_upload_template
+Rocky Push:
+  parallel:
+    matrix:
+    - ARCHITECTURES: "amd64 arm64"
+      DOCKERFILE: [rocky/rocky-8.Dockerfile]
+    - ARCHITECTURES: "amd64 arm64 ppc64le s390x"
+      DOCKERFILE: [rocky/rocky-9.Dockerfile]
+  <<: *push_template
 
-Ubuntu Upload:
-  variables:
-    IMAGE_DIR: ubuntu
-  <<: *linux_upload_template
+Ubuntu Push:
+  parallel:
+    matrix:
+    - ARCHITECTURES: "amd64 arm64 ppc64le s390x riscv64"
+      DOCKERFILE: [ubuntu/ubuntu-20.04.Dockerfile, ubuntu/ubuntu-22.04.Dockerfile, ubuntu/ubuntu-24.04.Dockerfile]
+  <<: *push_template
 
-openSUSE Upload:
-  variables:
-    IMAGE_DIR: opensuse
-  <<: *linux_upload_template
+Windows Push:
+  parallel:
+    matrix:
+    - ARCHITECTURES: "amd64"
+      DOCKERFILE: [windows-ltsc2019/windows-ltsc2019-vs2019.Dockerfile, windows-ltsc2019/windows-ltsc2019-vs2022.Dockerfile]
+      WINDOWS_CONTAINER_BASE_VERSION: [ltsc2019]
+    - ARCHITECTURES: "amd64"
+      DOCKERFILE: [windows-ltsc2022/windows-ltsc2022-vs2019.Dockerfile, windows-ltsc2022/windows-ltsc2022-vs2022.Dockerfile]
+      WINDOWS_CONTAINER_BASE_VERSION: [ltsc2022]
+    - ARCHITECTURES: "amd64"
+      DOCKERFILE: [windows-ltsc2025/windows-ltsc2025-vs2019.Dockerfile, windows-ltsc2025/windows-ltsc2025-vs2022.Dockerfile]
+      WINDOWS_CONTAINER_BASE_VERSION: [ltsc2025]
+  <<: *push_template
 
-Windows Upload (2019):
-  variables:
-    WINDOWS_CONTAINER_BASE_VERSION: ltsc2019
-    IMAGE_DIR: windows-ltsc2019
-  <<: *windows_upload_template
-
-Windows Upload (2022):
-  variables:
-    WINDOWS_CONTAINER_BASE_VERSION: ltsc2022
-    IMAGE_DIR: windows-ltsc2022
-  <<: *windows_upload_template
-
-Windows Upload (2025):
-  variables:
-    WINDOWS_CONTAINER_BASE_VERSION: ltsc2025
-    IMAGE_DIR: windows-ltsc2025
-  <<: *windows_upload_template
-
-MSYS Upload (2019):
-  variables:
-    WINDOWS_CONTAINER_BASE_VERSION: ltsc2019
-    IMAGE_DIR: msys-ltsc2019
-  <<: *windows_upload_template
-
-MSYS Upload (2022):
-  variables:
-    WINDOWS_CONTAINER_BASE_VERSION: ltsc2022
-    IMAGE_DIR: msys-ltsc2022
-  <<: *windows_upload_template
-
-MSYS Upload (2025):
-  variables:
-    WINDOWS_CONTAINER_BASE_VERSION: ltsc2025
-    IMAGE_DIR: msys-ltsc2025
-  <<: *windows_upload_template
+MSYS Push:
+  parallel:
+    matrix:
+    - ARCHITECTURES: "amd64"
+      DOCKERFILE: [msys-ltsc2019/msys-ltsc2019-clang64.Dockerfile, msys-ltsc2019/msys-ltsc2019-mingw64.Dockerfile, msys-ltsc2019/msys-ltsc2019-ucrt64.Dockerfile]
+      WINDOWS_CONTAINER_BASE_VERSION: [ltsc2019]
+    - ARCHITECTURES: "amd64"
+      DOCKERFILE: [msys-ltsc2022/msys-ltsc2022-clang64.Dockerfile, msys-ltsc2022/msys-ltsc2022-mingw64.Dockerfile, msys-ltsc2022/msys-ltsc2022-ucrt64.Dockerfile]
+      WINDOWS_CONTAINER_BASE_VERSION: [ltsc2022]
+    - ARCHITECTURES: "amd64"
+      DOCKERFILE: [msys-ltsc2025/msys-ltsc2025-clang64.Dockerfile, msys-ltsc2025/msys-ltsc2025-mingw64.Dockerfile, msys-ltsc2025/msys-ltsc2025-ucrt64.Dockerfile]
+      WINDOWS_CONTAINER_BASE_VERSION: [ltsc2025]
+  <<: *push_template

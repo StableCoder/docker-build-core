@@ -1,3 +1,5 @@
+# ALTERNATE_TAGS: windows-ltsc2022
+
 # Use the latest Windows Server Core image.
 FROM mcr.microsoft.com/windows/servercore:ltsc2022
 

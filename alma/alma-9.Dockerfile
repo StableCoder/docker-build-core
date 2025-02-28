@@ -1,4 +1,5 @@
 # PLATFORMS: linux/amd64 linux/arm64 linux/ppc64le linux/s390x
+# ALTERNATE_TAGS: alma
 FROM docker.io/almalinux:9
 
 RUN dnf update -y \
