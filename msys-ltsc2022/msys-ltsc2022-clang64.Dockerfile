@@ -23,12 +23,5 @@ RUN function msys() { C:\msys64\usr\bin\bash.exe @('-lc') + @Args; } \
     msys 'pacman --noconfirm -S msys/git msys/subversion ${MINGW_PACKAGE_PREFIX}-ccmake ${MINGW_PACKAGE_PREFIX}-ninja ${MINGW_PACKAGE_PREFIX}-python ${MINGW_PACKAGE_PREFIX}-toolchain'; \
     msys 'pacman --noconfirm -Scc'
 
-# Clang (for GCC-primary environments)
-RUN function msys() { C:\msys64\usr\bin\bash.exe @('-lc') + @Args; } \
-    msys ' '; \
-    msys 'pacman --noconfirm -Syuu'; \
-    msys 'pacman --noconfirm -S ${MINGW_PACKAGE_PREFIX}-clang'; \
-    msys 'pacman --noconfirm -Scc'
-
 ENTRYPOINT ["C:/msys64/usr/bin/bash.exe", "-lc", "'$@'", "--"]
 CMD ["bash"]
