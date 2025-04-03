@@ -20,7 +20,7 @@ RUN apt-get update \
     && apt-get clean
 
 # CMake
-ENV CMAKE_VER=3.31.2
+ENV CMAKE_VER=3.31.6
 RUN wget -q https://github.com/Kitware/CMake/releases/download/v${CMAKE_VER}/cmake-${CMAKE_VER}.tar.gz \
     && tar -xf cmake-${CMAKE_VER}.tar.gz \
     && cd cmake-${CMAKE_VER} \
