@@ -1,10 +1,13 @@
 # PLATFORMS: linux/amd64 linux/arm64 linux/ppc64le linux/s390x
-FROM docker.io/rockylinux/rockylinux:9
+# ALTERNATE_TAGS: alma
+FROM docker.io/almalinux:10
 
 RUN dnf update -y \
     # Enable EPEL/CRB repositories
     && dnf install -y dnf-plugins-core epel-release \
+    && dnf update -y \
     && crb enable \
+    && dnf update -y \
     # Install packages
     && dnf install -y \
     # Dev Tools

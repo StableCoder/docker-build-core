@@ -11,7 +11,7 @@ These images are used to target platforms/distributions, not specific tools or c
 
 ## Supported tags and respective `Dockerfile` links
 
-- [`alma`, `alma-8`, `alma-9` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/alma/)
+- [`alma`, `alma-8`, `alma-9`, `alma-10` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/alma/)
 - [`arch` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/arch/)
 - [`debian`, `debian-10`, `debian-11`, `debian-12` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/debian/)
 - [`fedora`, `fedora-40`, `fedora-41` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/fedora/)
@@ -19,7 +19,7 @@ These images are used to target platforms/distributions, not specific tools or c
 - [`msys-ltsc2022-clang64`, `msys-ltsc2022-mingw64`, `msys-ltsc2022-ucrt64` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/msys-ltsc2022/)
 - [`msys-ltsc2025-clang64`, `msys-ltsc2025-mingw64`, `msys-ltsc2025-ucrt64` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/msys-ltsc2025/)
 - [`opensuse`, `opensuse-15` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/opensuse/)
-- [`rocky`, `rocky-8`, `rocky-9` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/rocky/)
+- [`rocky`, `rocky-8`, `rocky-9`, `rocky-10` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/rocky/)
 - [`ubuntu`, `ubuntu-20.04`, `ubuntu-22.04`, `ubuntu-24.04` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/ubuntu/)
 - [`windows-ltsc2019`, `windows-ltsc2019-vs2019`, `windows-ltsc2019-vs2022` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/windows-ltsc2019/)
 - [`windows-ltsc2022`, `windows-ltsc2022-vs2019`, `windows-ltsc2022-vs2022` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/windows-ltsc2022/)
@@ -36,7 +36,7 @@ These images are used to target platforms/distributions, not specific tools or c
 | Fedora         | X     | X     | X       | X     |         |
 | openSUSE       | X     | X     | X       | X     |         |
 | Rocky 8        | X     | X     |         |       |         |
-| Rocky 9+       | X     | X     | X       | X     |         |
+| Rocky 9/10     | X     | X     | X       | X     |         |
 | Ubtuntu        | X     | X     | X       | X     | X       |
 | Windows        | X     |       |         |       |         |
 | MSYS/MinGW     | X     |       |         |       |         |

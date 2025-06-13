@@ -1,5 +1,5 @@
 # PLATFORMS: linux/amd64 linux/arm64
-FROM docker.io/rockylinux:8
+FROM docker.io/rockylinux/rockylinux:8
 
 RUN dnf update -y \
     # Enable EPEL/CRB repositories

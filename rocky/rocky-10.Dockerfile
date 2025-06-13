@@ -1,5 +1,6 @@
 # PLATFORMS: linux/amd64 linux/arm64 linux/ppc64le linux/s390x
-FROM docker.io/rockylinux/rockylinux:9
+# ALTERNATE_TAGS: rocky
+FROM docker.io/rockylinux/rockylinux:10
 
 RUN dnf update -y \
     # Enable EPEL/CRB repositories
