@@ -68,7 +68,7 @@ Debian Build:
   parallel:
     matrix:
     - ARCH: [amd64, arm64]
-      DOCKERFILE: [debian/debian-10.Dockerfile, debian/debian-11.Dockerfile]
+      DOCKERFILE: [debian/debian-11.Dockerfile]
     - ARCH: [amd64, arm64, ppc64le, s390x]
       DOCKERFILE: [debian/debian-12.Dockerfile]
   <<: *linux_build_template
@@ -185,7 +185,7 @@ Debian Push:
   parallel:
     matrix:
     - ARCHITECTURES: "amd64 arm64"
-      DOCKERFILE: [debian/debian-10.Dockerfile, debian/debian-11.Dockerfile]
+      DOCKERFILE: [debian/debian-11.Dockerfile]
     - ARCHITECTURES: "amd64 arm64 ppc64le s390x"
       DOCKERFILE: [debian/debian-12.Dockerfile]
   <<: *push_template
