@@ -14,7 +14,7 @@ These images are used to target platforms/distributions, not specific tools or c
 - [`alma`, `alma-8`, `alma-9`, `alma-10` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/alma/)
 - [`arch` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/arch/)
 - [`debian`, `debian-10`, `debian-11`, `debian-12` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/debian/)
-- [`fedora`, `fedora-40`, `fedora-41` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/fedora/)
+- [`fedora`, `fedora-41`, `fedora-42` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/fedora/)
 - [`msys-ltsc2019-clang64`, `msys-ltsc2019-mingw64`, `msys-ltsc2019-ucrt64` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/msys-ltsc2019/)
 - [`msys-ltsc2022-clang64`, `msys-ltsc2022-mingw64`, `msys-ltsc2022-ucrt64` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/msys-ltsc2022/)
 - [`msys-ltsc2025-clang64`, `msys-ltsc2025-mingw64`, `msys-ltsc2025-ucrt64` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/msys-ltsc2025/)
