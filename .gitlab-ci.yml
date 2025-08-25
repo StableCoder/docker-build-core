@@ -121,13 +121,13 @@ MSYS Build:
   parallel:
     matrix:
     - ARCH: [amd64]
-      DOCKERFILE: [msys-ltsc2019/msys-ltsc2019-clang64.Dockerfile, msys-ltsc2019/msys-ltsc2019-mingw64.Dockerfile, msys-ltsc2019/msys-ltsc2019-ucrt64.Dockerfile]
+      DOCKERFILE: [msys-ltsc2019/msys-ltsc2019-clang64.Dockerfile, msys-ltsc2019/msys-ltsc2019-mingw64.Dockerfile, msys-ltsc2019/msys-ltsc2019-msys2.Dockerfile, msys-ltsc2019/msys-ltsc2019-ucrt64.Dockerfile]
       WINDOWS_CONTAINER_BASE_VERSION: [ltsc2019]
     - ARCH: [amd64]
-      DOCKERFILE: [msys-ltsc2022/msys-ltsc2022-clang64.Dockerfile, msys-ltsc2022/msys-ltsc2022-mingw64.Dockerfile, msys-ltsc2022/msys-ltsc2022-ucrt64.Dockerfile]
+      DOCKERFILE: [msys-ltsc2022/msys-ltsc2022-clang64.Dockerfile, msys-ltsc2022/msys-ltsc2022-mingw64.Dockerfile, msys-ltsc2022/msys-ltsc2022-msys2.Dockerfile, msys-ltsc2022/msys-ltsc2022-ucrt64.Dockerfile]
       WINDOWS_CONTAINER_BASE_VERSION: [ltsc2022]
     - ARCH: [amd64]
-      DOCKERFILE: [msys-ltsc2025/msys-ltsc2025-clang64.Dockerfile, msys-ltsc2025/msys-ltsc2025-mingw64.Dockerfile, msys-ltsc2025/msys-ltsc2025-ucrt64.Dockerfile]
+      DOCKERFILE: [msys-ltsc2025/msys-ltsc2025-clang64.Dockerfile, msys-ltsc2025/msys-ltsc2025-mingw64.Dockerfile, msys-ltsc2025/msys-ltsc2025-msys2.Dockerfile, msys-ltsc2025/msys-ltsc2025-ucrt64.Dockerfile]
       WINDOWS_CONTAINER_BASE_VERSION: [ltsc2025]
   <<: *windows_build_template
 
@@ -238,12 +238,12 @@ MSYS Push:
   parallel:
     matrix:
     - ARCHITECTURES: "amd64"
-      DOCKERFILE: [msys-ltsc2019/msys-ltsc2019-clang64.Dockerfile, msys-ltsc2019/msys-ltsc2019-mingw64.Dockerfile, msys-ltsc2019/msys-ltsc2019-ucrt64.Dockerfile]
+      DOCKERFILE: [msys-ltsc2019/msys-ltsc2019-clang64.Dockerfile, msys-ltsc2019/msys-ltsc2019-mingw64.Dockerfile, msys-ltsc2019/msys-ltsc2019-msys2.Dockerfile, msys-ltsc2019/msys-ltsc2019-ucrt64.Dockerfile]
       WINDOWS_CONTAINER_BASE_VERSION: [ltsc2019]
     - ARCHITECTURES: "amd64"
-      DOCKERFILE: [msys-ltsc2022/msys-ltsc2022-clang64.Dockerfile, msys-ltsc2022/msys-ltsc2022-mingw64.Dockerfile, msys-ltsc2022/msys-ltsc2022-ucrt64.Dockerfile]
+      DOCKERFILE: [msys-ltsc2022/msys-ltsc2022-clang64.Dockerfile, msys-ltsc2022/msys-ltsc2022-mingw64.Dockerfile, msys-ltsc2022/msys-ltsc2022-msys2.Dockerfile, msys-ltsc2022/msys-ltsc2022-ucrt64.Dockerfile]
       WINDOWS_CONTAINER_BASE_VERSION: [ltsc2022]
     - ARCHITECTURES: "amd64"
-      DOCKERFILE: [msys-ltsc2025/msys-ltsc2025-clang64.Dockerfile, msys-ltsc2025/msys-ltsc2025-mingw64.Dockerfile, msys-ltsc2025/msys-ltsc2025-ucrt64.Dockerfile]
+      DOCKERFILE: [msys-ltsc2025/msys-ltsc2025-clang64.Dockerfile, msys-ltsc2025/msys-ltsc2025-mingw64.Dockerfile, msys-ltsc2025/msys-ltsc2025-msys2.Dockerfile, msys-ltsc2025/msys-ltsc2025-ucrt64.Dockerfile]
       WINDOWS_CONTAINER_BASE_VERSION: [ltsc2025]
   <<: *push_template
