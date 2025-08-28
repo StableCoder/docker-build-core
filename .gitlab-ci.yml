@@ -29,7 +29,7 @@ variables:
     - podman push $BUILD_IMAGE_REPO:$IMAGE_TAG-$ARCH
     - podman rmi $BUILD_IMAGE_REPO:$IMAGE_TAG-$ARCH
 
-.windows_build_template: &windows_build_template
+.windows_docker_build_template: &windows_docker_build_template
   stage: Build Images
   tags:
     - container-builder
@@ -47,8 +47,26 @@ variables:
         --file $DOCKERFILE
         .
     - docker push ${env:BUILD_IMAGE_REPO}:$env:IMAGE_TAG-$ARCH
-    # @TODO - Remove images when remote cache working
-    #- docker rmi ${env:BUILD_IMAGE_REPO}:$env:IMAGE_TAG-$ARCH
+
+.windows_buildkit_build_template: &windows_buildkit_build_template
+  stage: Build Images
+  tags:
+    - container-builder
+    - windows
+    - buildkit
+    - ${ARCH}
+    - ${WINDOWS_CONTAINER_BASE_VERSION}
+  script:
+    - $env:IMAGE_TAG=$(Get-Item $DOCKERFILE).BaseName
+    - buildctl build $env:NO_CACHE
+        --frontend=dockerfile.v0
+        --opt filename=$DOCKERFILE
+        --opt platform=windows/$ARCH
+        --local context=.
+        --local dockerfile=.
+        --import-cache type=registry,registry.insecure=true,ref=${env:BUILD_IMAGE_REPO}
+        --export-cache type=registry,registry.insecure=true,ref=${env:BUILD_IMAGE_REPO}
+        --output type=image,name=${env:BUILD_IMAGE_REPO}:${env:IMAGE_TAG}-$ARCH,registry.insecure=true,push=true
 
 Alma Build:
   parallel:
@@ -103,7 +121,7 @@ Ubuntu Build:
       DOCKERFILE: [ubuntu/ubuntu-20.04.Dockerfile, ubuntu/ubuntu-22.04.Dockerfile, ubuntu/ubuntu-24.04.Dockerfile]
   <<: *linux_build_template
 
-Windows Build:
+Windows Build (Docker):
   parallel:
     matrix:
     - ARCH: [amd64]
@@ -115,21 +133,26 @@ Windows Build:
     - ARCH: [amd64]
       DOCKERFILE: [windows-ltsc2025/windows-ltsc2025-vs2019.Dockerfile, windows-ltsc2025/windows-ltsc2025-vs2022.Dockerfile]
       WINDOWS_CONTAINER_BASE_VERSION: [ltsc2025]
-  <<: *windows_build_template
+  <<: *windows_docker_build_template
 
-MSYS Build:
+MSYS Build (Docker):
   parallel:
     matrix:
     - ARCH: [amd64]
       DOCKERFILE: [msys-ltsc2019/msys-ltsc2019-clang64.Dockerfile, msys-ltsc2019/msys-ltsc2019-mingw64.Dockerfile, msys-ltsc2019/msys-ltsc2019-msys2.Dockerfile, msys-ltsc2019/msys-ltsc2019-ucrt64.Dockerfile]
       WINDOWS_CONTAINER_BASE_VERSION: [ltsc2019]
+  <<: *windows_docker_build_template
+
+MSYS Build (Buildkit):
+  parallel:
+    matrix:
     - ARCH: [amd64]
       DOCKERFILE: [msys-ltsc2022/msys-ltsc2022-clang64.Dockerfile, msys-ltsc2022/msys-ltsc2022-mingw64.Dockerfile, msys-ltsc2022/msys-ltsc2022-msys2.Dockerfile, msys-ltsc2022/msys-ltsc2022-ucrt64.Dockerfile]
       WINDOWS_CONTAINER_BASE_VERSION: [ltsc2022]
     - ARCH: [amd64]
       DOCKERFILE: [msys-ltsc2025/msys-ltsc2025-clang64.Dockerfile, msys-ltsc2025/msys-ltsc2025-mingw64.Dockerfile, msys-ltsc2025/msys-ltsc2025-msys2.Dockerfile, msys-ltsc2025/msys-ltsc2025-ucrt64.Dockerfile]
       WINDOWS_CONTAINER_BASE_VERSION: [ltsc2025]
-  <<: *windows_build_template
+  <<: *windows_buildkit_build_template
 
 # Push Images
 
