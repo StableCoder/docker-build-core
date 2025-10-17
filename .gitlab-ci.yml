@@ -89,6 +89,8 @@ Debian Build:
       DOCKERFILE: [debian/debian-11.Dockerfile]
     - ARCH: [amd64, arm64, ppc64le, s390x]
       DOCKERFILE: [debian/debian-12.Dockerfile]
+    - ARCH: [amd64, arm64, ppc64le, s390x, riscv64]
+      DOCKERFILE: [debian/debian-13.Dockerfile]
   <<: *linux_build_template
 
 Fedora Build:
@@ -211,6 +213,8 @@ Debian Push:
       DOCKERFILE: [debian/debian-11.Dockerfile]
     - ARCHITECTURES: "amd64 arm64 ppc64le s390x"
       DOCKERFILE: [debian/debian-12.Dockerfile]
+    - ARCHITECTURES: "amd64 arm64 ppc64le s390x riscv64"
+      DOCKERFILE: [debian/debian-13.Dockerfile]
   <<: *push_template
 
 Fedora Push:
