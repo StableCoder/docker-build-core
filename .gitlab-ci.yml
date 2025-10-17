@@ -105,6 +105,8 @@ openSUSE Build:
     matrix:
     - ARCH: [amd64, arm64, ppc64le, s390x]
       DOCKERFILE: [opensuse/opensuse-15.Dockerfile]
+    - ARCH: [amd64, arm64, ppc64le]
+      DOCKERFILE: [opensuse/opensuse-16.Dockerfile]
   <<: *linux_build_template
 
 Rocky Build:
@@ -229,6 +231,8 @@ openSUSE Push:
     matrix:
     - ARCHITECTURES: "amd64 arm64 ppc64le s390x"
       DOCKERFILE: [opensuse/opensuse-15.Dockerfile]
+    - ARCHITECTURES: "amd64 arm64 ppc64le"
+      DOCKERFILE: [opensuse/opensuse-16.Dockerfile]
   <<: *push_template
 
 Rocky Push:
