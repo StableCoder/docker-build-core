@@ -33,7 +33,7 @@ These images are used to target platforms/distributions, not specific tools or c
 - [`msys-ltsc2025-msys2` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/msys-ltsc2025/msys-ltsc2025-msys2.Dockerfile)
 - [`msys-ltsc2025-ucrt64` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/msys-ltsc2025/msys-ltsc2025-ucrt64.Dockerfile)
 - [`opensuse-15` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/opensuse/opensuse-15.Dockerfile)
-- [`opensuse-16` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/opensuse/opensuse-16.Dockerfile)
+- [`opensuse-16`, `opensuse` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/opensuse/opensuse-16.Dockerfile)
 - [`rocky-8` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/rocky/rocky-8.Dockerfile)
 - [`rocky-9`(Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/rocky/rocky-9.Dockerfile)
 - [`rocky-10`, `rocky` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/rocky/rocky-10.Dockerfile)
