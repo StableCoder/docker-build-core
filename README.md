@@ -57,7 +57,8 @@ These images are used to target platforms/distributions, not specific tools or c
 | Debian 12      | X     | X     | X       | X     |         |
 | Debian 13      | X     | X     | X       | X     | X       |
 | Fedora         | X     | X     | X       | X     |         |
-| openSUSE       | X     | X     | X       | X     |         |
+| openSUSE 15    | X     | X     | X       | X     |         |
+| openSUSE 16    | X     | X     | X       |       |         |
 | Rocky 8        | X     | X     |         |       |         |
 | Rocky 9/10     | X     | X     | X       | X     |         |
 | Ubtuntu        | X     | X     | X       | X     | X       |
