@@ -41,11 +41,14 @@ These images are used to target platforms/distributions, not specific tools or c
 - [`ubuntu-22.04` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/ubuntu/ubuntu-22.04.Dockerfile)
 - [`ubuntu-24.04`, `ubuntu` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/ubuntu/ubuntu-24.04.Dockerfile)
 - [`windows-ltsc2019-vs2019` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/windows-ltsc2019/windows-ltsc2019-vs2019.Dockerfile)
-- [`windows-ltsc2019-vs2022`, `windows-ltsc2019` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/windows-ltsc2019/windows-ltsc2019-vs2022.Dockerfile)
+- [`windows-ltsc2019-vs2022` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/windows-ltsc2019/windows-ltsc2019-vs2022.Dockerfile)
+- [`windows-ltsc2019-vs2026`, `windows-ltsc2019` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/windows-ltsc2019/windows-ltsc2019-vs2026.Dockerfile)
 - [`windows-ltsc2022-vs2019` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/windows-ltsc2022/windows-ltsc2022-vs2019.Dockerfile)
-- [`windows-ltsc2022-vs2022`, `windows-ltsc2022` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/windows-ltsc2022/windows-ltsc2022-vs2022.Dockerfile)
+- [`windows-ltsc2022-vs2022` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/windows-ltsc2022/windows-ltsc2022-vs2022.Dockerfile)
+- [`windows-ltsc2022-vs2026`, `windows-ltsc2022` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/windows-ltsc2022/windows-ltsc2022-vs2026.Dockerfile)
 - [`windows-ltsc2025-vs2019` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/windows-ltsc2025/windows-ltsc2025-vs2019.Dockerfile)
-- [`windows-ltsc2025-vs2022`, `windows-ltsc2025`, `windows` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/windows-ltsc2025/windows-ltsc2025-vs2022.Dockerfile)
+- [`windows-ltsc2025-vs2022`, `windows` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/windows-ltsc2025/windows-ltsc2025-vs2022.Dockerfile)
+- [`windows-ltsc2025-vs2026`, `windows-ltsc2025`, `windows` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/windows-ltsc2025/windows-ltsc2025-vs2026.Dockerfile)
 
 ## Architecture Support
 

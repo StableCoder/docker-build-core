@@ -1,5 +1,3 @@
-# ALTERNATE_TAGS: windows-ltsc2019
-
 # Use the latest Windows Server Core image.
 FROM mcr.microsoft.com/dotnet/framework/runtime:4.8-windowsservercore-ltsc2019
 

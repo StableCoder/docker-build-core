@@ -129,13 +129,13 @@ Windows Build (Docker):
   parallel:
     matrix:
     - ARCH: [amd64]
-      DOCKERFILE: [windows-ltsc2019/windows-ltsc2019-vs2019.Dockerfile, windows-ltsc2019/windows-ltsc2019-vs2022.Dockerfile]
+      DOCKERFILE: [windows-ltsc2019/windows-ltsc2019-vs2019.Dockerfile, windows-ltsc2019/windows-ltsc2019-vs2022.Dockerfile, windows-ltsc2019/windows-ltsc2019-vs2026.Dockerfile]
       WINDOWS_CONTAINER_BASE_VERSION: [ltsc2019]
     - ARCH: [amd64]
-      DOCKERFILE: [windows-ltsc2022/windows-ltsc2022-vs2019.Dockerfile, windows-ltsc2022/windows-ltsc2022-vs2022.Dockerfile]
+      DOCKERFILE: [windows-ltsc2022/windows-ltsc2022-vs2019.Dockerfile, windows-ltsc2022/windows-ltsc2022-vs2022.Dockerfile, windows-ltsc2022/windows-ltsc2022-vs2026.Dockerfile]
       WINDOWS_CONTAINER_BASE_VERSION: [ltsc2022]
     - ARCH: [amd64]
-      DOCKERFILE: [windows-ltsc2025/windows-ltsc2025-vs2019.Dockerfile, windows-ltsc2025/windows-ltsc2025-vs2022.Dockerfile]
+      DOCKERFILE: [windows-ltsc2025/windows-ltsc2025-vs2019.Dockerfile, windows-ltsc2025/windows-ltsc2025-vs2022.Dockerfile, windows-ltsc2025/windows-ltsc2025-vs2026.Dockerfile]
       WINDOWS_CONTAINER_BASE_VERSION: [ltsc2025]
   <<: *windows_docker_build_template
 
@@ -255,13 +255,13 @@ Windows Push:
   parallel:
     matrix:
     - ARCHITECTURES: "amd64"
-      DOCKERFILE: [windows-ltsc2019/windows-ltsc2019-vs2019.Dockerfile, windows-ltsc2019/windows-ltsc2019-vs2022.Dockerfile]
+      DOCKERFILE: [windows-ltsc2019/windows-ltsc2019-vs2019.Dockerfile, windows-ltsc2019/windows-ltsc2019-vs2022.Dockerfile, windows-ltsc2019/windows-ltsc2019-vs2026.Dockerfile]
       WINDOWS_CONTAINER_BASE_VERSION: [ltsc2019]
     - ARCHITECTURES: "amd64"
-      DOCKERFILE: [windows-ltsc2022/windows-ltsc2022-vs2019.Dockerfile, windows-ltsc2022/windows-ltsc2022-vs2022.Dockerfile]
+      DOCKERFILE: [windows-ltsc2022/windows-ltsc2022-vs2019.Dockerfile, windows-ltsc2022/windows-ltsc2022-vs2022.Dockerfile, windows-ltsc2022/windows-ltsc2022-vs2026.Dockerfile]
       WINDOWS_CONTAINER_BASE_VERSION: [ltsc2022]
     - ARCHITECTURES: "amd64"
-      DOCKERFILE: [windows-ltsc2025/windows-ltsc2025-vs2019.Dockerfile, windows-ltsc2025/windows-ltsc2025-vs2022.Dockerfile]
+      DOCKERFILE: [windows-ltsc2025/windows-ltsc2025-vs2019.Dockerfile, windows-ltsc2025/windows-ltsc2025-vs2022.Dockerfile, windows-ltsc2025/windows-ltsc2025-vs2026.Dockerfile]
       WINDOWS_CONTAINER_BASE_VERSION: [ltsc2025]
   <<: *push_template
 
