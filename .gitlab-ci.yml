@@ -97,7 +97,7 @@ Fedora Build:
   parallel:
     matrix:
     - ARCH: [amd64, arm64, ppc64le, s390x]
-      DOCKERFILE: [fedora/fedora-42.Dockerfile, fedora/fedora-43.Dockerfile]
+      DOCKERFILE: [fedora/fedora-43.Dockerfile, fedora/fedora-44.Dockerfile]
   <<: *linux_build_template
 
 openSUSE Build:
@@ -218,7 +218,7 @@ Fedora Push:
   parallel:
     matrix:
     - ARCHITECTURES: "amd64 arm64 ppc64le s390x"
-      DOCKERFILE: [fedora/fedora-42.Dockerfile, fedora/fedora-43.Dockerfile]
+      DOCKERFILE: [fedora/fedora-43.Dockerfile, fedora/fedora-44.Dockerfile]
   <<: *push_template
 
 openSUSE Push:

@@ -1,5 +1,4 @@
 # PLATFORMS: linux/amd64 linux/arm64 linux/ppc64le linux/s390x
-# ALTERNATE_TAGS: fedora
 FROM docker.io/fedora:43
 
 RUN dnf update -y --refresh && \
