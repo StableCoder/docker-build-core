@@ -1,5 +1,6 @@
 # PLATFORMS: linux/amd64 linux/arm64 linux/ppc64le linux/s390x linux/riscv64
-FROM docker.io/ubuntu:24.04
+# ALTERNATE_TAGS: ubuntu
+FROM docker.io/ubuntu:26.04
 
 # Set for tzdata to noninteractive mode
 RUN ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime
