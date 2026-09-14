@@ -37,6 +37,7 @@ variables:
     - docker
     - ${ARCH}
     - ${WINDOWS_CONTAINER_BASE_VERSION}
+  timeout: 2h 30m
   script:
     - $env:IMAGE_TAG=$(Get-Item $DOCKERFILE).BaseName
     - docker build
@@ -56,6 +57,7 @@ variables:
     - buildkit
     - ${ARCH}
     - ${WINDOWS_CONTAINER_BASE_VERSION}
+  timeout: 2h 30m
   script:
     - $env:IMAGE_TAG=$(Get-Item $DOCKERFILE).BaseName
     - buildctl build $env:NO_CACHE
