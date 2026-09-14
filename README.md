@@ -58,7 +58,7 @@ These images are used to target platforms/distributions, not specific tools or c
 | Alma           | X     | X     | X       | X     |         |
 | Arch (SteamOS) | X     |       |         |       |         |
 | Debian 11      | X     | X     |         |       |         |
-| Debian 12      | X     | X     | X       | X     |         |
+| Debian 12      | X     | X     | X       |       |         |
 | Debian 13      | X     | X     | X       | X     | X       |
 | Fedora         | X     | X     | X       | X     |         |
 | openSUSE 15    | X     | X     | X       | X     |         |
