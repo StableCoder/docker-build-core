@@ -15,7 +15,6 @@ These images are used to target platforms/distributions, not specific tools or c
 - [`alma-9` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/alma/alma-9.Dockerfile)
 - [`alma-10`, `alma` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/alma/alma-10.Dockerfile)
 - [`arch` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/arch/arch.Dockerfile)
-- [`debian-11` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/debian/debian-11.Dockerfile)
 - [`debian-12` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/debian/debian-12.Dockerfile)
 - [`debian-13`, `debian` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/debian/debian-13.Dockerfile)
 - [`fedora-43` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/fedora/fedora-43.Dockerfile)
@@ -48,7 +47,7 @@ These images are used to target platforms/distributions, not specific tools or c
 - [`windows-ltsc2022-vs2022` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/windows-ltsc2022/windows-ltsc2022-vs2022.Dockerfile)
 - [`windows-ltsc2022-vs2026`, `windows-ltsc2022` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/windows-ltsc2022/windows-ltsc2022-vs2026.Dockerfile)
 - [`windows-ltsc2025-vs2019` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/windows-ltsc2025/windows-ltsc2025-vs2019.Dockerfile)
-- [`windows-ltsc2025-vs2022`, `windows` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/windows-ltsc2025/windows-ltsc2025-vs2022.Dockerfile)
+- [`windows-ltsc2025-vs2022` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/windows-ltsc2025/windows-ltsc2025-vs2022.Dockerfile)
 - [`windows-ltsc2025-vs2026`, `windows-ltsc2025`, `windows` (Dockerfile)](https://github.com/StableCoder/docker-build-core/tree/main/windows-ltsc2025/windows-ltsc2025-vs2026.Dockerfile)
 
 ## Architecture Support
@@ -57,7 +56,6 @@ These images are used to target platforms/distributions, not specific tools or c
 | -------------- | ----- | ----- | ------- | ----- | ------- |
 | Alma           | X     | X     | X       | X     |         |
 | Arch (SteamOS) | X     |       |         |       |         |
-| Debian 11      | X     | X     |         |       |         |
 | Debian 12      | X     | X     | X       |       |         |
 | Debian 13      | X     | X     | X       | X     | X       |
 | Fedora         | X     | X     | X       | X     |         |
@@ -69,7 +67,7 @@ These images are used to target platforms/distributions, not specific tools or c
 | Windows        | X     |       |         |       |         |
 | MSYS/MinGW     | X     |       |         |       |         |
 
-Images *without* an OS_VERSION, ex. `debian` or `rocky`, are based off the 'latest' tag of the base image, which often means it also shares the same image layers as the OS_VERSION's as well. Ex. `debian` uses the same layers as `debian-12` and `rocky` shares the same layers as `rocky-9`.
+Image tags *without* an OS_VERSION, ex. `debian` or `rocky`, are based off the 'latest' tag of the base image, which often means it also shares the same image layers as the OS_VERSION's as well.
 
 ## Tooling Available
 
